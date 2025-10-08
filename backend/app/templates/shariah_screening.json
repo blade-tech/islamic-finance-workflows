@@ -1,0 +1,120 @@
+{
+  "id": "shariah_screening",
+  "title": "Shariah Investment Screening",
+  "description": "Screen equities, funds, or portfolios for Shariah compliance using AAOIFI standards and modern Islamic finance screening methodologies",
+  "category": "screening",
+
+  "shariah_framework": {
+    "screening_levels": {
+      "sector_screening": {
+        "description": "Qualitative screening excluding prohibited business activities",
+        "prohibited_sectors": [
+          "Conventional financial services (interest-based banking, insurance)",
+          "Alcohol production and distribution",
+          "Pork and pork-related products",
+          "Gambling and casinos",
+          "Adult entertainment and pornography",
+          "Weapons and defense (controversial, varies by scholar)",
+          "Tobacco (some scholars permit with caveats)",
+          "Hotels and hospitality with significant haram revenue"
+        ]
+      },
+      "financial_screening": {
+        "description": "Quantitative screening based on financial ratios",
+        "aaoifi_ratios": [
+          "Total Debt / Market Capitalization ≤ 33%",
+          "Interest-Bearing Securities / Market Capitalization ≤ 33%",
+          "Non-Compliant Income / Total Revenue ≤ 5%"
+        ],
+        "alternative_methodologies": {
+          "dow_jones": "Total Debt / 36-month avg market cap ≤ 33%; Non-compliant income / Total revenue ≤ 5%",
+          "ftse": "Total Debt / Total Assets ≤ 33%; Cash + interest-bearing securities / Total Assets ≤ 50%",
+          "msci": "Similar to AAOIFI with regional variations"
+        }
+      },
+      "purification": {
+        "description": "Removal of non-compliant income from returns",
+        "calculation": "Purification Amount = (Non-Compliant Income / Total Revenue) × Dividend Received",
+        "disposition": "Donate to charity, cannot be used for personal benefit"
+      }
+    },
+
+    "primary_principles": [
+      "Business activity must be Shariah-compliant (halal products/services)",
+      "Debt levels must be limited to prevent riba dominance",
+      "Income sources must be predominantly Shariah-compliant (>95%)",
+      "Purification required for any non-compliant income received",
+      "Continuous monitoring required as company activities evolve"
+    ],
+
+    "aaoifi_standards": [
+      {
+        "standard": "SS 21",
+        "title": "Shariah Screening Standards for Equity",
+        "key_ratios": [
+          "Debt ratio ≤ 33%",
+          "Interest-bearing securities ratio ≤ 33%",
+          "Non-compliant income ratio ≤ 5%"
+        ]
+      }
+    ],
+
+    "screening_methodologies": [
+      "AAOIFI Standard 21 (most widely accepted)",
+      "Dow Jones Islamic Market Index",
+      "FTSE Shariah Index",
+      "MSCI Islamic Indices",
+      "S&P Shariah Indices"
+    ]
+  },
+
+  "legal_framework": {
+    "gcc": {
+      "requirements": [
+        "AAOIFI SS 21 adoption common",
+        "Internal Shariah boards review screening results",
+        "Quarterly rebalancing for index-linked products"
+      ]
+    },
+    "malaysia": {
+      "requirements": [
+        "SC Malaysia Shariah Advisory Council methodology",
+        "Stricter tobacco exclusion than some GCC markets",
+        "Enhanced ESG integration with Shariah screening"
+      ]
+    },
+    "global": {
+      "requirements": [
+        "Disclosure of screening methodology in fund prospectuses",
+        "Annual Shariah audits for Islamic funds",
+        "Purification calculations reported to investors"
+      ]
+    }
+  },
+
+  "system_prompt": "You are an Islamic finance expert specializing in Shariah investment screening. Your role is to evaluate equities, funds, or portfolios for Shariah compliance using established screening methodologies.\n\n## Your Screening Process\n\n1. **Sector Screening (Qualitative)**:\n   - Identify company's primary business activities\n   - Check against prohibited sectors list\n   - Flag if ≥5% revenue from non-compliant activities\n\n2. **Financial Screening (Quantitative)**:\n   - Calculate debt ratio: Total Debt / Market Cap\n   - Calculate interest-bearing securities ratio\n   - Calculate non-compliant income ratio\n   - Compare against AAOIFI SS 21 thresholds (33%, 33%, 5%)\n\n3. **Purification Calculation**:\n   - If company passes screening but has non-compliant income\n   - Calculate purification amount for dividends received\n   - Provide charity donation recommendation\n\n4. **Search AAOIFI Standards**:\n   - Use search_graphiti for AAOIFI SS 21 guidance (group_id: 'aaoifi')\n\n## Citation Requirements\n\nInclude minimum 3 AAOIFI citations for screening methodology.\n\n## Output Structure\n\n1. Sector screening result (pass/fail with reasoning)\n2. Financial ratios calculated\n3. Compliance verdict (compliant/non-compliant/requires purification)\n4. Purification calculation if applicable\n5. Recommendations\n6. AAOIFI citations",
+
+  "user_prompt_template": "Screen the following investment for Shariah compliance:\n\n**Investment**: {{investment_name}}\n**Type**: {{investment_type}}\n**Sector**: {{sector}}\n**Financial Data**:\n- Total Debt: {{total_debt}}\n- Market Capitalization: {{market_cap}}\n- Total Assets: {{total_assets}}\n- Interest-Bearing Securities: {{interest_securities}}\n- Total Revenue: {{total_revenue}}\n- Non-Compliant Income: {{non_compliant_income}}\n\n**Screening Methodology**: {{methodology}}\n\nProvide:\n1. Sector screening analysis\n2. Financial ratios calculation\n3. Compliance verdict\n4. Purification calculation (if needed)\n5. AAOIFI citations",
+
+  "required_documents": ["aaoifi"],
+  "required_standards": ["SS 21"],
+
+  "citation_requirements": {
+    "min_citations": 3,
+    "required_standards": ["SS 21"],
+    "citation_format": "AAOIFI [Standard] Section [X.Y]",
+    "verification_method": "graphiti_search"
+  },
+
+  "common_concerns": [
+    "Revenue breakdown unclear (difficult to assess non-compliant income)",
+    "Debt ratio exceeds 33% threshold",
+    "Significant non-compliant income requiring purification",
+    "Business activities overlap with prohibited sectors",
+    "Lack of transparency in financial reporting"
+  ],
+
+  "version": "1.0.0",
+  "created_at": "2025-10-08T00:45:00Z",
+  "created_by": "Islamic Finance Standards Synthesis"
+}

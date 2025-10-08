@@ -1,0 +1,151 @@
+{
+  "id": "portfolio_reconciliation",
+  "title": "Portfolio Shariah Compliance Reconciliation",
+  "description": "Reconcile investment portfolios for ongoing Shariah compliance, identify non-compliant holdings, calculate purification requirements, and provide rebalancing recommendations",
+  "category": "reconciliation",
+
+  "shariah_framework": {
+    "reconciliation_scope": [
+      "Verify current holdings remain Shariah-compliant",
+      "Identify any holdings that became non-compliant since initial screening",
+      "Calculate purification amounts for dividends/income received",
+      "Assess overall portfolio compliance ratio",
+      "Recommend rebalancing actions"
+    ],
+
+    "compliance_checks": {
+      "sector_compliance": {
+        "check": "Verify no holdings in prohibited sectors",
+        "prohibited": [
+          "Conventional financial services",
+          "Alcohol",
+          "Pork products",
+          "Gambling",
+          "Adult entertainment",
+          "Tobacco (methodology-dependent)"
+        ],
+        "action_if_non_compliant": "Immediate divestment required"
+      },
+      "financial_ratios": {
+        "check": "Recalculate financial screening ratios using latest data",
+        "aaoifi_thresholds": [
+          "Debt ratio ≤ 33%",
+          "Interest-bearing securities ≤ 33%",
+          "Non-compliant income ≤ 5%"
+        ],
+        "action_if_breached": "Divest within grace period (typically 90 days) or immediately if severe breach"
+      },
+      "income_tracking": {
+        "check": "Track all income received from portfolio holdings",
+        "components": [
+          "Dividends from equities",
+          "Rental income from REITs/Sukuk",
+          "Capital gains from sales",
+          "Interest or non-compliant income (requires purification)"
+        ]
+      }
+    },
+
+    "purification_methodology": {
+      "calculation": "Purification Amount = (Non-Compliant Income / Total Income) × Total Income Received",
+      "alternative": "Per-holding calculation: (Company's Non-Compliant Revenue % / 100) × Dividend Received",
+      "disposition": [
+        "Donate to registered charity",
+        "Cannot be used for personal benefit or investment returns",
+        "Document donation receipts for audit trail"
+      ]
+    },
+
+    "rebalancing_triggers": [
+      "Holdings become non-compliant (immediate action)",
+      "Portfolio drift from target Shariah-compliant allocation",
+      "Scheduled quarterly/annual rebalancing",
+      "Significant market movements affecting compliance ratios",
+      "New AAOIFI standards or Shariah board rulings"
+    ],
+
+    "aaoifi_standards": [
+      {
+        "standard": "SS 21",
+        "title": "Shariah Screening Standards",
+        "purpose": "Defines ongoing compliance monitoring requirements"
+      },
+      {
+        "standard": "FAS 34",
+        "title": "Financial Reporting for Islamic Investment Funds",
+        "purpose": "Governs disclosure of purification and compliance status"
+      }
+    ]
+  },
+
+  "legal_framework": {
+    "reporting_requirements": {
+      "gcc": [
+        "Quarterly Shariah compliance reports to investors",
+        "Annual Shariah audit by independent board",
+        "Purification disclosure in financial statements"
+      ],
+      "malaysia": [
+        "SC Malaysia reporting templates",
+        "Shariah committee attestation",
+        "ESG integration disclosure (if applicable)"
+      ],
+      "global": [
+        "Fund prospectus disclosure of screening methodology",
+        "Regular rebalancing notifications to investors",
+        "Purification calculation transparency"
+      ]
+    }
+  },
+
+  "system_prompt": "You are an Islamic finance portfolio management expert specializing in Shariah compliance reconciliation. Your role is to review investment portfolios for ongoing compliance, identify issues, and recommend corrective actions.\n\n## Your Reconciliation Process\n\n1. **Holdings Review**:\n   - List all current portfolio holdings\n   - Verify each holding against prohibited sectors\n   - Recalculate financial screening ratios using latest financial data\n   - Flag any holdings that have become non-compliant\n\n2. **Income Tracking**:\n   - Identify all income received during review period\n   - Categorize income: compliant dividends, rental, capital gains, non-compliant interest\n   - Calculate purification requirement for any non-compliant income\n\n3. **Compliance Status Assessment**:\n   - Calculate portfolio-level compliance ratio\n   - Identify severity of any breaches (minor vs. severe)\n   - Assess whether immediate action required or grace period applicable\n\n4. **Purification Calculation**:\n   - Use formula: (Non-Compliant Income / Total Income) × Total Income Received\n   - Or per-holding: (Company Non-Compliant Revenue %) × Dividend\n   - Provide charity donation recommendation\n\n5. **Rebalancing Recommendations**:\n   - List holdings to divest (with urgency level)\n   - Suggest compliant alternative investments\n   - Propose rebalancing timeline\n\n6. **Search AAOIFI Standards**:\n   - Use search_graphiti for AAOIFI SS 21, FAS 34 guidance (group_id: 'aaoifi')\n\n## Citation Requirements\n\nInclude minimum 3 AAOIFI citations for compliance methodology.\n\n## Output Structure\n\n1. Portfolio holdings summary\n2. Compliance status by holding\n3. Non-compliant holdings identified (if any)\n4. Purification calculation\n5. Rebalancing recommendations with timeline\n6. AAOIFI citations\n7. Audit trail documentation",
+
+  "user_prompt_template": "Perform Shariah compliance reconciliation for the following portfolio:\n\n**Portfolio Name**: {{portfolio_name}}\n**Review Period**: {{review_period}}\n**Screening Methodology**: {{methodology}}\n\n**Current Holdings**:\n{{holdings}}\n\n**Income Received During Period**:\n{{income_received}}\n\n**Last Compliance Review Date**: {{last_review_date}}\n\nProvide:\n\n1. **Holdings Compliance Review**:\n   - Sector screening results\n   - Financial ratios recalculation\n   - Compliance status (compliant/non-compliant/requires monitoring)\n\n2. **Non-Compliant Holdings** (if any):\n   - Reason for non-compliance\n   - Urgency level (immediate/grace period)\n   - Recommended action\n\n3. **Income Analysis**:\n   - Total income breakdown by category\n   - Non-compliant income identified\n   - Purification calculation\n   - Charity donation amount\n\n4. **Portfolio-Level Assessment**:\n   - Overall compliance ratio\n   - Compliance trend (improving/deteriorating/stable)\n   - Risk areas to monitor\n\n5. **Rebalancing Plan**:\n   - Holdings to divest (with timeline)\n   - Suggested compliant alternatives\n   - Implementation priority\n\n6. **Documentation**:\n   - Audit trail summary\n   - AAOIFI citations\n   - Next review date recommendation\n\nSearch the AAOIFI knowledge base (SS 21, FAS 34) and cite specifically.",
+
+  "required_documents": ["aaoifi"],
+  "required_standards": ["SS 21", "FAS 34"],
+
+  "citation_requirements": {
+    "min_citations": 3,
+    "required_standards": ["SS 21"],
+    "citation_format": "AAOIFI [Standard] Section [X.Y]",
+    "verification_method": "graphiti_search"
+  },
+
+  "common_concerns": [
+    "Holdings became non-compliant due to business activity changes",
+    "Financial ratios breached due to increased debt levels",
+    "Non-compliant income received requiring purification",
+    "Delayed rebalancing causing prolonged exposure to non-compliant assets",
+    "Insufficient documentation of purification donations",
+    "Lack of regular monitoring leading to portfolio drift"
+  ],
+
+  "example_workflow": {
+    "scenario": "Quarterly reconciliation of $10M Islamic equity fund",
+    "steps": [
+      "1. Retrieve latest financial data for all 50 holdings",
+      "2. Recalculate debt ratio, interest-bearing securities ratio for each holding",
+      "3. Flag 3 holdings that breached debt ratio (>33%)",
+      "4. Review income received: $120K dividends, $5K non-compliant income from one holding",
+      "5. Calculate purification: ($5K / $125K) × $125K = $5K to charity",
+      "6. Assess compliance status: 47/50 holdings compliant (94% portfolio compliance)",
+      "7. Recommend: Divest 3 non-compliant holdings within 90 days",
+      "8. Suggest: Replace with AAOIFI-screened alternatives",
+      "9. Document: Compliance report with AAOIFI citations, purification receipt",
+      "10. Schedule: Next quarterly review in 3 months"
+    ]
+  },
+
+  "learning_patterns": [
+    "Common reasons holdings become non-compliant over time",
+    "Effective purification tracking and documentation",
+    "Portfolio rebalancing strategies that minimize disruption",
+    "Early warning indicators of compliance drift",
+    "Integration of ESG screening with Shariah compliance"
+  ],
+
+  "version": "1.0.0",
+  "created_at": "2025-10-08T00:55:00Z",
+  "created_by": "Islamic Finance Standards Synthesis"
+}

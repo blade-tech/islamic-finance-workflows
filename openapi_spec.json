@@ -1,0 +1,696 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Islamic Finance Workflows API",
+        "description": "AI-powered AAOIFI-compliant document generation using Claude and Graphiti",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/graphiti/test": {
+            "get": {
+                "tags": [
+                    "Graphiti"
+                ],
+                "summary": "Test Graphiti Connection",
+                "description": "Test connection to Graphiti/Neo4j and return statistics.\n\nReturns:\n    GraphitiStats with connection status and node/edge counts",
+                "operationId": "test_graphiti_connection_api_graphiti_test_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TestConnectionResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/documents/ingest": {
+            "post": {
+                "tags": [
+                    "Documents"
+                ],
+                "summary": "Ingest Document",
+                "description": "Upload and ingest a document into Graphiti.\n\nArgs:\n    file: PDF or DOCX file to upload\n    type: 'aaoifi' or 'context'\n\nReturns:\n    UploadedDocument with episode_id",
+                "operationId": "ingest_document_api_documents_ingest_post",
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Body_ingest_document_api_documents_ingest_post"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/IngestDocumentResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/templates": {
+            "get": {
+                "tags": [
+                    "Templates"
+                ],
+                "summary": "Fetch Workflow Templates",
+                "description": "Get all available workflow templates.\n\nReturns:\n    List of WorkflowTemplate objects",
+                "operationId": "fetch_workflow_templates_api_templates_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/workflows/execute": {
+            "post": {
+                "tags": [
+                    "Workflows"
+                ],
+                "summary": "Execute Workflow",
+                "description": "Execute a workflow (placeholder).\n\nArgs:\n    request: ExecuteWorkflowRequest with template_id and configuration\n\nReturns:\n    execution_id for tracking",
+                "operationId": "execute_workflow_api_workflows_execute_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ExecuteWorkflowRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ExecuteWorkflowResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/workflows/{execution_id}/stream": {
+            "get": {
+                "tags": [
+                    "Workflows"
+                ],
+                "summary": "Stream Claude",
+                "description": "Stream Claude execution (placeholder).\n\nArgs:\n    execution_id: Workflow execution ID\n\nReturns:\n    SSE stream of Claude responses",
+                "operationId": "stream_claude_api_workflows__execution_id__stream_get",
+                "parameters": [
+                    {
+                        "name": "execution_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Execution Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/citations/{citation_id}/approval": {
+            "put": {
+                "tags": [
+                    "Citations"
+                ],
+                "summary": "Update Citation Approval",
+                "description": "Update citation approval status (placeholder).\n\nArgs:\n    citation_id: Citation ID\n    request: Approval status and optional rejection reason\n\nReturns:\n    Success status",
+                "operationId": "update_citation_approval_api_citations__citation_id__approval_put",
+                "parameters": [
+                    {
+                        "name": "citation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Citation Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UpdateCitationApprovalRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UpdateCitationApprovalResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/workflows/{execution_id}/citations": {
+            "get": {
+                "tags": [
+                    "Citations"
+                ],
+                "summary": "Fetch Citations",
+                "description": "Fetch citations for a workflow execution (placeholder).\n\nArgs:\n    execution_id: Workflow execution ID\n\nReturns:\n    List of citations",
+                "operationId": "fetch_citations_api_workflows__execution_id__citations_get",
+                "parameters": [
+                    {
+                        "name": "execution_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Execution Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/workflows/{execution_id}/learnings": {
+            "post": {
+                "tags": [
+                    "Learnings"
+                ],
+                "summary": "Extract Learnings",
+                "description": "Extract learnings from a workflow execution (placeholder).\n\nArgs:\n    execution_id: Workflow execution ID\n\nReturns:\n    List of extracted learnings",
+                "operationId": "extract_learnings_api_workflows__execution_id__learnings_post",
+                "parameters": [
+                    {
+                        "name": "execution_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Execution Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/learnings/{learning_id}/apply": {
+            "post": {
+                "tags": [
+                    "Learnings"
+                ],
+                "summary": "Apply Learning",
+                "description": "Apply a learning to a template (placeholder).\n\nArgs:\n    learning_id: Learning ID\n\nReturns:\n    Success status and template ID",
+                "operationId": "apply_learning_api_learnings__learning_id__apply_post",
+                "parameters": [
+                    {
+                        "name": "learning_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Learning Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ApplyLearningResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Root",
+                "description": "Health check endpoint",
+                "operationId": "root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Health",
+                "description": "Detailed health check",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ApplyLearningResponse": {
+                "properties": {
+                    "applied": {
+                        "type": "boolean",
+                        "title": "Applied"
+                    },
+                    "template_id": {
+                        "type": "string",
+                        "title": "Template Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "applied",
+                    "template_id"
+                ],
+                "title": "ApplyLearningResponse",
+                "description": "Response from applying learning"
+            },
+            "Body_ingest_document_api_documents_ingest_post": {
+                "properties": {
+                    "file": {
+                        "type": "string",
+                        "format": "binary",
+                        "title": "File"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "file",
+                    "type"
+                ],
+                "title": "Body_ingest_document_api_documents_ingest_post"
+            },
+            "ExecuteWorkflowRequest": {
+                "properties": {
+                    "template_id": {
+                        "type": "string",
+                        "title": "Template Id"
+                    },
+                    "context_text": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Context Text"
+                    },
+                    "context_document_ids": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Context Document Ids"
+                    },
+                    "user_notes": {
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "type": "object",
+                        "title": "User Notes"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "template_id"
+                ],
+                "title": "ExecuteWorkflowRequest",
+                "description": "Request to execute a workflow"
+            },
+            "ExecuteWorkflowResponse": {
+                "properties": {
+                    "execution_id": {
+                        "type": "string",
+                        "title": "Execution Id"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "execution_id"
+                ],
+                "title": "ExecuteWorkflowResponse",
+                "description": "Response from workflow execution start"
+            },
+            "GraphitiStats": {
+                "properties": {
+                    "connected": {
+                        "type": "boolean",
+                        "title": "Connected"
+                    },
+                    "total_episodes": {
+                        "type": "integer",
+                        "title": "Total Episodes",
+                        "default": 0
+                    },
+                    "total_nodes": {
+                        "type": "integer",
+                        "title": "Total Nodes",
+                        "default": 0
+                    },
+                    "total_edges": {
+                        "type": "integer",
+                        "title": "Total Edges",
+                        "default": 0
+                    },
+                    "aaoifi_documents_count": {
+                        "type": "integer",
+                        "title": "Aaoifi Documents Count",
+                        "default": 0
+                    },
+                    "context_documents_count": {
+                        "type": "integer",
+                        "title": "Context Documents Count",
+                        "default": 0
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "connected"
+                ],
+                "title": "GraphitiStats",
+                "description": "Statistics from the knowledge graph"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "IngestDocumentResponse": {
+                "properties": {
+                    "document": {
+                        "$ref": "#/components/schemas/UploadedDocument"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "document"
+                ],
+                "title": "IngestDocumentResponse",
+                "description": "Response from document ingestion"
+            },
+            "TestConnectionResponse": {
+                "properties": {
+                    "stats": {
+                        "$ref": "#/components/schemas/GraphitiStats"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "stats"
+                ],
+                "title": "TestConnectionResponse",
+                "description": "Response from Graphiti connection test"
+            },
+            "UpdateCitationApprovalRequest": {
+                "properties": {
+                    "approved": {
+                        "type": "boolean",
+                        "title": "Approved"
+                    },
+                    "rejection_reason": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Rejection Reason"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "approved"
+                ],
+                "title": "UpdateCitationApprovalRequest",
+                "description": "Request to update citation approval"
+            },
+            "UpdateCitationApprovalResponse": {
+                "properties": {
+                    "updated": {
+                        "type": "boolean",
+                        "title": "Updated"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "updated"
+                ],
+                "title": "UpdateCitationApprovalResponse",
+                "description": "Response from citation update"
+            },
+            "UploadedDocument": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "title": "Id"
+                    },
+                    "filename": {
+                        "type": "string",
+                        "title": "Filename"
+                    },
+                    "filesize": {
+                        "type": "integer",
+                        "title": "Filesize"
+                    },
+                    "mime_type": {
+                        "type": "string",
+                        "title": "Mime Type"
+                    },
+                    "uploaded_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Uploaded At"
+                    },
+                    "episode_id": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Episode Id"
+                    },
+                    "parsed": {
+                        "type": "boolean",
+                        "title": "Parsed",
+                        "default": false
+                    },
+                    "content_preview": {
+                        "type": "string",
+                        "title": "Content Preview",
+                        "default": ""
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "filename",
+                    "filesize",
+                    "mime_type",
+                    "uploaded_at"
+                ],
+                "title": "UploadedDocument",
+                "description": "Document uploaded by user"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}

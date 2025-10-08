@@ -1,0 +1,255 @@
+{
+  "id": "sukuk_compliance_review",
+  "title": "Sukuk Compliance Review",
+  "description": "Review Sukuk (Islamic bonds) structures for Shariah compliance and regulatory adherence across AAOIFI FAS 33, asset-backing requirements, and multi-jurisdiction frameworks",
+  "category": "compliance",
+
+  "shariah_framework": {
+    "foundational_principles": [
+      "True Ownership (Milk Haqiqi) - Sukuk holders must have actual ownership in underlying assets, not contractual claims",
+      "No Guaranteed Fixed Return - Returns tied to asset performance, not predetermined interest",
+      "Risk-Bearing (Ghurm) - Al-ghurm bil-ghunm: gain accompanies liability for loss",
+      "Prohibition of Debt-for-Debt (Bay' al-Dayn bil-Dayn) - Cannot securitize existing debt obligations",
+      "Maqasid Alignment - Structures must serve higher Islamic law objectives"
+    ],
+
+    "sukuk_types": {
+      "ijara": {
+        "description": "Lease-based Sukuk with tangible asset ownership",
+        "requirements": [
+          "Legal title transfer with ownership registration",
+          "Market-rate rental terms in lease agreement",
+          "Assets used for Shariah-compliant activities",
+          "Clear maintenance obligation allocation",
+          "Purchase undertaking at fair market value (not predetermined)"
+        ],
+        "common_pitfall": "Sale and leaseback retaining beneficial ownership (form without substance)"
+      },
+      "mudaraba": {
+        "description": "Profit-sharing Sukuk with capital providers and fund manager",
+        "requirements": [
+          "Investment project clearly defined and Shariah-compliant",
+          "Profit-sharing ratio specified (not fixed return)",
+          "Mudareb management role documented",
+          "Loss allocation: capital providers bear financial loss",
+          "No guaranteed capital repayment"
+        ],
+        "common_pitfall": "Hidden third-party guarantees eliminating risk"
+      },
+      "musharaka": {
+        "description": "Joint venture partnership Sukuk",
+        "requirements": [
+          "Capital contributions documented",
+          "Profit-loss sharing ratios specified",
+          "Management rights allocated",
+          "Exit mechanism structured properly",
+          "Partnership assets identifiable and Shariah-compliant"
+        ]
+      },
+      "murabaha": {
+        "description": "Cost-plus sale Sukuk (controversial for long-term capital)",
+        "requirements": [
+          "Asset purchase completed before sale to Sukuk holders",
+          "Issuer takes ownership and risk",
+          "Markup disclosed transparently",
+          "Tangible Shariah-compliant assets",
+          "Deferred payment terms documented"
+        ],
+        "common_pitfall": "Resembles debt instrument; many scholars limit to short-term trade finance only"
+      }
+    },
+
+    "absolute_prohibitions": [
+      "Debt-for-Debt Exchange - Securitizing conventional loans/receivables without tangible assets",
+      "Guaranteed Fixed Returns - Contractual guarantees unrelated to asset performance",
+      "Predetermined Price Repurchase - Binding commitments guaranteeing capital preservation",
+      "Riba-Based Underlying Assets - Conventional bank loans, interest-bearing securities, prohibited industries"
+    ],
+
+    "structural_red_flags": [
+      "Form Over Substance - Legal ownership transfers without economic reality change",
+      "Gharar (Excessive Uncertainty) - Ambiguous profit-sharing or undefined assets",
+      "Liquidity Mechanisms - Trading at face value plus accrued profit (suggests debt, not asset trading)",
+      "Asset-Light Structures - Overreliance on intangible assets without genuine risk transfer",
+      "Complex Layering - Multiple contracts achieving conventional debt outcomes"
+    ],
+
+    "aaoifi_standards": [
+      {
+        "standard": "FAS 33",
+        "title": "Investment Sukuk",
+        "key_requirements": [
+          "Asset classification: asset-backed vs. asset-based",
+          "Transparent disclosure of underlying assets, ownership structure, profit distribution",
+          "Fair value accounting with regular revaluation"
+        ]
+      },
+      {
+        "standard": "SS 17",
+        "title": "Investment Sukuk (Shariah Standard)",
+        "purpose": "Defines Shariah compliance criteria for various Sukuk structures"
+      },
+      {
+        "standard": "SS 59",
+        "title": "Hybrid Sukuk Tradability",
+        "purpose": "Clarifies tradability rules for hybrid Sukuk post-primary issuance (2022)"
+      },
+      {
+        "standard": "SS 62",
+        "title": "Enhanced Sukuk Standards (Upcoming)",
+        "enhancements": [
+          "Enhanced asset-backing verification",
+          "Standardized contract templates",
+          "Stronger Shariah Supervisory Board role in ongoing monitoring"
+        ]
+      }
+    ],
+
+    "compliance_concerns": [
+      "Asset-Light Structures - Intangible assets raising ownership and risk transfer concerns",
+      "Secondary Market Trading - Ensuring prices reflect asset values, not debt-like accrual",
+      "Purchase Undertakings - Distinguishing between permissible options and disguised guarantees",
+      "Cross-Border Recognition - Varying Shariah interpretations across jurisdictions",
+      "Green/ESG Sukuk - Additional environmental verification alongside Shariah compliance"
+    ]
+  },
+
+  "legal_framework": {
+    "gcc": {
+      "jurisdictions": ["UAE", "Saudi Arabia", "Bahrain", "Qatar"],
+      "regulatory_requirements": [
+        "AAOIFI Shariah Standard 17 mandatory for most issuances",
+        "Dual compliance: Local securities regulations + Shariah board approval",
+        "Saudi Arabia: SAMA Sustainable Finance Framework with Climate Bonds Initiative certification for large issuances",
+        "UAE: DIFC for offshore; SCA approval for onshore"
+      ],
+      "documentation_structure": [
+        "Asset-backed structures using Ijarah, Musharakah, or hybrid",
+        "Mandatory Shariah compliance certificate from AAOIFI-accredited board",
+        "Wakalah agreements harmonizing civil law and Shariah principles"
+      ],
+      "listing_requirements": [
+        "Nasdaq Dubai and Saudi Exchange: Real-time pricing via centralized order books",
+        "Minimum issuance: $200M sovereign, $100M corporate",
+        "Bid-ask spreads: 15-30 bps (post-2022 improvements)"
+      ]
+    },
+
+    "malaysia": {
+      "regulator": "Securities Commission Malaysia + Bank Negara Malaysia",
+      "regulatory_requirements": [
+        "SC Malaysia's Sustainable & Responsible Investment Taxonomy",
+        "Dual verification: Shariah advisory + technical environmental audits (ESG sukuk)",
+        "Primary dealers must maintain two-way quotes for Government Investment Issues (GII)"
+      ],
+      "documentation_structure": [
+        "SC-approved templates with standardized Shariah clauses",
+        "Segregated proceeds accounts with quarterly allocation disclosures",
+        "Rebate mechanisms for misallocated funds"
+      ],
+      "listing_requirements": [
+        "Bursa Malaysia electronic trading platforms",
+        "Dominates global ESG sukuk issuance ($15.2B in 2024)",
+        "Cross-listing agreements enable ASEAN trading"
+      ]
+    },
+
+    "uk": {
+      "regulators": ["FCA", "PRA"],
+      "regulatory_requirements": [
+        "FCA Prospectus Regulation Rules + AAOIFI standards",
+        "MiFID II product governance requirements (hybrid legal framework)",
+        "Conflict with AAOIFI SS 56 on product governance creates compliance complexity"
+      ],
+      "documentation_structure": [
+        "IIFM standardized Master Agreement for Treasury Placement",
+        "Reconcile civil law frameworks with Shariah requirements",
+        "AAOIFI-compliant prospectus with MiFID II legends"
+      ],
+      "listing_requirements": [
+        "London Stock Exchange Islamic Finance segment",
+        "Full prospectus disclosure under UK Prospectus Regulation",
+        "Higher legal costs due to dual compliance systems"
+      ]
+    },
+
+    "cross_border_challenges": [
+      "Jurisdictional conflicts in murabaha markup enforceability (GCC vs. EU)",
+      "Differential treatment of tawarruq transactions across regions",
+      "Variance in gharar interpretation (UAE vs. Malaysia)",
+      "IIFM standardized documentation reducing settlement risks",
+      "AAOIFI SS 59 clarifies hybrid Sukuk tradability",
+      "ASEAN cross-listing agreements for sovereign sukuk"
+    ]
+  },
+
+  "system_prompt": "You are an Islamic finance expert specializing in Sukuk (Islamic bonds) compliance review. Your role is to evaluate Sukuk structures for Shariah authenticity and regulatory compliance across GCC, Malaysia, and UK markets.\n\n## Your Expertise\n\nYou have deep knowledge of:\n- AAOIFI standards (FAS 33, SS 17, SS 59, upcoming SS 62)\n- Sukuk structure types (Ijara, Mudaraba, Musharaka, Murabaha, hybrid)\n- Asset-backing requirements and true ownership verification\n- Prohibited structures (debt-for-debt, guaranteed returns, predetermined repurchase)\n- Multi-jurisdiction regulatory frameworks\n- Secondary market trading and liquidity mechanisms\n\n## Core Shariah Principles You Must Apply\n\n1. **True Ownership Verification**: Sukuk holders must have genuine ownership in underlying assets, not merely contractual claims to cash flows. Verify legal title transfer, asset registration, and economic substance.\n\n2. **Risk-Bearing Requirement**: Apply the principle of al-ghurm bil-ghunm (gain accompanies liability for loss). Sukuk holders must bear genuine investment risk proportional to ownership. Red flag any mechanisms that guarantee capital preservation or eliminate downside risk.\n\n3. **No Guaranteed Fixed Returns**: Returns must be tied to asset performance or business outcomes, not predetermined interest rates. This is fundamental to distinguishing Sukuk from conventional bonds.\n\n4. **Debt-for-Debt Prohibition**: Sukuk CANNOT be issued by securitizing existing debt obligations (bay' al-dayn bil-dayn). Underlying assets must be tangible or represent genuine business activities.\n\n5. **Form vs. Substance**: Constantly evaluate whether the structure represents genuine asset-backed financing or merely preserves the form while achieving conventional bond outcomes through complex layering.\n\n## Your Review Process\n\nFor every Sukuk structure you review:\n\n1. **Identify Sukuk Type**: Determine if Ijara, Mudaraba, Musharaka, Murabaha, or hybrid. Each has specific Shariah requirements.\n\n2. **Search AAOIFI Standards**: Use search_graphiti to find relevant AAOIFI FAS 33, SS 17, SS 59 sections (group_id: 'aaoifi').\n\n3. **Verify Asset-Backing**:\n   - Are assets tangible and Shariah-compliant?\n   - Is legal ownership properly transferred and registered?\n   - Do assets generate the cash flows distributed to Sukuk holders?\n   - Are assets genuinely at risk (no hidden guarantees)?\n\n4. **Check for Prohibited Elements**:\n   - Debt-for-debt securitization?\n   - Guaranteed fixed returns?\n   - Predetermined repurchase prices?\n   - Riba-based underlying assets?\n   - Excessive gharar (uncertainty)?\n\n5. **Evaluate Purchase Undertakings**: If present, distinguish between:\n   - Permissible: Non-binding promise to repurchase at fair market value\n   - Prohibited: Binding commitment at predetermined price (disguised guarantee)\n\n6. **Review Jurisdiction-Specific Requirements**:\n   - GCC: AAOIFI SS 17 mandatory, Shariah board certification\n   - Malaysia: SC templates, segregated proceeds, ESG dual verification\n   - UK: FCA Prospectus Rules + AAOIFI, MiFID II compliance\n\n7. **Secondary Market Tradability**: Ensure Sukuk trade based on underlying asset values, not face value plus accrued profit (which would indicate debt trading).\n\n8. **Cite Specific Standards**: For every compliance point or concern, cite:\n   - AAOIFI standard and section (e.g., 'AAOIFI FAS 33 Section 4.2')\n   - Relevant Shariah principle (e.g., 'al-ghurm bil-ghunm')\n   - Jurisdiction-specific regulation if applicable\n\n## Common Red Flags to Watch For\n\n- **Asset-Light Structures**: Over-reliance on intangible assets or service contracts without genuine ownership transfer\n- **Complex Layering**: Multiple contracts designed to achieve conventional bond economics through circuitous routes\n- **Hidden Guarantees**: Third-party arrangements that eliminate investment risk\n- **Sale and Leaseback**: Issuer retaining beneficial ownership after nominal sale\n- **Liquidity Mechanisms**: Secondary market trading at debt-like valuations rather than asset values\n- **Purchase Undertakings**: Binding repurchase commitments that guarantee capital return\n\n## Citation Requirements\n\nYou MUST include at least 5 citations to AAOIFI standards, formatted as:\n'According to AAOIFI FAS 33 Section X.Y, [requirement]...'\n\nVerify each citation by searching the knowledge graph before including it.\n\n## Output Structure\n\nProvide:\n1. Sukuk structure overview (type, asset composition, cash flow mechanism)\n2. Asset-backing analysis (ownership verification, risk assessment)\n3. Shariah compliance checklist (prohibited elements, structural concerns)\n4. Jurisdiction-specific compliance (documentation, regulatory requirements)\n5. Red flags and mitigation recommendations\n6. AAOIFI citations (minimum 5, with specific sections)\n7. Final compliance verdict (compliant, non-compliant, requires modification)\n\nYour goal is to ensure Sukuk structures maintain both Shariah authenticity and regulatory soundness.",
+
+  "user_prompt_template": "I need a comprehensive Sukuk compliance review for the following issuance:\n\n**Issuer**: {{issuer}}\n**Sukuk Type**: {{sukuk_type}}\n**Issuance Amount**: {{amount}}\n**Underlying Assets**: {{underlying_assets}}\n**Maturity**: {{maturity}}\n**Expected Return Structure**: {{return_structure}}\n**Jurisdiction**: {{jurisdiction}}\n\n**Additional Details**:\n{{additional_details}}\n\n**Specific Concerns**:\n{{concerns}}\n\nPlease provide:\n\n1. **Sukuk Structure Analysis**:\n   - Type classification (Ijara, Mudaraba, Musharaka, Murabaha, hybrid)\n   - Asset-backing mechanism\n   - Cash flow distribution structure\n   - Ownership and risk allocation\n\n2. **Shariah Compliance Assessment** (with AAOIFI citations):\n   - True ownership verification\n   - Risk-bearing analysis (al-ghurm bil-ghunm)\n   - Prohibited elements check (debt-for-debt, guaranteed returns, predetermined repurchase)\n   - Gharar and ambiguity evaluation\n   - Asset Shariah-compliance verification\n\n3. **Structural Red Flags**:\n   - Form vs. substance analysis\n   - Hidden guarantees or capital preservation mechanisms\n   - Purchase undertaking assessment\n   - Secondary market tradability implications\n\n4. **Jurisdiction-Specific Compliance**:\n   - Regulatory requirements for {{jurisdiction}}\n   - Required documentation and disclosures\n   - Shariah board certification process\n   - Listing requirements if applicable\n\n5. **Risk Assessment & Recommendations**:\n   - Key Shariah risks identified\n   - Structural modifications needed (if any)\n   - Mitigation strategies\n   - Compliance roadmap\n\n6. **Final Verdict**:\n   - Shariah compliance status (compliant/non-compliant/requires modification)\n   - Critical issues summary\n   - Implementation recommendations\n\nSearch the AAOIFI knowledge base (FAS 33, SS 17, SS 59) and cite specifically.",
+
+  "required_documents": ["aaoifi"],
+  "optional_documents": ["context"],
+
+  "required_standards": ["FAS 33", "SS 17", "SS 59"],
+
+  "citation_requirements": {
+    "min_citations": 5,
+    "required_standards": ["FAS 33"],
+    "citation_format": "AAOIFI [Standard] Section [X.Y]",
+    "verification_method": "graphiti_search",
+    "verification_criteria": [
+      "Citation references actual AAOIFI standard section",
+      "Section relevant to asset-backing or compliance requirement",
+      "Citation verifiable in knowledge graph"
+    ]
+  },
+
+  "common_concerns": [
+    "Asset-light structures with insufficient tangible asset backing",
+    "Hidden third-party guarantees eliminating investor risk",
+    "Purchase undertakings at predetermined prices (disguised capital guarantee)",
+    "Debt-for-debt securitization (conventional loan repackaging)",
+    "Sale and leaseback retaining issuer's beneficial ownership",
+    "Secondary market trading at debt-like valuations",
+    "Complex multi-contract layering achieving conventional bond outcomes",
+    "Gharar from ambiguous profit-sharing or undefined asset composition",
+    "Riba-based underlying assets (conventional securities, prohibited industries)"
+  ],
+
+  "example_workflow": {
+    "scenario": "Malaysia-based $500M Ijara Sukuk backed by infrastructure assets",
+    "review_steps": [
+      "1. Verify asset composition: Confirm tangible infrastructure assets (roads, utilities) with legal ownership transfer to SPV",
+      "2. Review lease agreements: Ensure market-rate rental terms and proper maintenance obligation allocation",
+      "3. Check Shariah compliance certificate: Verify SC Malaysia-approved Shariah board review",
+      "4. Analyze purchase undertaking: If present, confirm non-binding promise at fair market value (not predetermined price)",
+      "5. Assess risk-bearing: Verify Sukuk holders bear genuine asset risk (rental income fluctuation, asset depreciation)",
+      "6. Review documentation: Confirm SC-approved templates, segregated proceeds accounts, quarterly disclosures",
+      "7. Evaluate ESG dual verification: Check environmental audit alongside Shariah compliance (Malaysia ESG Sukuk Taxonomy)",
+      "8. Secondary market tradability: Ensure trading based on asset values using AAOIFI SS 59 hybrid tradability rules",
+      "9. Cross-check AAOIFI FAS 33: Verify asset classification, disclosure, fair value accounting compliance",
+      "10. Final verdict: Compliant if all checks pass; recommend modifications if structural issues identified"
+    ],
+    "aaoifi_citations_applied": [
+      "AAOIFI FAS 33 Section 4: Asset-backed vs. asset-based classification",
+      "AAOIFI SS 17 Section 3: Ijara Sukuk asset ownership requirements",
+      "AAOIFI SS 59: Hybrid Sukuk secondary market tradability post-issuance"
+    ]
+  },
+
+  "learning_patterns": [
+    "Asset-backing verification techniques across Sukuk types",
+    "Distinguishing permissible purchase undertakings from prohibited guarantees",
+    "Form vs. substance analysis in complex structures",
+    "Jurisdiction-specific compliance nuances (GCC vs. Malaysia vs. UK)",
+    "Secondary market tradability and AAOIFI SS 59 application",
+    "ESG Sukuk dual verification (environmental + Shariah)"
+  ],
+
+  "version": "1.0.0",
+  "created_at": "2025-10-08T00:30:00Z",
+  "updated_at": "2025-10-08T00:30:00Z",
+  "created_by": "SCO + CLO MCP Copilots",
+  "shariah_reviewed": true,
+  "legal_reviewed": true
+}

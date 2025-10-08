@@ -1,0 +1,695 @@
+'use client'
+
+/**
+ * STEP 1: SOURCE CONNECTION
+ * ==========================
+ * Connect to Neo4j knowledge graph via graphiti-core and upload AAOIFI documents.
+ *
+ * WHAT THIS STEP DOES:
+ * - Tests Neo4j connection via graphiti-core Python library (direct connection, not MCP)
+ * - Uploads AAOIFI standard documents (PDF/DOCX)
+ * - Ingests documents as Graphiti episodes (EpisodeType.text)
+ * - Displays connection stats (nodes, edges, episodes)
+ * - Natural language search via Graphiti
+ *
+ * WHY THIS IS FIRST:
+ * - Knowledge graph is foundation for citations
+ * - AAOIFI documents are the authoritative source
+ * - Need to establish data connection before workflow
+ *
+ * USER EXPERIENCE:
+ * - Click "Test Connection" button
+ * - See Neo4j stats (nodes, edges, documents)
+ * - Upload AAOIFI PDFs with drag-and-drop
+ * - See progress as documents are parsed
+ */
+
+import { useState, useEffect } from 'react'
+import { useWorkflowStore } from '@/lib/store'
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Label } from '@/components/ui/label'
+import {
+  Database,
+  Upload,
+  CheckCircle,
+  XCircle,
+  Loader2,
+  FileText,
+  Trash2,
+  Info,
+  Search,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react'
+import { testGraphitiConnection, ingestDocument, searchGraphitiEnhanced, type GraphitiEnhancedSearchResponse } from '@/lib/api'
+import type { GraphitiStats, UploadedDocument } from '@/lib/types'
+
+// Default Claude synthesis prompt (matching backend)
+const DEFAULT_SYNTHESIS_PROMPT = `You are an expert knowledge synthesizer. Your task is to analyze information from a knowledge graph and generate a clear, accurate, and comprehensive answer.
+
+**Guidelines:**
+1. Synthesize the information into a coherent narrative
+2. Cite specific facts and entities when making claims
+3. Highlight relationships and connections between entities
+4. Note any temporal context (when things happened)
+5. If information is contradictory or uncertain, acknowledge it
+6. Be concise but thorough
+7. Use markdown formatting for clarity
+
+Generate a narrative answer that directly addresses the user's question.`
+
+export function Step1SourceConnection() {
+  const execution = useWorkflowStore((state) => state.execution)
+  const setGraphitiConnected = useWorkflowStore((state) => state.setGraphitiConnected)
+  const addDocument = useWorkflowStore((state) => state.addDocument)
+  const removeDocument = useWorkflowStore((state) => state.removeDocument)
+  const addError = useWorkflowStore((state) => state.addError)
+  const setLoading = useWorkflowStore((state) => state.setLoading)
+
+  const [graphitiStats, setGraphitiStats] = useState<GraphitiStats | null>(null)
+  const [testingConnection, setTestingConnection] = useState(false)
+  const [uploadingFiles, setUploadingFiles] = useState<Set<string>>(new Set())
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState<GraphitiEnhancedSearchResponse | null>(null)
+  const [searching, setSearching] = useState(false)
+  const [fastMode, setFastMode] = useState(false)  // Fast default search (< 1s) vs enhanced search (8-16s+)
+  const [useLlmSynthesis, setUseLlmSynthesis] = useState(false)
+  const [customPrompt, setCustomPrompt] = useState('')
+  const [showCustomPrompt, setShowCustomPrompt] = useState(false)
+  const [showRawResponse, setShowRawResponse] = useState(false)
+  const [showPromptUsed, setShowPromptUsed] = useState(false)
+
+  // Debug: Log searchResults changes
+  useEffect(() => {
+    console.log('🔄 searchResults state changed:', searchResults)
+  }, [searchResults])
+
+  // Test Graphiti connection
+  const handleTestConnection = async () => {
+    setTestingConnection(true)
+    setLoading('graphitiConnection', true)
+
+    try {
+      const stats = await testGraphitiConnection()
+      setGraphitiStats(stats)
+      setGraphitiConnected(stats.connected)
+
+      if (!stats.connected) {
+        addError({
+          id: `error_${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          severity: 'error',
+          title: 'Neo4j Connection Failed',
+          message: 'Could not connect to Neo4j via graphiti-core. Check your backend configuration.',
+          suggestion: 'Ensure the FastAPI backend is running and NEO4J_URI/NEO4J_USER/NEO4J_PASSWORD are correctly set.',
+          dismissible: true,
+        })
+      }
+    } catch (error: any) {
+      addError({
+        id: `error_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        severity: 'error',
+        title: 'Connection Test Failed',
+        message: error.message || 'Failed to test Graphiti connection',
+        technicalDetails: error.stack,
+        suggestion: 'Check that the backend API is running at http://localhost:8000',
+        dismissible: true,
+      })
+    } finally {
+      setTestingConnection(false)
+      setLoading('graphitiConnection', false)
+    }
+  }
+
+  // Handle file upload with progress tracking
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (!files || files.length === 0) return
+
+    setLoading('documentUpload', true)
+
+    for (const file of Array.from(files)) {
+      // Add to uploading set
+      setUploadingFiles((prev) => new Set(prev).add(file.name))
+
+      try {
+        // Upload → Parse → Ingest happens in single API call
+        const uploadedDoc = await ingestDocument(file, 'aaoifi')
+
+        // Verify ingestion was successful
+        if (uploadedDoc.parsed && uploadedDoc.episode_id) {
+          addDocument('aaoifi', uploadedDoc)
+        } else {
+          throw new Error('Document upload succeeded but ingestion failed')
+        }
+      } catch (error: any) {
+        addError({
+          id: `error_${Date.now()}`,
+          timestamp: new Date().toISOString(),
+          severity: 'error',
+          title: `Failed to ingest ${file.name}`,
+          message: error.message || 'Document ingestion failed',
+          technicalDetails: error.stack,
+          suggestion: 'Check backend logs for LlamaParse or Graphiti errors',
+          dismissible: true,
+        })
+      } finally {
+        // Remove from uploading set
+        setUploadingFiles((prev) => {
+          const newSet = new Set(prev)
+          newSet.delete(file.name)
+          return newSet
+        })
+      }
+    }
+
+    setLoading('documentUpload', false)
+    // Clear file input
+    event.target.value = ''
+  }
+
+  // Handle knowledge graph search
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) return
+
+    console.log('🔍 Starting search:', searchQuery)
+    setSearching(true)
+    try {
+      console.log('📡 Calling searchGraphitiEnhanced...')
+      const results = await searchGraphitiEnhanced({
+        query: searchQuery,
+        num_results: 10,
+        use_llm_synthesis: useLlmSynthesis,
+        custom_prompt: showCustomPrompt && customPrompt ? customPrompt : undefined,
+        fast_mode: fastMode,
+      })
+      console.log('✅ Search results received:', results)
+      setSearchResults(results)
+      console.log('✅ Search results state set')
+    } catch (error: any) {
+      console.error('❌ Search error:', error)
+      addError({
+        id: `error_${Date.now()}`,
+        timestamp: new Date().toISOString(),
+        severity: 'error',
+        title: 'Search Failed',
+        message: error.message || 'Failed to search knowledge graph',
+        technicalDetails: error.stack,
+        dismissible: true,
+      })
+    } finally {
+      setSearching(false)
+      console.log('🏁 Search complete, searching=false')
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* What's Happening Explainer */}
+      <Alert variant="info">
+        <Info className="h-4 w-4" />
+        <AlertTitle>What's Happening in Step 1</AlertTitle>
+        <AlertDescription>
+          This step connects to the Neo4j knowledge graph using graphiti-core (Python library) and ingests
+          AAOIFI standard documents. These documents will be used as authoritative sources for
+          citations and natural language search during workflow execution.
+        </AlertDescription>
+      </Alert>
+
+      {/* Graphiti Connection Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Database className="h-5 w-5" />
+            Neo4j / Graphiti Connection
+          </CardTitle>
+          <CardDescription>
+            Test connection to Neo4j AuraDB via graphiti-core Python library
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Button
+            onClick={handleTestConnection}
+            disabled={testingConnection}
+            className="w-full"
+          >
+            {testingConnection ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Testing Connection...
+              </>
+            ) : (
+              <>
+                <Database className="h-4 w-4 mr-2" />
+                Test Connection
+              </>
+            )}
+          </Button>
+
+          {/* Connection Status */}
+          {graphitiStats && (
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                {graphitiStats.connected ? (
+                  <>
+                    <CheckCircle className="h-5 w-5 text-green-600" />
+                    <span className="font-medium text-green-600">Connected</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="h-5 w-5 text-destructive" />
+                    <span className="font-medium text-destructive">Disconnected</span>
+                  </>
+                )}
+              </div>
+
+              {/* Stats */}
+              {graphitiStats.connected && (
+                <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-md">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Episodes</p>
+                    <p className="text-2xl font-bold">{graphitiStats.totalEpisodes}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Nodes</p>
+                    <p className="text-2xl font-bold">{graphitiStats.totalNodes}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Edges</p>
+                    <p className="text-2xl font-bold">{graphitiStats.totalEdges}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">AAOIFI Documents</p>
+                    <p className="text-2xl font-bold">{graphitiStats.aaaoifiDocumentsCount}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Natural Language Search (appears after successful connection) */}
+      {graphitiStats && graphitiStats.connected && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Search className="h-5 w-5" />
+              Explore Knowledge Graph
+            </CardTitle>
+            <CardDescription>
+              Search the knowledge graph using natural language to see what information is available
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {/* Search Input */}
+            <div className="flex gap-2">
+              <Input
+                placeholder="e.g., What are the requirements for Murabaha contracts?"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch()
+                  }
+                }}
+              />
+              <Button onClick={handleSearch} disabled={searching || !searchQuery.trim()}>
+                {searching ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Searching...
+                  </>
+                ) : (
+                  <>
+                    <Search className="h-4 w-4 mr-2" />
+                    Search
+                  </>
+                )}
+              </Button>
+            </div>
+
+            {/* Fast Mode Toggle */}
+            <div className="space-y-2 pt-4 border-t">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="fast-mode"
+                  checked={fastMode}
+                  onCheckedChange={(checked) => setFastMode(checked as boolean)}
+                />
+                <Label
+                  htmlFor="fast-mode"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  ⚡ Fast Mode (< 1s)
+                </Label>
+              </div>
+              <p className="text-xs text-muted-foreground ml-6">
+                {fastMode
+                  ? "Using default search (< 1 second) - skips episode mentions reranking and entity enrichment"
+                  : "Using enhanced search (~15-20 seconds) - includes episode mentions reranking, entity search, and context enrichment"
+                }
+              </p>
+            </div>
+
+            {/* LLM Synthesis Controls */}
+            <div className="space-y-3 pt-4 border-t">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="use-llm-synthesis"
+                  checked={useLlmSynthesis}
+                  onCheckedChange={(checked) => setUseLlmSynthesis(checked as boolean)}
+                />
+                <Label
+                  htmlFor="use-llm-synthesis"
+                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  Use Claude AI Synthesis (generate narrative from knowledge graph)
+                </Label>
+              </div>
+
+              {useLlmSynthesis && (
+                <div className="ml-6 space-y-3">
+                  {/* Show default prompt */}
+                  {!showCustomPrompt && (
+                    <div className="p-3 bg-muted/30 rounded-md border border-border">
+                      <p className="text-xs font-semibold mb-2 text-muted-foreground">Default System Prompt:</p>
+                      <pre className="text-xs whitespace-pre-wrap font-mono text-muted-foreground">
+                        {DEFAULT_SYNTHESIS_PROMPT}
+                      </pre>
+                    </div>
+                  )}
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="use-custom-prompt"
+                      checked={showCustomPrompt}
+                      onCheckedChange={(checked) => setShowCustomPrompt(checked as boolean)}
+                    />
+                    <Label
+                      htmlFor="use-custom-prompt"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Use Custom Prompt
+                    </Label>
+                  </div>
+
+                  {showCustomPrompt && (
+                    <div className="space-y-2">
+                      <Label htmlFor="custom-prompt" className="text-sm">
+                        Custom Synthesis Prompt
+                      </Label>
+                      <Textarea
+                        id="custom-prompt"
+                        placeholder="Enter your custom prompt for Claude synthesis..."
+                        value={customPrompt}
+                        onChange={(e) => setCustomPrompt(e.target.value)}
+                        className="min-h-[100px] font-mono text-sm"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        This prompt will be used by Claude to synthesize the narrative answer from knowledge graph context.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Search Results */}
+            {searchResults && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-sm font-medium">
+                    Results for "{searchResults.query}"
+                  </h4>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">
+                      {searchResults.num_results} {searchResults.num_results === 1 ? 'fact' : 'facts'}
+                    </Badge>
+                    {searchResults.entity_count > 0 && (
+                      <Badge variant="outline">
+                        {searchResults.entity_count} {searchResults.entity_count === 1 ? 'entity' : 'entities'}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+
+                {searchResults.num_results === 0 ? (
+                  <div className="p-4 bg-muted rounded-md text-sm text-muted-foreground text-center">
+                    No results found. Try a different query.
+                  </div>
+                ) : (
+                  <>
+                    {/* Synthesized Answer / Claude AI Synthesis */}
+                    <div className="p-4 bg-primary/5 rounded-lg border border-primary/20 space-y-3">
+                      {/* Header with model info if LLM synthesis was used */}
+                      <div className="flex items-center justify-between">
+                        <h5 className="text-sm font-semibold text-primary">
+                          {searchResults.llm_synthesis ? 'Claude AI Synthesis' : 'Synthesized Answer'}
+                        </h5>
+                        {searchResults.llm_synthesis && (
+                          <div className="flex items-center gap-2">
+                            <Badge variant="secondary" className="text-xs">
+                              {searchResults.llm_synthesis.model}
+                            </Badge>
+                            <Badge variant="outline" className="text-xs">
+                              {searchResults.llm_synthesis.tokens_used.input_tokens}↓ {searchResults.llm_synthesis.tokens_used.output_tokens}↑
+                            </Badge>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Answer text */}
+                      <div className="text-sm leading-relaxed whitespace-pre-wrap">
+                        {searchResults.answer}
+                      </div>
+
+                      {/* Prompt Used (only for LLM synthesis) */}
+                      {searchResults.llm_synthesis && (
+                        <div className="pt-2 border-t border-primary/20 space-y-2">
+                          <button
+                            onClick={() => setShowPromptUsed(!showPromptUsed)}
+                            className="flex items-center gap-2 text-xs text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {showPromptUsed ? (
+                              <>
+                                <ChevronUp className="h-3 w-3" />
+                                Hide Prompt Used
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-3 w-3" />
+                                Show Prompt Used
+                              </>
+                            )}
+                          </button>
+
+                          {showPromptUsed && (
+                            <div className="p-3 bg-muted/50 rounded-md">
+                              <p className="text-xs font-semibold mb-2 text-muted-foreground">
+                                {showCustomPrompt && customPrompt ? 'Custom Prompt' : 'Default System Prompt'}
+                              </p>
+                              <pre className="text-xs overflow-x-auto whitespace-pre-wrap font-mono">
+                                {searchResults.llm_synthesis.prompt_used}
+                              </pre>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Expandable raw response viewer (only for LLM synthesis) */}
+                      {searchResults.llm_synthesis && (
+                        <div className="pt-2 border-t border-primary/20">
+                          <button
+                            onClick={() => setShowRawResponse(!showRawResponse)}
+                            className="flex items-center gap-2 text-xs text-primary hover:text-primary/80 transition-colors"
+                          >
+                            {showRawResponse ? (
+                              <>
+                                <ChevronUp className="h-3 w-3" />
+                                Hide Raw Response
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDown className="h-3 w-3" />
+                                Show Raw Response
+                              </>
+                            )}
+                          </button>
+
+                          {showRawResponse && (
+                            <div className="mt-2 p-3 bg-muted/50 rounded-md">
+                              <pre className="text-xs overflow-x-auto whitespace-pre-wrap font-mono">
+                                {JSON.stringify(searchResults.llm_synthesis.raw_response, null, 2)}
+                              </pre>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Enriched Facts */}
+                    <div className="space-y-3 max-h-96 overflow-y-auto">
+                      <h5 className="text-sm font-semibold">Detailed Facts</h5>
+                      {searchResults.facts.map((fact, idx) => (
+                        <div
+                          key={idx}
+                          className="p-4 bg-background rounded-lg border border-border hover:border-primary/50 transition-colors"
+                        >
+                          {/* Timestamp in top right */}
+                          <div className="flex items-start justify-between gap-4 mb-3">
+                            <div className="flex-1 min-w-0">
+                              {/* Main fact */}
+                              <p className="text-sm leading-relaxed">
+                                {fact.fact}
+                              </p>
+                            </div>
+                            {fact.created_at && (
+                              <time className="text-xs text-muted-foreground whitespace-nowrap">
+                                {new Date(fact.created_at).toLocaleString()}
+                              </time>
+                            )}
+                          </div>
+
+                          {/* Entity context */}
+                          {(fact.source_entity || fact.target_entity) && (
+                            <div className="flex items-center gap-2 pt-2 border-t border-border/50 text-xs text-muted-foreground">
+                              {fact.source_entity && (
+                                <span className="font-medium">{fact.source_entity}</span>
+                              )}
+                              {fact.relationship_type && (
+                                <span className="text-primary/60">→ {fact.relationship_type} →</span>
+                              )}
+                              {fact.target_entity && (
+                                <span className="font-medium">{fact.target_entity}</span>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Related facts */}
+                          {fact.related_facts && fact.related_facts.length > 0 && (
+                            <div className="mt-2 pt-2 border-t border-border/50">
+                              <p className="text-xs text-muted-foreground mb-1">Related:</p>
+                              <ul className="space-y-1">
+                                {fact.related_facts.slice(0, 2).map((rf, rfIdx) => (
+                                  <li key={rfIdx} className="text-xs text-muted-foreground pl-2 border-l-2 border-border">
+                                    {rf.length > 100 ? `${rf.substring(0, 100)}...` : rf}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* AAOIFI Document Upload Card */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Upload className="h-5 w-5" />
+            Upload AAOIFI Documents
+          </CardTitle>
+          <CardDescription>
+            Upload AAOIFI standards (PDF/DOCX) to use as authoritative sources
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* File input */}
+          <div className="flex items-center gap-2">
+            <Input
+              type="file"
+              accept=".pdf,.docx"
+              multiple
+              onChange={handleFileUpload}
+              disabled={uploadingFiles.size > 0}
+            />
+          </div>
+
+          {/* Uploaded documents list */}
+          {execution && execution.aaaoifiDocuments.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium">Uploaded Documents</h4>
+              <div className="space-y-2">
+                {execution.aaaoifiDocuments.map((doc) => (
+                  <div
+                    key={doc.id}
+                    className="flex items-center justify-between p-3 bg-muted rounded-md"
+                  >
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                      <FileText className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{doc.filename}</p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <span>{(doc.filesize / 1024).toFixed(1)} KB</span>
+                          {doc.episode_id && (
+                            <span className="font-mono">• Episode: {doc.episode_id.slice(0, 8)}...</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {doc.parsed && doc.episode_id ? (
+                        <Badge variant="default" className="bg-green-600">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          Ingested
+                        </Badge>
+                      ) : uploadingFiles.has(doc.filename) ? (
+                        <Badge variant="secondary">
+                          <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                          Processing...
+                        </Badge>
+                      ) : (
+                        <Badge variant="destructive">
+                          <XCircle className="h-3 w-3 mr-1" />
+                          Failed
+                        </Badge>
+                      )}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeDocument('aaoifi', doc.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Processing status */}
+          {uploadingFiles.size > 0 && (
+            <Alert>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <AlertTitle>Processing Documents</AlertTitle>
+              <AlertDescription>
+                {uploadingFiles.size === 1 ? (
+                  <>Processing {Array.from(uploadingFiles)[0]}</>
+                ) : (
+                  <>Processing {uploadingFiles.size} files: Upload → LlamaParse → Graphiti ingestion</>
+                )}
+              </AlertDescription>
+            </Alert>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+ 

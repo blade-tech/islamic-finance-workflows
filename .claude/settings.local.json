@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(findstr:*)",
+      "Bash(npx:*)",
+      "Read(//c/Users/sami/AppData/Roaming/Claude/**)",
+      "Bash(claude mcp:*)",
+      "Bash(find:*)",
+      "Bash(curl:*)",
+      "mcp__exa__web_search_exa",
+      "Read(//d/Pictures/Screenshots/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

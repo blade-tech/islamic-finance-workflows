@@ -1,0 +1,212 @@
+{
+  "id": "murabaha_structuring",
+  "title": "Murabaha Transaction Structuring",
+  "description": "Structure Shariah-compliant cost-plus sale transactions with comprehensive AAOIFI FAS 2 compliance and multi-jurisdiction legal frameworks",
+  "category": "structuring",
+
+  "shariah_framework": {
+    "madhahib_perspectives": {
+      "consensus": "All four madhahib (Hanafi, Maliki, Shafi'i, Hanbali) agree on Murabaha's basic permissibility, as stated by Ibn Qudaamah: 'there is no difference in opinion regarding its validity'",
+      "foundational_principle": "Murabaha falls within the Qur'anic distinction between permissible trade and prohibited riba (2:275), requiring no specific scriptural authorization beyond general commercial permissibility"
+    },
+
+    "primary_principles": [
+      "Full cost and profit disclosure (transparency obligation)",
+      "Actual possession and ownership by financier before resale",
+      "Prohibition of deception (tadlis) and excessive uncertainty (gharar)",
+      "Genuine commercial risk-bearing, not disguised lending",
+      "Profit represents trade markup, not time-value of money",
+      "Financing must run through real commodities"
+    ],
+
+    "required_conditions": [
+      "Seller must reveal both original cost and profit margin to buyer",
+      "Financier must take actual physical possession of commodity before resale",
+      "Two-stage structure: (1) Financier acquires asset, (2) Financier sells to customer",
+      "Disclosure of all defects in the commodity",
+      "No connection between customer and original dealer (prevents collusion)",
+      "Profit must be specified as known percentage of cost, not linked to time-based benchmarks (LIBOR)",
+      "All terms must be specified and known at time of signing sale contract"
+    ],
+
+    "prohibited_elements": [
+      "Riba (interest) - profit linked to time or unknown variables",
+      "Gharar (excessive uncertainty) - ambiguous terms or undisclosed information",
+      "Tadlis (deception) - concealing true costs or defects",
+      "Riba al-nasi'ah (interest on deferred payment disguised as trade markup)",
+      "Customer directing dealer to delay purchase until prices drop",
+      "Reselling commodity before taking possession (violates hadith from Ahmad, An-Nasa'i, Ad-Daraqutni, Abu Dawud)",
+      "Using Murabaha form without substance of genuine trade (hilah/legal stratagem)"
+    ],
+
+    "aaoifi_standards": [
+      {
+        "standard": "FAS 2",
+        "title": "Murabaha and Murabaha to the Purchase Orderer",
+        "key_sections": [
+          "Section 5: Recognition and measurement of Murabaha transactions",
+          "Section 7: Disclosure requirements for cost and profit",
+          "Section 8: Treatment of deferred payment terms"
+        ],
+        "purpose": "Governs accounting treatment, disclosure, and measurement of Murabaha transactions"
+      },
+      {
+        "standard": "SS 17/45",
+        "title": "Shariah Standards for Murabaha",
+        "purpose": "Defines Shariah compliance criteria for modern Murabaha practice"
+      }
+    ],
+
+    "jurisprudential_nuances": [
+      "Hanafi school: More flexible on constructive possession in commercial matters",
+      "Maliki school: Stricter on sadd al-dhara'i (blocking means to prohibited ends), scrutinizes structures that technically comply but enable riba-like outcomes",
+      "Shafi'i school: Emphasizes clear contractual terms and precise documentation",
+      "Hanbali school: Textualist approach requiring adherence to classical formulations with necessity-based exceptions"
+    ]
+  },
+
+  "legal_framework": {
+    "gcc": {
+      "jurisdictions": ["UAE", "Saudi Arabia", "Bahrain", "Qatar"],
+      "regulators": [
+        "UAE: Central Bank of UAE (CBUAE), Securities and Commodities Authority (SCA)",
+        "Saudi Arabia: SAMA (Saudi Central Bank), Capital Market Authority (CMA)",
+        "Bahrain: Central Bank of Bahrain (strong AAOIFI adoption)"
+      ],
+      "required_documentation": [
+        "Offer and Acceptance Letters (asset description, cost price, profit margin, payment terms)",
+        "Purchase Order from customer specifying asset requirements",
+        "Agency Agreement appointing bank as agent to purchase",
+        "Sale Agreement between bank and customer with cost-plus-profit disclosure",
+        "Title Transfer Documents evidencing ownership transfer",
+        "Shariah Compliance Certificate from internal/external boards"
+      ],
+      "key_considerations": [
+        "Courts scrutinize documentation to ensure true sales, not disguised loans",
+        "Arbitration clauses must specify arbitrators with Islamic finance expertise",
+        "Documentation must comply with both civil law and Shariah principles",
+        "Tahawwut Master Agreement (TMA) increasingly used as regional benchmark"
+      ]
+    },
+
+    "malaysia": {
+      "regulator": "Bank Negara Malaysia (BNM)",
+      "legislation": "Islamic Financial Services Act (IFSA)",
+      "oversight": "National Special Muzakarah Council (binding religious rulings)",
+      "required_documentation": [
+        "Initial Agreement specifying asset with detailed specifications",
+        "Asset Acquisition Documentation with proof of bank ownership",
+        "Sale Contract with transparent cost and profit margin disclosure",
+        "Payment Schedule with fixed installment terms",
+        "Shariah Compliance Certificate from mandatory Shariah board",
+        "Audit Trail for all transactions (traceability requirement)"
+      ],
+      "key_considerations": [
+        "Dual governance: National religious authorities + conventional regulators",
+        "Internal Shariah Committees with legally binding decisions",
+        "Enhanced reporting requirements for Shariah-compliant activities",
+        "Strong AAOIFI alignment (leads Southeast Asia in SS 17/45 adoption)",
+        "RegTech solutions for automated Shariah compliance screening"
+      ]
+    },
+
+    "uk": {
+      "regulators": ["Financial Conduct Authority (FCA)", "Prudential Regulation Authority (PRA)"],
+      "approach": "No special exemptions but recognition of Islamic finance unique features",
+      "tax_framework": "Finance Act amendments ensure tax neutrality with conventional finance",
+      "required_documentation": [
+        "Sale and Purchase Agreement with transparent profit disclosure",
+        "Ownership Transfer Documents (bank's asset acquisition evidence)",
+        "Payment Schedule with fixed installments and disclosed profit margin",
+        "Legal Charge (for property finance, registered mortgage equivalent)",
+        "Commodity Trading Documentation (for commodity Murabaha)",
+        "FCA Compliance Documentation (consumer protection disclosures)"
+      ],
+      "key_considerations": [
+        "Tax neutrality: Murabaha treated equivalently to conventional loans/mortgages",
+        "Stamp Duty amendments removed double taxation barriers",
+        "Same FCA consumer protection standards as conventional products",
+        "Commodity Murabaha common for refinancing flexibility",
+        "FCA allows Shariah compliance payments to registered charities (2024-2025)"
+      ]
+    },
+
+    "cross_border_considerations": [
+      "Documentation standardization challenges despite AAOIFI harmonization",
+      "Regulatory arbitrage risks from differential treatment across jurisdictions",
+      "Conflict of laws in hybrid legal frameworks (civil law + Shariah)",
+      "Courts may recharacterize Murabaha as conventional loan if documentation inadequate",
+      "Use standardized AAOIFI-aligned clauses with local adaptations",
+      "Maintain comprehensive audit trails for regulatory review"
+    ]
+  },
+
+  "system_prompt": "You are an Islamic finance expert specializing in Murabaha (cost-plus sale) transactions. Your role is to structure Shariah-compliant Murabaha transactions that satisfy both Islamic jurisprudence and regulatory requirements across multiple jurisdictions (GCC, Malaysia, UK).\n\n## Your Expertise\n\nYou have deep knowledge of:\n- Classical fiqh foundations of Murabaha from all four madhahib (Hanafi, Maliki, Shafi'i, Hanbali)\n- Modern AAOIFI standards (particularly FAS 2 and SS 17/45)\n- Regulatory frameworks in GCC countries, Malaysia, and UK\n- Distinction between form and substance in Islamic commercial law\n- Contemporary scholarly debates on Murabaha structure and application\n\n## Core Shariah Principles You Must Apply\n\n1. **Transparency Obligation**: Always disclose both the original cost and profit margin. This isn't merely technical—it's grounded in the prohibition of deception (tadlis) and the requirement of informed consent.\n\n2. **Genuine Ownership**: The financier MUST take actual possession of the commodity before reselling to the customer. This ensures real commercial risk-bearing, distinguishing Murabaha from disguised lending. Reference the hadith requirement that goods must be moved from the dealer's place.\n\n3. **Substance Over Form**: Constantly evaluate whether the transaction represents genuine trade or merely preserves the form while functioning as interest-based lending. Apply the Maliki principle of sadd al-dhara'i (blocking means to prohibited ends).\n\n4. **Riba Avoidance**: Profit must represent a trade markup, NOT time-value of money. Never link profit to time-based benchmarks like LIBOR. The profit percentage must be known and fixed at contract signing.\n\n5. **Gharar Elimination**: All terms must be specified and known. No unknown or future variables in profit calculation.\n\n6. **Real Economy Connection**: Financing must run through actual commodities. While commodity Murabaha is permissible, scrutinize whether it maintains ethical foundations or becomes a mere legal stratagem.\n\n## Your Workflow Process\n\nFor every Murabaha transaction you structure:\n\n1. **Search AAOIFI Standards**: Use the search_graphiti tool to find relevant AAOIFI FAS 2 sections and SS 17/45 guidance from the knowledge graph (group_id: 'aaoifi').\n\n2. **Analyze Transaction Details**: Review the customer's requirements (commodity, amount, payment terms, jurisdiction).\n\n3. **Structure Two-Stage Process**:\n   - Stage 1: Financier acquires asset (verify possession requirement)\n   - Stage 2: Financier sells to customer (cost-plus-profit, transparent disclosure)\n\n4. **Apply Jurisdiction-Specific Requirements**:\n   - GCC: Include Tahawwut Master Agreement clauses, Shariah board certification\n   - Malaysia: Ensure dual governance compliance, maintain audit trail\n   - UK: Apply FCA consumer protection, verify tax neutrality structure\n\n5. **Identify Shariah Concerns**: Proactively flag any elements that could:\n   - Create riba-like outcomes (time-based profit, deferred payment without genuine trade)\n   - Introduce gharar (uncertain terms, ambiguous profit calculation)\n   - Represent form without substance (legal strategems, collusion with dealer)\n\n6. **Cite Specific Standards**: For every Shariah requirement or compliance point, cite:\n   - AAOIFI standard and section (e.g., 'AAOIFI FAS 2 Section 5.1')\n   - Relevant hadith or classical fiqh principle\n   - Madhab-specific rulings if applicable\n\n7. **Provide Documentation Requirements**: Specify required documents for the applicable jurisdiction, including:\n   - Shariah compliance certificates\n   - Ownership transfer evidence\n   - Cost and profit disclosure statements\n   - Regulatory filings\n\n## Citation Requirements\n\nYou MUST include at least 5 citations to AAOIFI standards, formatted as:\n'According to AAOIFI FAS 2 Section X.Y, [requirement]...'\n\nVerify each citation by searching the knowledge graph before including it.\n\n## Common Shariah Concerns to Watch For\n\n- Customer directing dealer to delay purchase (suggests collusion, not genuine trade)\n- Profit linked to time or LIBOR (transforms into riba al-nasi'ah)\n- Inadequate possession by financier (violates hadith requirement)\n- Reselling before possession taken (explicitly prohibited)\n- Commodity Murabaha used purely for liquidity (potential hilah/stratagem)\n- Documentation that doesn't evidence genuine sale (risk of recharacterization as loan)\n\n## Scholarly Balance\n\nWhile you're grounded in classical principles, acknowledge contemporary scholarly diversity:\n- Some scholars accept constructive possession in digital/tokenized assets\n- Debates exist on binding vs. non-binding promises in modern two-stage Murabaha\n- Commodity Murabaha (tawarruq) has varying acceptance across scholars\n\nWhen scholarly disagreement exists, present the range of views with their jurisprudential bases.\n\n## Output Structure\n\nProvide:\n1. Transaction structure overview (two-stage process)\n2. Shariah compliance checklist (possession, disclosure, riba avoidance)\n3. Jurisdiction-specific documentation requirements\n4. Risk assessment (potential Shariah concerns)\n5. AAOIFI citations (minimum 5, with specific sections)\n6. Recommended implementation steps\n\nYour goal is to create structures that are both Shariah-compliant in substance and legally sound across jurisdictions.",
+
+  "user_prompt_template": "I need to structure a Murabaha transaction with the following details:\n\n**Transaction Amount**: {{amount}}\n**Customer**: {{customer}}\n**Commodity/Asset**: {{commodity}}\n**Payment Terms**: {{payment_terms}}\n**Jurisdiction**: {{jurisdiction}}\n\n**Additional Context**:\n{{additional_context}}\n\n**Customer Requirements**:\n{{customer_requirements}}\n\nPlease provide a complete Murabaha transaction structure including:\n\n1. **Two-Stage Process Flow**:\n   - How the financier will acquire the asset\n   - How possession will be established\n   - How the resale to customer will be structured\n\n2. **Shariah Compliance Points** (with AAOIFI citations):\n   - Cost and profit disclosure mechanism\n   - Possession and ownership transfer evidence\n   - Riba avoidance measures\n   - Gharar elimination approach\n\n3. **Jurisdiction-Specific Documentation**:\n   - Required legal documents for {{jurisdiction}}\n   - Regulatory filings\n   - Shariah board certification process\n\n4. **Risk Assessment**:\n   - Potential Shariah concerns\n   - Mitigation strategies\n   - Red flags to avoid\n\n5. **Implementation Roadmap**:\n   - Step-by-step execution plan\n   - Timeline considerations\n   - Stakeholder responsibilities\n\nSearch the AAOIFI knowledge base for relevant standards and cite them specifically.",
+
+  "required_documents": ["aaoifi"],
+  "optional_documents": ["context"],
+
+  "required_standards": ["FAS 2", "SS 17/45"],
+
+  "citation_requirements": {
+    "min_citations": 5,
+    "required_standards": ["FAS 2"],
+    "citation_format": "AAOIFI [Standard] Section [X.Y]",
+    "verification_method": "graphiti_search",
+    "verification_criteria": [
+      "Citation must reference actual AAOIFI standard section",
+      "Section must be relevant to stated requirement",
+      "Citation must be verifiable in knowledge graph"
+    ]
+  },
+
+  "common_concerns": [
+    "Customer-dealer collusion (customer directing dealer on timing/pricing)",
+    "Profit linked to time-based benchmarks (LIBOR) instead of fixed percentage",
+    "Inadequate possession by financier (constructive vs. physical possession)",
+    "Documentation that evidences financing rather than genuine sale",
+    "Commodity Murabaha used as pure liquidity tool without real economy connection",
+    "Rescheduling existing debts disguised as Murabaha (debt-for-debt prohibition)",
+    "Defects in commodity not disclosed to customer",
+    "Profit margin not specified at contract signing (introduces gharar)"
+  ],
+
+  "example_workflow": {
+    "scenario": "UAE-based company needs $1,000,000 equipment financing via Murabaha",
+    "steps": [
+      "1. Customer submits purchase order specifying equipment with detailed specifications",
+      "2. Bank conducts due diligence on equipment supplier and customer creditworthiness",
+      "3. Bank appoints customer as agent to facilitate purchase (agency agreement)",
+      "4. Bank acquires equipment from supplier, taking ownership and possession (title transfer documented)",
+      "5. Equipment physically moved from supplier location to establish possession (hadith requirement)",
+      "6. Bank discloses cost ($1,000,000) and profit margin (e.g., 15% = $150,000) to customer",
+      "7. Bank sells equipment to customer for $1,150,000 (sale agreement signed)",
+      "8. Customer pays $1,150,000 over agreed payment schedule (e.g., 36 monthly installments)",
+      "9. Shariah board issues compliance certificate",
+      "10. CBUAE regulatory filing completed (UAE-specific requirement)"
+    ],
+    "aaoifi_citations_applied": [
+      "AAOIFI FAS 2 Section 5.1: Recognition of Murabaha receivable at sale price",
+      "AAOIFI FAS 2 Section 7.3: Disclosure of cost and profit to customer",
+      "AAOIFI SS 17/45: Possession requirement before resale"
+    ]
+  },
+
+  "learning_patterns": [
+    "Common Shariah concerns in modern Murabaha practice",
+    "Documentation gaps that risk recharacterization as conventional loan",
+    "Compliance best practices across GCC, Malaysia, UK jurisdictions",
+    "Madhab-specific interpretations affecting structure",
+    "Evolution from classical Murabaha to modern 'Murabaha to purchase orderer'",
+    "Tension between commercial practicality and Shariah authenticity"
+  ],
+
+  "version": "1.0.0",
+  "created_at": "2025-10-08T00:00:00Z",
+  "updated_at": "2025-10-08T00:00:00Z",
+  "created_by": "SCO + CLO MCP Copilots",
+  "shariah_reviewed": true,
+  "legal_reviewed": true
+}

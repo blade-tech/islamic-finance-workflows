@@ -1,0 +1,138 @@
+{
+  "id": "contract_documentation",
+  "title": "Islamic Contract Documentation",
+  "description": "Generate Shariah-compliant contract documentation for Islamic finance transactions including Mudaraba, Musharaka, Wakalah, and Ijarah agreements",
+  "category": "documentation",
+
+  "shariah_framework": {
+    "contract_types": {
+      "mudaraba": {
+        "description": "Profit-sharing partnership (silent partnership)",
+        "parties": ["Rab al-Mal (capital provider)", "Mudarib (entrepreneur/manager)"],
+        "essential_elements": [
+          "Capital contribution specified",
+          "Profit-sharing ratio agreed",
+          "Loss allocation: capital provider bears financial loss",
+          "Mudarib management authority defined",
+          "Investment activities specified"
+        ],
+        "prohibited_clauses": [
+          "Guaranteed profit for capital provider",
+          "Fixed return unrelated to actual profits",
+          "Mudarib liability for losses (except negligence/breach)"
+        ]
+      },
+      "musharaka": {
+        "description": "Joint venture partnership",
+        "parties": ["Partner 1", "Partner 2", "Additional partners as applicable"],
+        "essential_elements": [
+          "Capital contributions from all partners",
+          "Profit-sharing ratio (can differ from capital ratio)",
+          "Loss-sharing follows capital contribution ratios",
+          "Management rights and responsibilities",
+          "Exit mechanism (if diminishing Musharaka)"
+        ],
+        "prohibited_clauses": [
+          "Guaranteed returns independent of partnership performance",
+          "Loss allocation not following capital ratios",
+          "One partner exempted from loss"
+        ]
+      },
+      "wakalah": {
+        "description": "Agency agreement",
+        "parties": ["Principal (Muwakkil)", "Agent (Wakil)"],
+        "essential_elements": [
+          "Scope of agency authority clearly defined",
+          "Agent fee structure (fixed, percentage, or incentive-based)",
+          "Principal's assets/funds under management",
+          "Reporting and accountability mechanisms",
+          "Termination conditions"
+        ],
+        "prohibited_clauses": [
+          "Agent guarantee of investment returns",
+          "Mixing agent and principal roles inappropriately"
+        ]
+      },
+      "ijarah": {
+        "description": "Lease agreement",
+        "parties": ["Lessor (owner)", "Lessee (tenant)"],
+        "essential_elements": [
+          "Leased asset description and condition",
+          "Rental amount and payment schedule",
+          "Lease term and renewal options",
+          "Maintenance obligations (lessor: structural, lessee: operational)",
+          "Purchase option at end of lease (if Ijarah Muntahia Bittamleek)"
+        ],
+        "prohibited_clauses": [
+          "Lessee responsible for structural repairs (lessor's obligation)",
+          "Rent linked to interest rate benchmarks",
+          "Binding purchase at predetermined price (should be market value or independent valuation)"
+        ]
+      }
+    },
+
+    "universal_contract_principles": [
+      "Offer and acceptance (ijab wa qabul) must be clear and unambiguous",
+      "Parties must have legal capacity (ahliyyah)",
+      "Subject matter must be lawful and clearly defined",
+      "No gharar (excessive uncertainty) in terms",
+      "No riba (interest) elements",
+      "Mutual consent without coercion (ikrah)"
+    ],
+
+    "aaoifi_standards": [
+      {
+        "standard": "SS 12",
+        "title": "Sharikah (Musharaka and Mudaraba)",
+        "purpose": "Governs partnership contract structures"
+      },
+      {
+        "standard": "SS 9",
+        "title": "Ijarah and Ijarah Muntahia Bittamleek",
+        "purpose": "Governs lease contract structures"
+      }
+    ]
+  },
+
+  "legal_framework": {
+    "common_clauses": [
+      "Governing law and jurisdiction",
+      "Dispute resolution mechanism (Shariah arbitration preferred)",
+      "Representations and warranties",
+      "Events of default and remedies",
+      "Confidentiality obligations",
+      "Amendment procedures",
+      "Force majeure provisions"
+    ],
+    "jurisdiction_specific": {
+      "gcc": ["Shariah board approval clause", "AAOIFI compliance statement"],
+      "malaysia": ["SC Malaysia template compliance", "Shariah committee certification"],
+      "uk": ["FCA regulatory disclosures", "Consumer protection statements"]
+    }
+  },
+
+  "system_prompt": "You are an Islamic finance legal expert specializing in Shariah-compliant contract drafting. Your role is to generate comprehensive contract documentation that satisfies both Islamic legal principles and modern commercial requirements.\n\n## Your Drafting Process\n\n1. **Identify Contract Type**: Mudaraba, Musharaka, Wakalah, Ijarah, or hybrid structure\n\n2. **Essential Elements**: Ensure all Shariah-required elements present:\n   - Clear offer and acceptance\n   - Parties with legal capacity\n   - Lawful subject matter\n   - No gharar (excessive uncertainty)\n   - No riba elements\n   - Mutual consent\n\n3. **Type-Specific Requirements**:\n   - Mudaraba: Profit-sharing ratio, loss allocation, Mudarib authority\n   - Musharaka: Capital contributions, profit/loss sharing, management rights\n   - Wakalah: Agency scope, fee structure, accountability\n   - Ijarah: Asset description, rental terms, maintenance obligations\n\n4. **Prohibited Clauses**: Never include:\n   - Guaranteed returns unrelated to performance\n   - Interest-based penalties or indexation\n   - Inappropriate risk allocation (e.g., Mudarib liable for non-negligent losses)\n\n5. **Search AAOIFI Standards**: Use search_graphiti for relevant standards (SS 12 for Musharaka/Mudaraba, SS 9 for Ijarah)\n\n6. **Jurisdiction-Specific Additions**: Include required clauses for applicable jurisdiction\n\n## Citation Requirements\n\nInclude minimum 3 AAOIFI citations for contract structure requirements.\n\n## Output Structure\n\n1. Contract title and parties\n2. Recitals (background and purpose)\n3. Definitions\n4. Essential terms (type-specific)\n5. General provisions (governing law, dispute resolution, etc.)\n6. Schedules (if applicable)\n7. Signature blocks\n8. AAOIFI compliance notes with citations",
+
+  "user_prompt_template": "Generate a Shariah-compliant {{contract_type}} contract with the following details:\n\n**Parties**:\n{{parties}}\n\n**Transaction Details**:\n{{transaction_details}}\n\n**Key Terms**:\n{{key_terms}}\n\n**Jurisdiction**: {{jurisdiction}}\n\n**Special Provisions**:\n{{special_provisions}}\n\nProvide:\n1. Complete contract draft\n2. Shariah compliance notes\n3. AAOIFI citations for key clauses\n4. Recommended review points",
+
+  "required_documents": ["aaoifi"],
+  "required_standards": ["SS 12", "SS 9"],
+
+  "citation_requirements": {
+    "min_citations": 3,
+    "citation_format": "AAOIFI [Standard] Section [X.Y]",
+    "verification_method": "graphiti_search"
+  },
+
+  "common_concerns": [
+    "Gharar (uncertainty) in profit-sharing or asset specifications",
+    "Inappropriate guarantee clauses",
+    "Riba elements in penalty or indexation clauses",
+    "Improper risk allocation between parties",
+    "Missing essential Shariah contract elements"
+  ],
+
+  "version": "1.0.0",
+  "created_at": "2025-10-08T00:50:00Z",
+  "created_by": "Islamic Finance Standards Synthesis"
+}
