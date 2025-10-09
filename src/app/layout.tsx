@@ -23,6 +23,7 @@ import '@/styles/globals.css'
 import { ErrorBoundary } from '@/components/workflow/ErrorBoundary'
 import { ErrorDisplay } from '@/components/workflow/ErrorDisplay'
 import { Toaster } from '@/components/ui/toaster'
+import { ServiceStatusButton } from '@/components/workflow/ServiceStatusButton'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -57,6 +58,9 @@ export default function RootLayout({
 
           {/* Toast notifications (bottom-right) */}
           <Toaster />
+
+          {/* Backend service status button (floating, bottom-right) */}
+          <ServiceStatusButton />
         </ErrorBoundary>
       </body>
     </html>

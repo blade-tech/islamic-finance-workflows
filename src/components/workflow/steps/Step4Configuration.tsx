@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Info, MessageSquare } from 'lucide-react'
+import { ServiceDependencyBadge } from '../ServiceDependencyBadge'
 
 export function Step4Configuration() {
   const execution = useWorkflowStore((state) => state.execution)
@@ -35,6 +36,9 @@ export function Step4Configuration() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Required Services */}
+          <ServiceDependencyBadge services={['orchestrator']} inline={false} />
+
           <Textarea
             placeholder="e.g., Make sure to emphasize profit-sharing ratios, include clauses about dispute resolution, reference AAOIFI FAS 3..."
             rows={10}

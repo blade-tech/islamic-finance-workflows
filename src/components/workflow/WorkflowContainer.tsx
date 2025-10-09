@@ -77,16 +77,16 @@ export function WorkflowContainer() {
   const canGoNext = (() => {
     if (execution.currentStepIndex >= STEPS.length - 1) return false
 
-    // Step-specific validation
+    // Step-specific validation (RELAXED FOR TESTING)
     switch (execution.currentStepIndex) {
-      case 0: // Step 1: Source Connection - require Graphiti connected
-        return execution.graphitiConnected
-      case 1: // Step 2: Workflow Selection - require template selected
-        return execution.selectedTemplate !== null
+      case 0: // Step 1: Source Connection - ALLOW PROCEED (for testing)
+        return true // was: execution.graphitiConnected
+      case 1: // Step 2: Workflow Selection - ALLOW PROCEED (for testing)
+        return true // was: execution.selectedTemplate !== null
       case 2: // Step 3: Context Upload - optional, always allow proceed
         return true
-      case 3: // Step 4: Live Execution - require execution completed
-        return execution.status === 'completed'
+      case 3: // Step 4: Live Execution - ALLOW PROCEED (for testing)
+        return true // was: execution.status === 'completed'
       case 4: // Step 5: Citation Verification - allow proceed (citations optional)
         return true
       case 5: // Step 6: Outcome & Download - allow proceed
@@ -137,24 +137,22 @@ export function WorkflowContainer() {
                   <button
                     key={step.index}
                     onClick={() => {
-                      // Allow navigating to completed steps
-                      if (isCompleted || isCurrent) {
-                        useWorkflowStore.setState((state) => ({
-                          execution: state.execution
-                            ? { ...state.execution, currentStepIndex: step.index }
-                            : null,
-                        }))
-                      }
+                      // Allow navigating to ANY step (for testing)
+                      useWorkflowStore.setState((state) => ({
+                        execution: state.execution
+                          ? { ...state.execution, currentStepIndex: step.index }
+                          : null,
+                      }))
                     }}
-                    disabled={isUpcoming}
+                    disabled={false} // was: disabled={isUpcoming}
                     className={`
-                      flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors
+                      flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer
                       ${
                         isCurrent
                           ? 'bg-primary text-primary-foreground'
                           : isCompleted
                           ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
-                          : 'bg-muted text-muted-foreground cursor-not-allowed'
+                          : 'bg-muted text-muted-foreground hover:bg-muted/80'
                       }
                     `}
                   >
@@ -196,18 +194,7 @@ export function WorkflowContainer() {
             </Button>
             {!canGoNext && execution.currentStepIndex < STEPS.length - 1 && (
               <p className="text-xs text-muted-foreground mt-1">
-                {(() => {
-                  switch (execution.currentStepIndex) {
-                    case 0:
-                      return 'Connect to Graphiti to proceed'
-                    case 1:
-                      return 'Select a workflow template to proceed'
-                    case 3:
-                      return 'Complete workflow execution to proceed'
-                    default:
-                      return ''
-                  }
-                })()}
+                {/* Removed validation for testing - navigate freely */}
               </p>
             )}
           </div>

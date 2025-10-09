@@ -17,6 +17,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FileText, Trash2, Info, ArrowRight, Upload, Loader2 } from 'lucide-react'
+import { ServiceDependencyBadge } from '../ServiceDependencyBadge'
 
 export function Step3ContextUpload() {
   const execution = useWorkflowStore((state) => state.execution)
@@ -115,7 +116,14 @@ export function Step3ContextUpload() {
             Provide specific guidance, constraints, or preferences to help Claude tailor the output
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          {/* Required Services */}
+          <ServiceDependencyBadge
+            services={['orchestrator']}
+            specialTags={['R&D Phase']}
+            inline={false}
+          />
+
           <Textarea
             placeholder="e.g., 'Emphasize profit-sharing ratios', 'Include dispute resolution clauses', 'Reference AAOIFI FAS 3'..."
             value={execution?.contextText || ''}
@@ -137,6 +145,13 @@ export function Step3ContextUpload() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Required Services */}
+          <ServiceDependencyBadge
+            services={['documents', 'graphiti']}
+            specialTags={['R&D Phase']}
+            inline={false}
+          />
+
           <div className="flex items-center gap-2">
             <Input
               type="file"

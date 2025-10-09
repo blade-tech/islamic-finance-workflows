@@ -34,6 +34,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
+import { ServiceDependencyBadge } from '@/components/workflow/ServiceDependencyBadge'
 import {
   Play,
   StopCircle,
@@ -123,7 +124,7 @@ export function Step5LiveExecution() {
         system_prompt: execution.selectedTemplate.openCodeTemplate,
         initial_message: initialMessage,
         context_text: execution.contextText || undefined,
-        context_document_ids: execution.contextDocumentIds || [],
+        context_document_ids: execution.contextDocuments.map((doc) => doc.id) || [],
         user_notes: execution.userNotes
       }
 
@@ -476,11 +477,15 @@ export function Step5LiveExecution() {
               Begin an interactive conversation with Claude
             </CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="space-y-4">
+            {/* Required Services */}
+            <ServiceDependencyBadge services={['mcp', 'orchestrator', 'graphiti']} inline={false} />
+
             <Button
               onClick={handleStartSession}
               size="lg"
               disabled={!execution?.selectedTemplate}
+              className="w-full"
             >
               <Play className="h-4 w-4 mr-2" />
               Start Interactive Session

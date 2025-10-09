@@ -28,6 +28,10 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Textarea } from '@/components/ui/textarea'
 import { BookOpen, Plus, CheckCircle, Info, Loader2 } from 'lucide-react'
+import { MockDataBadge } from '../MockDataBadge'
+import { ServiceDependencyBadge } from '../ServiceDependencyBadge'
+import type { ServiceName } from '@/lib/service-types'
+import type { SpecialTag } from '../ServiceDependencyBadge'
 
 export function Step2WorkflowSelection() {
   const execution = useWorkflowStore((state) => state.execution)
@@ -37,21 +41,17 @@ export function Step2WorkflowSelection() {
   const [templates, setTemplates] = useState<WorkflowTemplate[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [isMockData, setIsMockData] = useState(false)
 
   // Fetch templates from backend on mount
   useEffect(() => {
     async function loadTemplates() {
       try {
         setLoading(true)
-        const data = await fetchWorkflowTemplates()
+        const { templates: data, isMock } = await fetchWorkflowTemplates()
 
-        // Filter to show only Murabaha/Tawarruq templates
-        const filteredTemplates = data.filter((template) => {
-          const searchStr = `${template.name} ${template.category}`.toLowerCase()
-          return searchStr.includes('murabaha') || searchStr.includes('tawarruq')
-        })
-
-        setTemplates(filteredTemplates)
+        setTemplates(data)
+        setIsMockData(isMock)
       } catch (err) {
         console.error('Failed to load templates:', err)
         setError('Failed to load workflow templates. Please check if the backend is running.')
@@ -71,6 +71,9 @@ export function Step2WorkflowSelection() {
 
   return (
     <div className="space-y-6">
+      {/* Mock Data Badge */}
+      <MockDataBadge visible={isMockData} />
+
       {/* Explainer */}
       <Alert variant="info">
         <Info className="h-4 w-4" />
@@ -116,16 +119,24 @@ export function Step2WorkflowSelection() {
                   >
                     <CardHeader className="p-4">
                       <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 flex-1">
                           <span className="text-2xl">{template.icon}</span>
-                          <div>
+                          <div className="flex-1">
                             <CardTitle className="text-base">{template.name}</CardTitle>
-                            <div className="flex gap-2 mt-1">
+                            <div className="flex flex-wrap items-center gap-1 mt-2">
                               <Badge variant="secondary" className="text-xs">{template.category}</Badge>
+                              {/* Service Dependency Badges */}
+                              {(template.requiredServices || template.tags) && (
+                                <ServiceDependencyBadge
+                                  services={(template.requiredServices || []).map(s => s.toLowerCase()) as ServiceName[]}
+                                  specialTags={(template.tags || []) as SpecialTag[]}
+                                  inline={true}
+                                />
+                              )}
                             </div>
                           </div>
                         </div>
-                        {isSelected && <CheckCircle className="h-5 w-5 text-primary" />}
+                        {isSelected && <CheckCircle className="h-5 w-5 text-primary flex-shrink-0" />}
                       </div>
                     </CardHeader>
                   </Card>
@@ -142,9 +153,17 @@ export function Step2WorkflowSelection() {
                 <CardHeader className="p-4">
                   <div className="flex items-center gap-3">
                     <Plus className="h-6 w-6" />
-                    <div>
+                    <div className="flex-1">
                       <CardTitle className="text-base">Create Custom Workflow</CardTitle>
-                      <Badge variant="secondary" className="mt-1 text-xs">AI-Generated</Badge>
+                      <div className="flex flex-wrap items-center gap-1 mt-2">
+                        <Badge variant="secondary" className="text-xs">AI-Generated</Badge>
+                        {/* Inferred services for custom workflows */}
+                        <ServiceDependencyBadge
+                          services={['mcp', 'orchestrator']}
+                          specialTags={['Unknown']}
+                          inline={true}
+                        />
+                      </div>
                     </div>
                   </div>
                 </CardHeader>

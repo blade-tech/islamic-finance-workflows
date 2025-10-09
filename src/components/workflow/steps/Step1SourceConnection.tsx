@@ -45,13 +45,51 @@ import {
   Info,
   Search,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Settings,
+  AlertCircle
 } from 'lucide-react'
 import { testGraphitiConnection, ingestDocument, searchGraphiti, type GraphitiSearchResponse } from '@/lib/api'
 import type { GraphitiStats, UploadedDocument } from '@/lib/types'
+import { ServiceStatus } from '@/lib/service-types'
+import { BackendServiceMonitor } from '@/components/workflow/BackendServiceMonitor'
+import { ServiceDependencyBadge } from '@/components/workflow/ServiceDependencyBadge'
+
+// Helper to get status icon
+function getStatusIcon(status: ServiceStatus) {
+  switch (status) {
+    case ServiceStatus.CONNECTED:
+      return <CheckCircle className="h-4 w-4 text-green-500" />
+    case ServiceStatus.DISCONNECTED:
+      return <XCircle className="h-4 w-4 text-red-500" />
+    case ServiceStatus.MOCK:
+      return <AlertCircle className="h-4 w-4 text-yellow-500" />
+    case ServiceStatus.CHECKING:
+      return <Loader2 className="h-4 w-4 text-blue-500 animate-spin" />
+    default:
+      return <AlertCircle className="h-4 w-4 text-gray-400" />
+  }
+}
+
+// Helper to get status badge
+function getStatusBadge(status: ServiceStatus) {
+  switch (status) {
+    case ServiceStatus.CONNECTED:
+      return <Badge className="bg-green-500 text-xs">Connected</Badge>
+    case ServiceStatus.DISCONNECTED:
+      return <Badge variant="destructive" className="text-xs">Disconnected</Badge>
+    case ServiceStatus.MOCK:
+      return <Badge className="bg-yellow-500 text-xs">Mock Mode</Badge>
+    case ServiceStatus.CHECKING:
+      return <Badge className="bg-blue-500 text-xs">Checking...</Badge>
+    default:
+      return <Badge variant="outline" className="text-xs">Unknown</Badge>
+  }
+}
 
 export function Step1SourceConnection() {
   const execution = useWorkflowStore((state) => state.execution)
+  const servicesStatus = useWorkflowStore((state) => state.servicesStatus)
   const setGraphitiConnected = useWorkflowStore((state) => state.setGraphitiConnected)
   const addDocument = useWorkflowStore((state) => state.addDocument)
   const removeDocument = useWorkflowStore((state) => state.removeDocument)
@@ -64,6 +102,7 @@ export function Step1SourceConnection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState<GraphitiSearchResponse | null>(null)
   const [searching, setSearching] = useState(false)
+  const [showServiceMonitor, setShowServiceMonitor] = useState(false)
 
   // Debug: Log searchResults changes
   useEffect(() => {
@@ -200,18 +239,79 @@ export function Step1SourceConnection() {
         </AlertDescription>
       </Alert>
 
+      {/* Backend Services Required */}
+      {servicesStatus && (
+        <Card className="border-primary/20">
+          <CardHeader className="pb-3">
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                Backend Services Required
+              </CardTitle>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowServiceMonitor(true)}
+                className="text-xs"
+              >
+                View All Services
+              </Button>
+            </div>
+            <CardDescription className="text-xs">
+              This step requires the following backend services
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {/* Graphiti Service */}
+            <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
+              <div className="flex items-center gap-2">
+                {getStatusIcon(servicesStatus.graphiti.status)}
+                <span className="text-sm font-medium">Graphiti / Neo4j</span>
+              </div>
+              {getStatusBadge(servicesStatus.graphiti.status)}
+            </div>
+
+            {/* MCP Proxy Service */}
+            <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
+              <div className="flex items-center gap-2">
+                {getStatusIcon(servicesStatus.mcp.status)}
+                <span className="text-sm font-medium">MCP Proxy</span>
+              </div>
+              {getStatusBadge(servicesStatus.mcp.status)}
+            </div>
+
+            {/* Documents Service */}
+            <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
+              <div className="flex items-center gap-2">
+                {getStatusIcon(servicesStatus.documents.status)}
+                <span className="text-sm font-medium">Document Service</span>
+              </div>
+              {getStatusBadge(servicesStatus.documents.status)}
+            </div>
+
+            {/* Help text */}
+            <p className="text-xs text-muted-foreground pt-2">
+              Services will fall back to mock mode if unavailable. Click "View All Services" for details.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Graphiti Connection Card */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Database className="h-5 w-5" />
-            Neo4j / Graphiti Connection
+            Neo4j / Graphiti Connection (Optional)
           </CardTitle>
           <CardDescription>
-            Test connection to Neo4j AuraDB via graphiti-core Python library
+            Test connection to view knowledge graph stats. Skip if the Graphiti service badge above shows healthy.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Required Services */}
+          <ServiceDependencyBadge services={['graphiti']} inline={false} />
+
           <Button
             onClick={handleTestConnection}
             disabled={testingConnection}
@@ -286,6 +386,9 @@ export function Step1SourceConnection() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {/* Required Services */}
+            <ServiceDependencyBadge services={['mcp', 'graphiti']} inline={false} />
+
             {/* Search Input */}
             <div className="flex gap-2">
               <Input
@@ -394,6 +497,9 @@ export function Step1SourceConnection() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          {/* Required Services */}
+          <ServiceDependencyBadge services={['documents', 'graphiti']} inline={false} />
+
           {/* File input */}
           <div className="flex items-center gap-2">
             <Input
@@ -474,6 +580,12 @@ export function Step1SourceConnection() {
           )}
         </CardContent>
       </Card>
+
+      {/* Backend Service Monitor Modal */}
+      <BackendServiceMonitor
+        isOpen={showServiceMonitor}
+        onClose={() => setShowServiceMonitor(false)}
+      />
     </div>
   )
 }

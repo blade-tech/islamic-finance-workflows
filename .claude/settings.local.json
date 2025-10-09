@@ -9,7 +9,19 @@
       "Bash(find:*)",
       "Bash(curl:*)",
       "mcp__exa__web_search_exa",
-      "Read(//d/Pictures/Screenshots/**)"
+      "Read(//d/Pictures/Screenshots/**)",
+      "Read(//d/Downloads/**)",
+      "mcp__github__get_file_contents",
+      "mcp__netlify__netlify-user-services-reader",
+      "mcp__netlify__netlify-team-services-reader",
+      "mcp__netlify__netlify-project-services-reader",
+      "Bash(npm run build:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Read(//d/**)",
+      "Bash(netstat:*)",
+      "Bash(taskkill:*)"
     ],
     "deny": [],
     "ask": []
