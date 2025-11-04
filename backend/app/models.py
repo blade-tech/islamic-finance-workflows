@@ -13,7 +13,7 @@ WHY PYDANTIC:
 
 from datetime import datetime
 from typing import List, Optional, Dict, Any, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 # ============================================================================
@@ -337,3 +337,74 @@ class ApplyLearningResponse(BaseModel):
     """Response from applying learning"""
     applied: bool
     template_id: str
+
+
+# ============================================================================
+# METHODOLOGY (Guardian-inspired, mock data for now)
+# ============================================================================
+
+class Methodology(BaseModel):
+    """
+    Digitized methodology for Islamic finance workflows.
+    Based on Hedera Guardian framework, but using mock data initially.
+    """
+    id: str
+    name: str
+    description: str
+
+    # Classification
+    type: Literal['islamic-finance', 'environmental', 'social', 'custom']
+    category: Optional[str] = None  # e.g., 'mudarabah', 'sukuk', 'murabaha'
+    standard: Optional[str] = None  # e.g., 'IIFM', 'AAOIFI', 'Verra'
+
+    # Status
+    status: Literal['draft', 'active', 'archived'] = 'active'
+
+    # Guardian-style components (simplified for mock)
+    schema_count: int = Field(default=0, serialization_alias='schemaCount')  # Number of data schemas
+    policy_steps: int = Field(default=0, serialization_alias='policySteps')  # Number of workflow steps
+    required_roles: List[str] = Field(default_factory=list, serialization_alias='requiredRoles')  # e.g., ['Auditor', 'Issuer']
+
+    # Source
+    source_type: Literal['guardian', 'iifm', 'custom', 'uploaded'] = Field(default='custom', serialization_alias='sourceType')
+    source_url: Optional[str] = Field(default=None, serialization_alias='sourceUrl')
+
+    # Metadata
+    version: str = "1.0.0"
+    created_at: datetime = Field(serialization_alias='createdAt')
+    updated_at: datetime = Field(serialization_alias='updatedAt')
+
+    # Statistics (for learning/improvement)
+    application_count: int = Field(default=0, serialization_alias='applicationCount')
+    success_rate: float = Field(default=0.0, serialization_alias='successRate')
+    average_validation_time: int = Field(default=0, serialization_alias='averageValidationTime')  # seconds
+
+    model_config = ConfigDict(
+        populate_by_name=True,
+        ser_json_bytes='utf8',
+    )
+
+
+# ============================================================================
+# METHODOLOGY API MODELS
+# ============================================================================
+
+class MethodologyListFilters(BaseModel):
+    """Filters for methodology list endpoint"""
+    type: Optional[Literal['islamic-finance', 'environmental', 'social', 'custom']] = None
+    category: Optional[str] = None
+    standard: Optional[str] = None
+    status: Optional[Literal['draft', 'active', 'archived']] = None
+    search: Optional[str] = None
+
+
+class MethodologyListResponse(BaseModel):
+    """Response with list of methodologies"""
+    methodologies: List[Methodology]
+    total: int
+    filters_applied: MethodologyListFilters = Field(serialization_alias="filtersApplied")
+
+
+class MethodologyDetailResponse(BaseModel):
+    """Response with methodology details"""
+    methodology: Methodology

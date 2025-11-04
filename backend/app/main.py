@@ -98,7 +98,7 @@ app.add_middleware(
 # ============================================================================
 
 # Import routers (will create these next)
-from app.api import graphiti, documents, templates, workflows, citations, learnings, sessions
+from app.api import graphiti, documents, templates, workflows, citations, learnings, sessions, methodologies
 
 app.include_router(graphiti.router, prefix="/api", tags=["Graphiti"])
 app.include_router(documents.router, prefix="/api", tags=["Documents"])
@@ -107,6 +107,7 @@ app.include_router(workflows.router, prefix="/api", tags=["Workflows"])
 app.include_router(sessions.router, prefix="/api/sessions", tags=["Sessions"])  # NEW: Session management
 app.include_router(citations.router, prefix="/api", tags=["Citations"])
 app.include_router(learnings.router, prefix="/api", tags=["Learnings"])
+app.include_router(methodologies.router, prefix="/api", tags=["Methodologies"])  # NEW: Methodology management
 
 
 # ============================================================================
@@ -125,12 +126,76 @@ async def root():
 
 @app.get("/health", tags=["Health"])
 async def health():
-    """Detailed health check"""
+    """
+    Detailed health check
+    Returns available services based on configuration
+    """
+    # Determine which services are available based on environment config
+    available_services = []
+
+    # Graphiti service (requires Neo4j)
+    if os.getenv("NEO4J_URI"):
+        available_services.append("graphiti")
+
+    # Documents service (always available)
+    available_services.append("documents")
+
+    # Orchestrator service (requires Anthropic API, using sessions router)
+    if os.getenv("ANTHROPIC_API_KEY"):
+        available_services.append("orchestrator")
+
+    # MCP service (requires Anthropic API for Claude agent SDK)
+    if os.getenv("ANTHROPIC_API_KEY"):
+        available_services.append("mcp")
+
     return {
-        "status": "healthy",
+        "status": "ok",
+        "services": available_services,
+        "version": "1.0.0",
         "neo4j_configured": bool(os.getenv("NEO4J_URI")),
         "anthropic_configured": bool(os.getenv("ANTHROPIC_API_KEY")),
         "openai_configured": bool(os.getenv("OPENAI_API_KEY")),
+    }
+
+
+@app.get("/api/config", tags=["Health"])
+async def config():
+    """
+    Service configuration endpoint
+    Returns available services and MCP servers for frontend discovery
+    """
+    # Determine which services are available
+    available_services = []
+
+    # Graphiti service (requires Neo4j)
+    if os.getenv("NEO4J_URI"):
+        available_services.append("graphiti")
+
+    # Documents service (always available)
+    available_services.append("documents")
+
+    # Orchestrator service (requires Anthropic API)
+    if os.getenv("ANTHROPIC_API_KEY"):
+        available_services.append("orchestrator")
+
+    # MCP service (requires Anthropic API)
+    if os.getenv("ANTHROPIC_API_KEY"):
+        available_services.append("mcp")
+
+    # Determine which MCP servers are configured
+    mcp_servers = []
+    if os.getenv("NEO4J_URI") and os.getenv("OPENAI_API_KEY"):
+        mcp_servers.append("graphiti")
+
+    # Additional features
+    features = []
+    if os.getenv("ANTHROPIC_API_KEY"):
+        features.append("claude-agent-sdk")
+
+    return {
+        "services": available_services,
+        "mcp_servers": mcp_servers,
+        "features": features
     }
 
 
