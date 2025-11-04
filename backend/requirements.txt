@@ -6,6 +6,9 @@ python-multipart==0.0.12
 # Anthropic Claude SDK
 anthropic>=0.40.0
 
+# Model Context Protocol
+mcp>=1.0.0  # MCP Python SDK for server implementation
+
 # Langfuse (LLM Observability)
 langfuse==2.58.3
 

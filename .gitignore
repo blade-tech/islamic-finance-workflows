@@ -68,3 +68,12 @@ temp/
 tmp/
 NUL
 */NUL
+
+# Sensitive credentials
+*credentials*.txt
+*credentials*.json
+vanta-credentials.json
+
+# Build artifacts
+tsconfig.tsbuildinfo
+.playwright-mcp/

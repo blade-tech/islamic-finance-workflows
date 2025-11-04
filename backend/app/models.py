@@ -11,8 +11,11 @@ WHY PYDANTIC:
 - Matches frontend types exactly
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 from typing import List, Optional, Dict, Any, Literal
+from enum import Enum
 from pydantic import BaseModel, Field, ConfigDict
 
 
@@ -210,8 +213,9 @@ class WorkflowExecution(BaseModel):
     aaoifi_documents: List[UploadedDocument] = Field(default_factory=list)
 
     # Step 2: Selection
-    selected_template: Optional[WorkflowTemplate] = None
-    custom_template: Optional[WorkflowTemplate] = None
+    selected_methodologies: List['Methodology'] = Field(default_factory=list)  # NEW: Multi-select methodologies (Phase 3)
+    selected_template: Optional['WorkflowTemplate'] = None  # Generated from methodologies or legacy template
+    custom_template: Optional['WorkflowTemplate'] = None
 
     # Step 3: Context
     context_documents: List[UploadedDocument] = Field(default_factory=list)
@@ -408,3 +412,399 @@ class MethodologyListResponse(BaseModel):
 class MethodologyDetailResponse(BaseModel):
     """Response with methodology details"""
     methodology: Methodology
+
+
+class GenerateTemplateFromMethodologiesRequest(BaseModel):
+    """Request to generate workflow template from methodologies"""
+    methodology_ids: List[str] = Field(min_length=1)
+
+
+class GenerateTemplateFromMethodologiesResponse(BaseModel):
+    """Response with generated template"""
+    template: WorkflowTemplate
+
+
+# ============================================================================
+# COLLABORATION & MULTI-STAKEHOLDER MODELS (Vanta-inspired)
+# ============================================================================
+
+class NotificationChannel(BaseModel):
+    """Notification delivery channel preferences"""
+    email: bool = True
+    in_app: bool = True
+    webhook: Optional[str] = None
+
+
+class NotificationPreferences(BaseModel):
+    """User preferences for notifications"""
+    enabled: bool = True
+    channels: NotificationChannel = Field(default_factory=NotificationChannel)
+    frequency: Literal['real_time', 'daily_digest', 'weekly_digest'] = 'real_time'
+
+    # Event types to receive notifications for
+    contract_updates: bool = True
+    approval_requests: bool = True
+    task_assignments: bool = True
+    comments_mentions: bool = True
+    workflow_completion: bool = True
+
+
+class Subscriber(BaseModel):
+    """Contract subscriber for collaboration and notifications"""
+    contract_id: str
+    user_email: str
+    user_name: str
+    user_role: Literal['business_team', 'shariah_advisor', 'legal_counsel', 'compliance_manager', 'finance_team']
+    notification_preferences: NotificationPreferences = Field(default_factory=NotificationPreferences)
+    subscribed_at: datetime
+    subscribed_by: str  # Email of user who added this subscriber
+
+
+class Comment(BaseModel):
+    """Comment on a contract or workflow step"""
+    comment_id: str
+    contract_id: str
+    step_number: Optional[int] = None  # None = contract-level comment
+
+    # Author
+    author_email: str
+    author_name: str
+    author_role: Literal['business_team', 'shariah_advisor', 'legal_counsel', 'compliance_manager', 'finance_team']
+
+    # Content
+    content: str  # Markdown supported
+    mentions: List[str] = Field(default_factory=list)  # List of @mentioned emails
+
+    # Metadata
+    created_at: datetime
+    updated_at: Optional[datetime] = None
+    edited: bool = False
+
+    # Reactions (future enhancement)
+    reactions: Dict[str, int] = Field(default_factory=dict)  # emoji -> count
+
+
+class TaskStatus(BaseModel):
+    """Status of a task"""
+    status: Literal['pending', 'in_progress', 'completed', 'cancelled']
+    completed_at: Optional[datetime] = None
+    cancelled_at: Optional[datetime] = None
+    cancellation_reason: Optional[str] = None
+
+
+class Task(BaseModel):
+    """Task assigned to a stakeholder"""
+    task_id: str
+    contract_id: str
+    step_number: Optional[int] = None  # None = contract-level task
+
+    # Assignment
+    assignee_email: str
+    assignee_name: str
+    assignee_role: Literal['business_team', 'shariah_advisor', 'legal_counsel', 'compliance_manager', 'finance_team']
+    assigner_email: str
+    assigner_name: str
+
+    # Task details
+    title: str
+    description: str
+    priority: Literal['low', 'medium', 'high', 'critical'] = 'medium'
+    due_date: Optional[datetime] = None
+
+    # Status
+    status: TaskStatus = Field(default_factory=lambda: TaskStatus(status='pending'))
+
+    # Metadata
+    created_at: datetime
+    updated_at: datetime
+
+
+class NotificationType(BaseModel):
+    """Type of notification"""
+    type: Literal[
+        'contract_created',
+        'contract_updated',
+        'approval_requested',
+        'approval_granted',
+        'approval_rejected',
+        'task_assigned',
+        'task_completed',
+        'task_overdue',
+        'comment_added',
+        'mention_in_comment',
+        'workflow_completed',
+        'workflow_failed',
+        'subscriber_added',
+        'subscriber_removed',
+        'ownership_transferred'
+    ]
+
+
+class Notification(BaseModel):
+    """Notification for a user"""
+    notification_id: str
+    recipient_email: str
+
+    # Notification details
+    type: Literal[
+        'contract_created',
+        'contract_updated',
+        'approval_requested',
+        'approval_granted',
+        'approval_rejected',
+        'task_assigned',
+        'task_completed',
+        'task_overdue',
+        'comment_added',
+        'mention_in_comment',
+        'workflow_completed',
+        'workflow_failed',
+        'subscriber_added',
+        'subscriber_removed',
+        'ownership_transferred'
+    ]
+    title: str
+    message: str
+
+    # Source references
+    source_contract_id: str
+    source_task_id: Optional[str] = None
+    source_comment_id: Optional[str] = None
+    source_user_email: Optional[str] = None  # User who triggered notification
+
+    # Status
+    read: bool = False
+    read_at: Optional[datetime] = None
+
+    # Actions
+    action_url: Optional[str] = None  # URL to navigate to (e.g., contract page, task page)
+    action_label: Optional[str] = None  # Label for action button (e.g., "View Contract", "Review Task")
+
+    # Metadata
+    created_at: datetime
+
+
+# ============================================================================
+# COLLABORATION API REQUEST/RESPONSE MODELS
+# ============================================================================
+
+class AddSubscriberRequest(BaseModel):
+    """Request to add subscriber to contract"""
+    user_email: str
+    user_name: str
+    user_role: Literal['business_team', 'shariah_advisor', 'legal_counsel', 'compliance_manager', 'finance_team']
+    notification_preferences: Optional[NotificationPreferences] = None
+
+
+class AddSubscriberResponse(BaseModel):
+    """Response from adding subscriber"""
+    subscriber: Subscriber
+
+
+class ListSubscribersResponse(BaseModel):
+    """Response with list of subscribers"""
+    subscribers: List[Subscriber]
+    owner_email: str
+
+
+class TransferOwnershipRequest(BaseModel):
+    """Request to transfer contract ownership"""
+    new_owner_email: str
+    new_owner_name: str
+
+
+class TransferOwnershipResponse(BaseModel):
+    """Response from ownership transfer"""
+    success: bool
+    new_owner_email: str
+
+
+class AddCommentRequest(BaseModel):
+    """Request to add comment"""
+    content: str
+    step_number: Optional[int] = None
+    mentions: List[str] = Field(default_factory=list)
+
+
+class AddCommentResponse(BaseModel):
+    """Response from adding comment"""
+    comment: Comment
+
+
+class ListCommentsResponse(BaseModel):
+    """Response with list of comments"""
+    comments: List[Comment]
+    total: int
+
+
+class UpdateCommentRequest(BaseModel):
+    """Request to update comment"""
+    content: str
+
+
+class UpdateCommentResponse(BaseModel):
+    """Response from updating comment"""
+    comment: Comment
+
+
+class CreateTaskRequest(BaseModel):
+    """Request to create task"""
+    assignee_email: str
+    assignee_name: str
+    assignee_role: Literal['business_team', 'shariah_advisor', 'legal_counsel', 'compliance_manager', 'finance_team']
+    title: str
+    description: str
+    priority: Literal['low', 'medium', 'high', 'critical'] = 'medium'
+    due_date: Optional[datetime] = None
+    step_number: Optional[int] = None
+
+
+class CreateTaskResponse(BaseModel):
+    """Response from creating task"""
+    task: Task
+
+
+class ListTasksResponse(BaseModel):
+    """Response with list of tasks"""
+    tasks: List[Task]
+    total: int
+
+
+class UpdateTaskStatusRequest(BaseModel):
+    """Request to update task status"""
+    status: Literal['pending', 'in_progress', 'completed', 'cancelled']
+    cancellation_reason: Optional[str] = None
+
+
+class UpdateTaskStatusResponse(BaseModel):
+    """Response from updating task status"""
+    task: Task
+
+
+class ListNotificationsResponse(BaseModel):
+    """Response with list of notifications"""
+    notifications: List[Notification]
+    unread_count: int
+    total: int
+
+
+class MarkNotificationReadRequest(BaseModel):
+    """Request to mark notification as read"""
+    read: bool = True
+
+
+class MarkNotificationReadResponse(BaseModel):
+    """Response from marking notification read"""
+    notification: Notification
+
+
+class UpdateNotificationPreferencesRequest(BaseModel):
+    """Request to update notification preferences"""
+    preferences: NotificationPreferences
+
+
+class UpdateNotificationPreferencesResponse(BaseModel):
+    """Response from updating preferences"""
+    preferences: NotificationPreferences
+
+
+# ============================================================================
+# DASHBOARD & COMPLIANCE MODELS (Vanta-inspired, 4-Component Architecture)
+# ============================================================================
+
+class ComponentType(str, Enum):
+    """The 4 modular components in Islamic Finance workflows"""
+    SHARIAH_STRUCTURE = "shariah_structure"
+    JURISDICTION = "jurisdiction"
+    ACCOUNTING = "accounting"
+    IMPACT = "impact"
+
+
+class ComplianceStatus(str, Enum):
+    """Compliance status for components and deals"""
+    COMPLIANT = "compliant"
+    NEEDS_ATTENTION = "needs_attention"
+    IN_PROGRESS = "in_progress"
+    NOT_APPLICABLE = "not_applicable"
+
+
+class ComponentCompliance(BaseModel):
+    """Compliance tracking for a single component"""
+    component_type: ComponentType
+    component_id: str  # e.g., 'sukuk_ijara', 'uae_dfsa'
+    component_name: str  # e.g., 'Sukuk Ijara', 'UAE DFSA'
+
+    # Progress metrics
+    total_requirements: int  # Total standards/rules for this component
+    completed_requirements: int  # Completed standards
+    evidence_count: int  # Documents uploaded
+    required_evidence_count: int  # Documents needed
+
+    # Calculated percentages
+    control_completion: float  # % of requirements met
+    evidence_completion: float  # % of evidence provided
+    overall_completion: float  # (control × 0.6) + (evidence × 0.4)
+
+    # Status
+    status: ComplianceStatus
+    needs_attention_count: int  # Issues requiring action
+    last_updated: str  # ISO timestamp
+
+
+class DealConfiguration(BaseModel):
+    """A specific deal's component combination"""
+    deal_id: str
+    deal_name: str
+
+    # Selected components
+    shariah_structure: str  # e.g., 'sukuk_ijara'
+    jurisdiction: str  # e.g., 'uae_dfsa'
+    accounting: str  # e.g., 'aaoifi'
+    impact: str  # e.g., 'green_sukuk' or 'none'
+    takaful_enabled: bool
+
+    # Compliance for each component
+    shariah_compliance: ComponentCompliance
+    jurisdiction_compliance: ComponentCompliance
+    accounting_compliance: ComponentCompliance
+    impact_compliance: Optional[ComponentCompliance] = None
+
+    # Overall deal compliance
+    overall_completion: float
+    status: ComplianceStatus
+    created_at: str
+
+
+class MonitoringCard(BaseModel):
+    """Monitoring dashboard cards"""
+    title: str  # "Contracts", "Shariah Reviews", "Impact Validations", "Documents"
+    total_count: int
+    needs_attention_count: int
+    status: ComplianceStatus
+    breakdown_by_component: Dict[str, int]  # Component breakdown
+    last_updated: str
+
+
+class DashboardMetrics(BaseModel):
+    """Top-level dashboard metrics"""
+
+    # Component-level compliance (4 main components)
+    shariah_compliance: ComponentCompliance
+    jurisdiction_compliance: ComponentCompliance
+    accounting_compliance: ComponentCompliance
+    impact_compliance: ComponentCompliance
+
+    # Monitoring cards
+    contracts_card: MonitoringCard
+    shariah_reviews_card: MonitoringCard
+    impact_validations_card: MonitoringCard
+    documents_card: MonitoringCard
+
+    # Active deals
+    active_deals: List[DealConfiguration]
+
+    # Summary metrics
+    total_deals: int
+    compliant_deals: int
+    deals_needing_attention: int
+    overall_platform_compliance: float  # Average across all 4 components

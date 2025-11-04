@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3030",
+    "dev": "next dev -p 3040",
     "build": "next build",
-    "start": "next start -p 3030",
+    "start": "next start -p 3040",
     "lint": "next lint"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "@radix-ui/react-tabs": "^1.1.3",
     "@radix-ui/react-toast": "^1.2.3",
     "@radix-ui/react-tooltip": "^1.2.8",
+    "bpmn-js": "^18.8.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.487.0",

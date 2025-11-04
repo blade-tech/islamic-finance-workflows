@@ -1,24 +1,26 @@
 'use client'
 
 /**
- * METHODOLOGY SELECTOR
- * ====================
- * Standalone component for selecting digitized methodologies.
+ * TEMPLATE SELECTOR
+ * =================
+ * Standalone component for selecting Islamic finance templates.
  *
  * WHAT THIS DOES:
- * - Lists all available digitized methodologies (Islamic finance, environmental, etc.)
- * - Allows selection of existing methodology OR
- * - Allows upload of document to digitize new methodology
- * - Shows detailed preview of selected methodology
+ * - Lists all available templates (Sukuk, Murabaha, Ijarah, etc.)
+ * - Allows selection of existing template OR
+ * - Allows upload of document to create new template
+ * - Shows detailed preview of selected template
  * - Filters by type, category, standard, status
  *
- * WHY SEPARATE:
- * - User requested this as Step 2 replacement (separate component)
- * - Can be "plugged in" to existing workflow later
- * - Maintains existing app stability
+ * USER-FACING TERMINOLOGY:
+ * - "Templates" (not "methodologies")
+ * - "Workflows" (not "policies")
+ * - "ZeroH" platform (Guardian hidden)
+ * - Standards (AAOIFI, IIFM) mentioned by name
+ * - No mention of "Guardian", "HCS", "Hedera" except when explaining blockchain
  *
  * BASED ON:
- * - Hedera Guardian methodology digitization framework
+ * - Hedera Guardian methodology digitization framework (hidden from users)
  * - Step2WorkflowSelection component pattern
  */
 
@@ -29,30 +31,30 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Info, Loader2, Upload, FileCheck, Users, Clock, Filter, CheckCircle } from 'lucide-react'
-import { MethodologyCard } from './MethodologyCard'
-import { MethodologyUploadFlow } from './MethodologyUploadFlow'
+import { TemplateCard } from './TemplateCard'
+import { TemplateUploadFlow } from './TemplateUploadFlow'
 import type { Methodology, MethodologyListFilters } from '@/lib/types'
 
-interface MethodologySelectorProps {
-  /** Optional controlled selected methodologies (for integration with workflow) */
-  selectedMethodologies?: Methodology[]
+interface TemplateSelectorProps {
+  /** Optional controlled selected templates (for integration with workflow) */
+  selectedTemplates?: Methodology[]
   /** Optional callback when selection changes (for integration with workflow) */
-  onSelectionChange?: (methodologies: Methodology[]) => void
+  onSelectionChange?: (templates: Methodology[]) => void
   /** Whether to show action buttons (Apply/Combine) - hide when controlled */
   showActionButtons?: boolean
 }
 
-export function MethodologySelector({
-  selectedMethodologies: controlledSelection,
+export function TemplateSelector({
+  selectedTemplates: controlledSelection,
   onSelectionChange,
   showActionButtons = false,
-}: MethodologySelectorProps = {}) {
-  const [methodologies, setMethodologies] = useState<Methodology[]>([])
+}: TemplateSelectorProps = {}) {
+  const [templates, setTemplates] = useState<Methodology[]>([])
 
   // Use controlled selection if provided, otherwise use internal state
   const [internalSelection, setInternalSelection] = useState<Methodology[]>([])
-  const selectedMethodologies = controlledSelection !== undefined ? controlledSelection : internalSelection
-  const setSelectedMethodologies = onSelectionChange || setInternalSelection
+  const selectedTemplates = controlledSelection !== undefined ? controlledSelection : internalSelection
+  const setSelectedTemplates = onSelectionChange || setInternalSelection
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -63,9 +65,9 @@ export function MethodologySelector({
   const [filters, setFilters] = useState<MethodologyListFilters>({})
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Fetch methodologies from backend
+  // Fetch templates from backend
   useEffect(() => {
-    async function loadMethodologies() {
+    async function loadTemplates() {
       try {
         setLoading(true)
 
@@ -82,33 +84,33 @@ export function MethodologySelector({
         )
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch methodologies: ${response.statusText}`)
+          throw new Error(`Failed to fetch templates: ${response.statusText}`)
         }
 
         const data = await response.json()
 
-        setMethodologies(data.methodologies || [])
+        setTemplates(data.methodologies || [])
         setIsMockData(true) // For now, all data is mock
       } catch (err) {
-        console.error('Failed to load methodologies:', err)
+        console.error('Failed to load templates:', err)
         setError(
-          'Failed to load methodologies. Please check if the backend is running on port 8000.'
+          'Failed to load templates. Please check if the backend is running on port 8000.'
         )
       } finally {
         setLoading(false)
       }
     }
 
-    loadMethodologies()
+    loadTemplates()
   }, [filters, searchQuery])
 
-  const handleToggleMethodology = (methodology: Methodology) => {
-    setSelectedMethodologies((prev) => {
-      const exists = prev.find((m) => m.id === methodology.id)
+  const handleToggleTemplate = (template: Methodology) => {
+    setSelectedTemplates((prev) => {
+      const exists = prev.find((m) => m.id === template.id)
       if (exists) {
-        return prev.filter((m) => m.id !== methodology.id)
+        return prev.filter((m) => m.id !== template.id)
       } else {
-        return [...prev, methodology]
+        return [...prev, template]
       }
     })
     setShowUpload(false)
@@ -119,7 +121,7 @@ export function MethodologySelector({
   }
 
   const handleClearSelection = () => {
-    setSelectedMethodologies([])
+    setSelectedTemplates([])
   }
 
   return (
@@ -128,9 +130,9 @@ export function MethodologySelector({
       {isMockData && (
         <Alert variant="default">
           <Info className="h-4 w-4" />
-          <AlertTitle>Mock Data</AlertTitle>
+          <AlertTitle>Preview Mode</AlertTitle>
           <AlertDescription>
-            Currently showing mock methodologies. Guardian integration coming soon.
+            Currently showing sample templates. Full template library coming soon.
           </AlertDescription>
         </Alert>
       )}
@@ -138,17 +140,17 @@ export function MethodologySelector({
       {/* Explainer */}
       <Alert variant="info">
         <Info className="h-4 w-4" />
-        <AlertTitle>Methodology Selection</AlertTitle>
+        <AlertTitle>Template Selection</AlertTitle>
         <AlertDescription>
-          Select an existing digitized methodology or upload a document to create a new one.
-          Methodologies define the structure, schemas, and policy steps for Islamic finance workflows.
+          Select a template for your Islamic finance workflow. All templates are AAOIFI-compliant
+          and ready for execution on Hedera Blockchain.
         </AlertDescription>
       </Alert>
 
       {/* Error State */}
       {error && (
         <Alert variant="destructive">
-          <AlertTitle>Error Loading Methodologies</AlertTitle>
+          <AlertTitle>Error Loading Templates</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
@@ -165,7 +167,7 @@ export function MethodologySelector({
           <CardContent className="space-y-4">
             {/* Search */}
             <Input
-              placeholder="Search methodologies..."
+              placeholder="Search templates..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
@@ -247,26 +249,26 @@ export function MethodologySelector({
       {loading && (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          <span className="ml-2 text-muted-foreground">Loading methodologies...</span>
+          <span className="ml-2 text-muted-foreground">Loading templates...</span>
         </div>
       )}
 
-      {/* Split Panel: Methodology Cards (Left) + Preview (Right) */}
+      {/* Split Panel: Template Cards (Left) + Preview (Right) */}
       {!loading && !error && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Panel: Methodology Cards */}
+          {/* Left Panel: Template Cards */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-medium text-muted-foreground">
-                  Available Methodologies ({methodologies.length})
+                  Available Templates ({templates.length})
                 </h3>
-                {selectedMethodologies.length > 0 && (
-                  <Badge variant="default">{selectedMethodologies.length} selected</Badge>
+                {selectedTemplates.length > 0 && (
+                  <Badge variant="default">{selectedTemplates.length} selected</Badge>
                 )}
               </div>
               <div className="flex gap-2">
-                {selectedMethodologies.length > 0 && (
+                {selectedTemplates.length > 0 && (
                   <Button variant="ghost" size="sm" onClick={handleClearSelection}>
                     Clear Selection
                   </Button>
@@ -278,21 +280,21 @@ export function MethodologySelector({
               </div>
             </div>
 
-            {/* Methodology List */}
+            {/* Template List */}
             <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
-              {methodologies.length === 0 ? (
+              {templates.length === 0 ? (
                 <Card>
                   <CardContent className="py-12 text-center text-muted-foreground">
-                    No methodologies found matching your filters.
+                    No templates found matching your filters.
                   </CardContent>
                 </Card>
               ) : (
-                methodologies.map((methodology) => (
-                  <MethodologyCard
-                    key={methodology.id}
-                    methodology={methodology}
-                    selected={selectedMethodologies.some((m) => m.id === methodology.id)}
-                    onClick={() => handleToggleMethodology(methodology)}
+                templates.map((template) => (
+                  <TemplateCard
+                    key={template.id}
+                    template={template}
+                    selected={selectedTemplates.some((m) => m.id === template.id)}
+                    onClick={() => handleToggleTemplate(template)}
                     showStats={true}
                   />
                 ))
@@ -302,27 +304,27 @@ export function MethodologySelector({
 
           {/* Right Panel: Preview */}
           <div className="lg:sticky lg:top-4 lg:self-start">
-            {selectedMethodologies.length > 0 ? (
+            {selectedTemplates.length > 0 ? (
               <Card>
                 <CardHeader>
                   <CardTitle>
-                    {selectedMethodologies.length === 1
-                      ? selectedMethodologies[0].name
-                      : `Combined Methodologies (${selectedMethodologies.length})`}
+                    {selectedTemplates.length === 1
+                      ? selectedTemplates[0].name
+                      : `Combined Templates (${selectedTemplates.length})`}
                   </CardTitle>
                   <CardDescription>
-                    {selectedMethodologies.length === 1
-                      ? selectedMethodologies[0].description
-                      : `Selected ${selectedMethodologies.length} methodologies to combine into workflow`}
+                    {selectedTemplates.length === 1
+                      ? selectedTemplates[0].description
+                      : `Selected ${selectedTemplates.length} templates to combine into workflow`}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {/* Selected Methodologies List */}
-                  {selectedMethodologies.length > 1 && (
+                  {/* Selected Templates List */}
+                  {selectedTemplates.length > 1 && (
                     <div className="space-y-2">
-                      <p className="text-xs text-muted-foreground font-medium">Selected Methodologies:</p>
+                      <p className="text-xs text-muted-foreground font-medium">Selected Templates:</p>
                       <div className="space-y-1">
-                        {selectedMethodologies.map((m) => (
+                        {selectedTemplates.map((m) => (
                           <div key={m.id} className="text-sm flex items-center gap-2">
                             <CheckCircle className="h-3 w-3 text-green-600" />
                             <span>{m.name}</span>
@@ -332,29 +334,29 @@ export function MethodologySelector({
                     </div>
                   )}
 
-                  {/* Combined Guardian Components */}
+                  {/* Combined Components */}
                   <div className="p-4 bg-muted rounded-md space-y-3">
                     <p className="text-xs text-muted-foreground font-medium">Combined Components:</p>
                     <div className="flex items-center gap-2 text-sm">
                       <FileCheck className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">
-                        {selectedMethodologies.reduce((sum, m) => sum + m.schemaCount, 0)}
+                        {selectedTemplates.reduce((sum, m) => sum + m.schemaCount, 0)}
                       </span>
                       <span className="text-muted-foreground">total data schemas</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">
-                        {selectedMethodologies.reduce((sum, m) => sum + m.policySteps, 0)}
+                        {selectedTemplates.reduce((sum, m) => sum + m.policySteps, 0)}
                       </span>
-                      <span className="text-muted-foreground">total policy steps</span>
+                      <span className="text-muted-foreground">total workflow steps</span>
                     </div>
                     <div className="flex items-center gap-2 text-sm">
                       <Users className="h-4 w-4 text-muted-foreground" />
                       <span className="font-medium">
                         {
                           new Set(
-                            selectedMethodologies.flatMap((m) => m.requiredRoles)
+                            selectedTemplates.flatMap((m) => m.requiredRoles)
                           ).size
                         }
                       </span>
@@ -370,7 +372,7 @@ export function MethodologySelector({
                     </div>
                     <div className="flex flex-wrap gap-1">
                       {Array.from(
-                        new Set(selectedMethodologies.flatMap((m) => m.requiredRoles))
+                        new Set(selectedTemplates.flatMap((m) => m.requiredRoles))
                       ).map((role, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">
                           {role}
@@ -382,22 +384,22 @@ export function MethodologySelector({
                   {/* Action Button (only show in standalone mode) */}
                   {showActionButtons && (
                     <Button className="w-full" size="lg">
-                      {selectedMethodologies.length === 1
-                        ? 'Apply This Methodology'
-                        : `Combine ${selectedMethodologies.length} Methodologies`}
+                      {selectedTemplates.length === 1
+                        ? 'Apply This Template'
+                        : `Combine ${selectedTemplates.length} Templates`}
                     </Button>
                   )}
                 </CardContent>
               </Card>
             ) : showUpload ? (
-              <MethodologyUploadFlow />
+              <TemplateUploadFlow />
             ) : (
               <Card>
                 <CardHeader>
-                  <CardTitle>Methodology Preview</CardTitle>
+                  <CardTitle>Template Preview</CardTitle>
                   <CardDescription>
-                    Select a methodology from the left to see details, or click "Upload New" to
-                    digitize a new methodology
+                    Select a template from the left to see details, or click "Upload New" to
+                    create a new template
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

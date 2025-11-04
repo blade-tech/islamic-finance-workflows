@@ -1,125 +1,108 @@
 # Islamic Finance Workflows
 
-A Next.js application demonstrating AI-powered workflows for Islamic finance compliance and document processing, powered by Claude AI and Model Context Protocol (MCP) integrations.
+**AI-powered AAOIFI-compliant document generation with blockchain deployment**
 
-## 🌟 Features
+[![Next.js](https://img.shields.io/badge/Next.js-14.2.18-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-18.3.1-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue)](https://www.typescriptlang.org/)
+[![Hedera](https://img.shields.io/badge/Hedera-Guardian-purple)](https://www.hedera.com/guardian)
 
-- **AI-Powered Document Processing**: Intelligent PDF parsing and analysis using LlamaParse
-- **Shariah Compliance Workflow**: Multi-step workflow for Islamic finance document validation
-- **Knowledge Graph Integration**: Neo4j-powered knowledge management with Graphiti MCP
-- **Real-time Processing**: Live execution monitoring with step-by-step feedback
-- **MCP Integrations**: Extensible architecture using Model Context Protocol
+---
 
-## 📋 Prerequisites
+## What This Does
 
-Before you begin, ensure you have the following installed:
+Islamic Finance Workflows is a **modular, component-based configuration system** for structuring compliant Islamic finance deals and deploying them to blockchain.
 
-- **Node.js** (v20 or higher)
-- **Python** (v3.11 or higher)
-- **npm** or **yarn** package manager
+### 10-Step Workflow
 
-You'll also need accounts and API keys for:
+1. **Connect Sources** - Initialize backend and knowledge graph
+2. **Select Shariah Structure** - Choose contract type (Wakala, Murabaha, Ijarah, etc.)
+3. **Select Jurisdiction** - Choose regulatory framework (Qatar QFC, UAE DIFC, etc.)
+4. **Select Accounting** - Choose standards (AAOIFI, IFRS, GAAP)
+5. **Select Impact Metrics** - Choose ESG frameworks (QFC Sustainable, UN SDGs, etc.)
+6. **Review Configuration** - Validate component compatibility
+7. **Configure Details** - Fill deal parameters and upload documents
+8. **Review Policy Structure** - View Guardian policy and BPMN workflow
+9. **Test Workflow** - Run sandbox simulation
+10. **Live Execution** - Deploy to Hedera Guardian blockchain
 
-- [Anthropic Claude API](https://console.anthropic.com/)
-- [OpenAI API](https://platform.openai.com/api-keys)
-- [LlamaParse](https://cloud.llamaindex.ai/)
-- [Neo4j Aura](https://neo4j.com/cloud/aura/) (free tier available)
+### Pre-Configured Demo: QIIB Oryx Sustainability Sukuk
+
+The app includes a one-click demo representing a Qatar Islamic Bank sustainability Sukuk:
+- **Shariah Structure**: Wakala (Agency) with Sukuk securitization
+- **Jurisdiction**: Qatar Financial Centre (QFC)
+- **Accounting**: AAOIFI standards
+- **Impact Metrics**: QFC Sustainable Finance + Islamic Social Finance
+- **Mock Deployment**: Realistic blockchain transaction IDs and DIDs
+
+---
+
+## Quick Start
 
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
-
 ```bash
-git clone <repository-url>
+git clone https://github.com/Blade-Labs/islamic-finance-workflows.git
 cd islamic-finance-workflows
 ```
 
-### 2. Frontend Setup
+### 2. One-Command Demo Launch
 
+**Windows**:
 ```bash
-# Install dependencies
-npm install
-
-# Copy environment configuration
-cp .env.example .env.local
-
-# Edit .env.local and add your configuration
-# The frontend runs on port 3030 by default
+start-demo.bat
 ```
 
-### 3. Backend Setup
+**Mac/Linux**:
+```bash
+chmod +x start-demo.sh
+./start-demo.sh
+```
+
+This will:
+- Install dependencies (first run only)
+- Start backend API on port 8000
+- Start frontend dev server on port 3040
+- Open browser to http://localhost:3040
+
+### 3. Manual Setup (Optional)
+
+If you prefer manual setup:
 
 ```bash
-cd backend
+# Install frontend dependencies
+npm install
 
-# Create Python virtual environment
+# Install backend dependencies
+cd backend
 python -m venv venv
 
 # Activate virtual environment
-# On Windows:
+# Windows:
 venv\Scripts\activate
-# On macOS/Linux:
+# Mac/Linux:
 source venv/bin/activate
 
-# Install Python dependencies
 pip install -r requirements.txt
-
-# Copy environment configuration
-cp .env.example .env
-
-# Edit .env and add your API keys
+cd ..
 ```
 
-### 4. Configure Environment Variables
+### 4. Start Manually (Optional)
 
-#### Frontend (.env.local)
-
-```env
-PORT=3030
-NEXT_PUBLIC_API_URL=http://localhost:8000
-```
-
-#### Backend (backend/.env)
-
-```env
-# AI API Keys
-ANTHROPIC_API_KEY=your_anthropic_api_key_here
-OPENAI_API_KEY=your_openai_api_key_here
-LLAMAPARSE_API_KEY=your_llamaparse_api_key_here
-
-# Neo4j Connection
-NEO4J_URI=neo4j+ssc://your_instance_id.databases.neo4j.io
-NEO4J_USER=neo4j
-NEO4J_PASSWORD=your_neo4j_password_here
-
-# FastAPI Configuration
-API_HOST=0.0.0.0
-API_PORT=8000
-CORS_ORIGINS=http://localhost:3030,http://localhost:3000
-
-# Claude Configuration
-CLAUDE_MODEL=claude-sonnet-4-5-20250929
-CLAUDE_MAX_TOKENS=16384
-CLAUDE_TEMPERATURE=0.7
-```
-
-### 5. Start the Application
-
-#### Terminal 1 - Backend API
-
+**Terminal 1 - Backend**:
 ```bash
 cd backend
-# Activate virtual environment if not already active
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# Activate venv if not already active
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-#### Terminal 2 - Frontend
-
+**Terminal 2 - Frontend**:
 ```bash
 npm run dev
 ```
 
-The application will be available at **http://localhost:3030**
+The application will be available at **http://localhost:3040**
 
 ## 🏗️ Project Structure
 
@@ -128,18 +111,20 @@ islamic-finance-workflows/
 ├── src/
 │   ├── app/                    # Next.js app directory
 │   ├── components/             # React components
-│   │   ├── ui/                 # Reusable UI components
-│   │   └── workflow/           # Workflow-specific components
-│   ├── lib/                    # Utility functions
-│   └── types/                  # TypeScript type definitions
+│   │   ├── ui/                 # shadcn/ui reusable components
+│   │   └── workflow/           # 10-step workflow components
+│   ├── lib/                    # Utility functions & validation
+│   ├── types/                  # TypeScript type definitions
+│   └── data/                   # Component configurations (Shariah, Jurisdictions, etc.)
 ├── backend/
-│   ├── main.py                 # FastAPI application
-│   ├── requirements.txt        # Python dependencies
-│   ├── uploads/                # Document upload directory
-│   └── outputs/                # Processing output directory
+│   └── app/
+│       ├── main.py             # FastAPI application
+│       ├── models/             # Pydantic data models
+│       └── services/           # Guardian policy generation
 ├── public/                     # Static assets
-├── .env.example                # Frontend environment template
-└── backend/.env.example        # Backend environment template
+├── start-demo.bat              # Windows demo launcher
+├── start-demo.sh               # Mac/Linux demo launcher
+└── PROJECT_OVERVIEW.md         # Comprehensive documentation
 ```
 
 ## 🛠️ Development
@@ -148,47 +133,32 @@ islamic-finance-workflows/
 
 #### Frontend
 
-- `npm run dev` - Start development server on port 3030
+- `npm run dev` - Start development server on port 3040
 - `npm run build` - Build production bundle
 - `npm run start` - Start production server
 - `npm run lint` - Run ESLint
 
 #### Backend
 
-- `uvicorn main:app --reload` - Start FastAPI with auto-reload
-- `pytest` - Run tests (if configured)
+- `uvicorn app.main:app --reload` - Start FastAPI with auto-reload (from backend/ directory)
 
 ### Code Style
 
 - Frontend: ESLint + Prettier (configured in project)
 - Backend: PEP 8 Python style guide
 
-## 🔧 Configuration
+## 📚 Using the Demo
 
-### MCP Integration
+### QIIB Oryx Sustainability Sukuk Workflow
 
-The application uses Model Context Protocol (MCP) for extensible AI integrations:
+1. **Launch Demo** - Use `start-demo.bat` (Windows) or `start-demo.sh` (Mac/Linux)
+2. **Click "Load QIIB Oryx Demo"** - Pre-populates all 4 components
+3. **Review Configuration** - See Wakala + QFC + AAOIFI + Sustainability metrics
+4. **Step Through Workflow** - Navigate through all 10 steps
+5. **View Guardian Policy** - See generated BPMN workflow and policy structure
+6. **Mock Deployment** - Simulated blockchain deployment with realistic transaction IDs
 
-- **Graphiti MCP**: Knowledge graph management with Neo4j
-- **Claude Code**: AI-powered workflow execution
-- Custom MCP servers can be added via `.claude/claude_desktop_config.json`
-
-### Neo4j Setup
-
-1. Create a free Neo4j Aura instance at https://neo4j.com/cloud/aura/
-2. Note your connection URI, username, and password
-3. Add credentials to `backend/.env`
-4. The Graphiti MCP will automatically initialize the required schema
-
-## 📚 Workflows
-
-### Shariah Compliance Workflow
-
-1. **Source Connection**: Configure data source (file upload or database)
-2. **Workflow Selection**: Choose Shariah compliance validation workflow
-3. **Configuration**: Set analysis parameters and preferences
-4. **Review & Execute**: Review configuration and start processing
-5. **Live Execution**: Monitor real-time progress and results
+**Note**: Phase 1 uses mock implementations for Guardian integration. Real blockchain deployment coming in Phase 2.
 
 ## 🧪 Testing
 
@@ -211,38 +181,44 @@ pytest
 
 #### Port Already in Use
 
-If port 3030 or 8000 is already in use:
+If port 3040 or 8000 is already in use:
 
 ```bash
-# Check what's using the port (Windows)
-netstat -ano | findstr :3030
+# Windows - Check what's using the port
+netstat -ano | findstr :3040
 
-# Check what's using the port (macOS/Linux)
-lsof -i :3030
+# Windows - Kill process
+taskkill /F /PID <process_id>
 
-# Kill the process or change the port in .env.local
+# Mac/Linux - Check what's using the port
+lsof -i :3040
+
+# Mac/Linux - Kill process
+kill <process_id>
 ```
 
 #### Backend Connection Errors
 
 - Verify the backend is running on http://localhost:8000
-- Check CORS_ORIGINS in `backend/.env` includes your frontend URL
-- Ensure all API keys are valid and properly configured
+- Check backend logs for errors
+- Ensure Python virtual environment is activated
 
-#### Neo4j Connection Issues
+#### Demo Not Loading
 
-- Verify Neo4j Aura instance is running
-- Check firewall isn't blocking the connection
-- Ensure URI includes the `neo4j+ssc://` protocol prefix
+- Clear browser cache and refresh
+- Check browser console for errors
+- Verify both frontend and backend servers are running
 
 ## 📖 Documentation
 
-Additional documentation:
+**Comprehensive Documentation**:
+- **[PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md)** - Complete documentation with demo details, architecture, known gaps, and future roadmap
 
+**Additional Resources**:
+- [Known Gaps](./KNOWN_GAPS.md) - Current limitations and future work
 - [Developer Guide](./FOR_DEVELOPERS.md) - Detailed development guide
 - [Architecture Overview](./PLUGGABLE_ARCHITECTURE.md) - System architecture
-- [Quick Start Guide](./QUICK_START.md) - Quick setup guide
-- [Deployment Guide](./NETLIFY_DEPLOYMENT_ASSESSMENT.md) - Deployment instructions
+- [Deployment Assessment](./NETLIFY_DEPLOYMENT_ASSESSMENT.md) - Deployment considerations
 
 ## 🤝 Contributing
 
@@ -266,18 +242,18 @@ Additional documentation:
 ## 🙏 Acknowledgments
 
 - Built with [Next.js](https://nextjs.org/)
-- Powered by [Anthropic Claude](https://www.anthropic.com/)
-- Knowledge graph with [Neo4j](https://neo4j.com/)
-- MCP framework by Anthropic
+- UI components from [shadcn/ui](https://ui.shadcn.com/)
+- BPMN visualization with [bpmn-js](https://bpmn.io/)
+- Blockchain framework: [Hedera Guardian](https://www.hedera.com/guardian)
 
 ## 📞 Support
 
 For issues and questions:
 
-- Create an issue in the GitHub repository
-- Check existing documentation in the `/docs` folder
+- Create an issue in the [GitHub repository](https://github.com/Blade-Labs/islamic-finance-workflows/issues)
+- Check [PROJECT_OVERVIEW.md](./PROJECT_OVERVIEW.md) for comprehensive documentation
 - Review [troubleshooting section](#-troubleshooting)
 
 ---
 
-**Note**: This application is currently in development. Features and APIs may change.
+**Phase 1 Status**: This demo showcases the modular workflow architecture with mock Guardian integration. Real blockchain deployment and live Hedera Guardian integration coming in Phase 2.
