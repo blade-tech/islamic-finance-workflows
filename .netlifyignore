@@ -1,0 +1,18 @@
+# Exclude backend and Python files
+backend/
+*.py
+*.pyc
+__pycache__/
+
+# Exclude development files
+.git/
+.env*
+*.log
+
+# Exclude documentation
+*.md
+!README.md
+
+# These are handled by Next.js build
+node_modules/
+.next/cache/
