@@ -89,22 +89,19 @@ export default function ContractCollaborationPage() {
     try {
       setLoading(true)
 
-      // Get contract owner
-      const subscribersData = await backendClient.api<{
-        owner_email: string
-      }>(`/api/contracts/${contractId}/subscribers`, { method: 'GET' })
+      // Using mock data for frontend-only deployment
+      const mockOwnerEmail: string = 'contract.owner@example.com'
 
       // Check if current user is owner
-      setIsOwner(subscribersData.owner_email === currentUserEmail)
+      setIsOwner(mockOwnerEmail === currentUserEmail)
 
-      // TODO: Load contract details from contracts API
-      // For now, using mock data
+      // Mock contract data
       setContractInfo({
         contract_id: contractId,
         contract_name: `Contract ${contractId}`,
         contract_type: 'Murabaha',
         status: 'In Review',
-        owner_email: subscribersData.owner_email || 'unknown@example.com',
+        owner_email: mockOwnerEmail,
         owner_name: 'Contract Owner',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()

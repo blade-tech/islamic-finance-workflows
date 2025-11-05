@@ -147,26 +147,23 @@ export default function RoleDashboardPage() {
     try {
       setLoading(true)
 
-      // Load user contracts
-      const contractsData = await backendClient.api<{
-        owned: string[]
-        subscribed: string[]
-        total: number
-      }>(`/api/users/${currentUserEmail}/contracts`, { method: 'GET' })
+      // Using mock data for frontend-only deployment
+      const contractsData = {
+        owned: ['contract-1', 'contract-2'],
+        subscribed: ['contract-3', 'contract-4', 'contract-5'],
+        total: 5
+      }
 
-      // Load task stats
-      const taskStats = await backendClient.api<{
-        total: number
-        pending: number
-        in_progress: number
-        overdue: number
-      }>(`/api/users/${currentUserEmail}/tasks/stats`, { method: 'GET' })
+      const taskStats = {
+        total: 8,
+        pending: 3,
+        in_progress: 2,
+        overdue: 1
+      }
 
-      // Load unread notification count
-      const notificationData = await backendClient.api<{ count: number }>(
-        `/api/notifications/count/unread?user_email=${currentUserEmail}`,
-        { method: 'GET' }
-      )
+      const notificationData = {
+        count: 5
+      }
 
       setStats({
         total_contracts: contractsData.total || 0,
@@ -178,8 +175,7 @@ export default function RoleDashboardPage() {
         unread_notifications: notificationData.count || 0
       })
 
-      // TODO: Load recent contracts from backend
-      // For now, using mock data
+      // Mock recent contracts
       setRecentContracts([])
 
     } catch (error) {

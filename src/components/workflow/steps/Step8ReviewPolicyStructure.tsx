@@ -110,7 +110,8 @@ export function Step8ReviewPolicyStructure() {
           accounting: execution.selectedAccounting?.name || 'Unknown',
           impact: execution.selectedImpacts?.map((i) => i.name) || []
         },
-        estimatedExecutionTime: '~15-20 minutes'
+        estimatedExecutionTime: '~15-20 minutes',
+        blockchainCost: '0.5 HBAR (~$0.03)'
       }
 
       setPolicyStructure(mockPolicy)

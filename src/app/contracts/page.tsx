@@ -16,7 +16,7 @@
 
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -77,7 +77,7 @@ interface Contract {
 // COMPONENT
 // ============================================================================
 
-export default function ContractsListPage() {
+function ContractsListPageContent() {
   const searchParams = useSearchParams()
 
   const [contracts, setContracts] = useState<Contract[]>([])
@@ -648,5 +648,13 @@ export default function ContractsListPage() {
         </CardContent>
       </Card>
     </div>
+  )
+}
+
+export default function ContractsListPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center min-h-screen">Loading contracts...</div>}>
+      <ContractsListPageContent />
+    </Suspense>
   )
 }

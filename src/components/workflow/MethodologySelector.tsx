@@ -52,7 +52,18 @@ export function MethodologySelector({
   // Use controlled selection if provided, otherwise use internal state
   const [internalSelection, setInternalSelection] = useState<Methodology[]>([])
   const selectedMethodologies = controlledSelection !== undefined ? controlledSelection : internalSelection
-  const setSelectedMethodologies = onSelectionChange || setInternalSelection
+
+  // Wrapper function to handle both controlled and uncontrolled cases
+  const setSelectedMethodologies = (update: Methodology[] | ((prev: Methodology[]) => Methodology[])) => {
+    if (onSelectionChange) {
+      // If we have a callback, resolve the update and call it
+      const newValue = typeof update === 'function' ? update(selectedMethodologies) : update
+      onSelectionChange(newValue)
+    } else {
+      // Otherwise use internal state setter
+      setInternalSelection(update)
+    }
+  }
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

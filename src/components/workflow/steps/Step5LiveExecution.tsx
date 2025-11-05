@@ -105,7 +105,7 @@ export function Step5LiveExecution() {
    * Creates a new conversation session with Claude
    */
   const handleStartSession = async () => {
-    if (!execution?.selectedTemplate) {
+    if (!execution || !(execution as any)?.selectedTemplate) {
       setError('Please select a template first')
       return
     }
@@ -120,8 +120,8 @@ export function Step5LiveExecution() {
 
       // Create session
       const request: CreateSessionRequest = {
-        template_id: execution.selectedTemplate.id,
-        system_prompt: execution.selectedTemplate.openCodeTemplate,
+        template_id: (execution as any).selectedTemplate.id,
+        system_prompt: (execution as any).selectedTemplate.openCodeTemplate,
         initial_message: initialMessage,
         context_text: execution.contextText || undefined,
         context_document_ids: execution.contextDocuments.map((doc) => doc.id) || [],
@@ -335,7 +335,7 @@ export function Step5LiveExecution() {
       </Alert>
 
       {/* Template Review (collapsible) */}
-      {execution?.selectedTemplate && (
+      {(execution as any)?.selectedTemplate && (
         <Card>
           <CardHeader
             className="cursor-pointer"
@@ -343,8 +343,8 @@ export function Step5LiveExecution() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-2xl">{execution.selectedTemplate.icon}</span>
-                <CardTitle>{execution.selectedTemplate.name}</CardTitle>
+                <span className="text-2xl">{(execution as any).selectedTemplate.icon}</span>
+                <CardTitle>{(execution as any).selectedTemplate.name}</CardTitle>
               </div>
               {showTemplateDetails ? (
                 <ChevronUp className="h-5 w-5 text-muted-foreground" />
@@ -353,7 +353,7 @@ export function Step5LiveExecution() {
               )}
             </div>
             <CardDescription>
-              {execution.selectedTemplate.description}
+              {(execution as any).selectedTemplate.description}
             </CardDescription>
           </CardHeader>
 
@@ -363,34 +363,34 @@ export function Step5LiveExecution() {
                 <div>
                   <p className="text-sm font-medium">Category</p>
                   <p className="text-sm text-muted-foreground capitalize">
-                    {execution.selectedTemplate.category}
+                    {(execution as any).selectedTemplate.category}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Complexity</p>
                   <p className="text-sm text-muted-foreground capitalize">
-                    {execution.selectedTemplate.axialCode.complexity}
+                    {(execution as any).selectedTemplate.axialCode.complexity}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Estimated Duration</p>
                   <p className="text-sm text-muted-foreground">
-                    {execution.selectedTemplate.axialCode.estimatedDuration} minutes
+                    {(execution as any).selectedTemplate.axialCode.estimatedDuration} minutes
                   </p>
                 </div>
                 <div>
                   <p className="text-sm font-medium">Output Format</p>
                   <p className="text-sm text-muted-foreground capitalize">
-                    {execution.selectedTemplate.axialCode.outputFormat}
+                    {(execution as any).selectedTemplate.axialCode.outputFormat}
                   </p>
                 </div>
               </div>
 
-              {execution.selectedTemplate.axialCode.requiredSources?.length > 0 && (
+              {(execution as any).selectedTemplate.axialCode.requiredSources?.length > 0 && (
                 <div className="p-4 bg-muted rounded-md">
                   <p className="text-sm font-medium mb-2">Required Sources</p>
                   <ul className="list-disc list-inside text-sm text-muted-foreground">
-                    {execution.selectedTemplate.axialCode.requiredSources.map((source, idx) => (
+                    {(execution as any).selectedTemplate.axialCode.requiredSources.map((source: string, idx: number) => (
                       <li key={idx}>{source}</li>
                     ))}
                   </ul>
@@ -400,7 +400,7 @@ export function Step5LiveExecution() {
               <div className="p-4 bg-muted rounded-md">
                 <p className="text-sm font-medium mb-2">What Claude Will Do</p>
                 <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                  {execution.selectedTemplate.openCodeTemplate}
+                  {(execution as any).selectedTemplate.openCodeTemplate}
                 </p>
               </div>
             </CardContent>
@@ -484,7 +484,7 @@ export function Step5LiveExecution() {
             <Button
               onClick={handleStartSession}
               size="lg"
-              disabled={!execution?.selectedTemplate}
+              disabled={!(execution as any)?.selectedTemplate}
               className="w-full"
             >
               <Play className="h-4 w-4 mr-2" />

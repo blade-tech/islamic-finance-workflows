@@ -986,8 +986,8 @@ export function Step2ConfigureDetails() {
   // CONDITIONAL FORM SELECTION based on selected template
   // Maps template names/IDs to form config keys
   const getFormConfig = (): FormConfig => {
-    const templateName = execution?.selectedTemplate?.name?.toLowerCase() || ''
-    const templateId = execution?.selectedTemplate?.id?.toLowerCase() || ''
+    const templateName = (execution as any)?.selectedTemplate?.name?.toLowerCase() || ''
+    const templateId = (execution as any)?.selectedTemplate?.id?.toLowerCase() || execution?.workflowTemplateId?.toLowerCase() || ''
 
     // Try to match template by ID or name
     // Priority: exact ID match > name match > fallback to sukuk_ijara
@@ -1107,18 +1107,18 @@ export function Step2ConfigureDetails() {
       </Alert>
 
       {/* Show selected template */}
-      {execution?.selectedTemplate && (
+      {(execution as any)?.selectedTemplate && (
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-base">Selected Template</CardTitle>
                 <CardDescription className="text-sm mt-1">
-                  {execution.selectedTemplate.name}
+                  {(execution as any).selectedTemplate.name}
                 </CardDescription>
               </div>
               <Badge variant="secondary">
-                {execution.selectedTemplate.category || 'Islamic Finance'}
+                {(execution as any).selectedTemplate.category || 'Islamic Finance'}
               </Badge>
             </div>
           </CardHeader>

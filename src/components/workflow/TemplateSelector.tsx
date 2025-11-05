@@ -54,7 +54,18 @@ export function TemplateSelector({
   // Use controlled selection if provided, otherwise use internal state
   const [internalSelection, setInternalSelection] = useState<Methodology[]>([])
   const selectedTemplates = controlledSelection !== undefined ? controlledSelection : internalSelection
-  const setSelectedTemplates = onSelectionChange || setInternalSelection
+
+  // Create wrapper function to handle both controlled and uncontrolled state updates
+  const setSelectedTemplates = (update: Methodology[] | ((prev: Methodology[]) => Methodology[])) => {
+    if (onSelectionChange) {
+      // Controlled mode: resolve function and call onSelectionChange with new value
+      const newValue = typeof update === 'function' ? update(selectedTemplates) : update
+      onSelectionChange(newValue)
+    } else {
+      // Uncontrolled mode: use internal state setter
+      setInternalSelection(update)
+    }
+  }
 
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)

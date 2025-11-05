@@ -35,7 +35,7 @@ import type { SpecialTag } from '../ServiceDependencyBadge'
 
 export function Step2WorkflowSelection() {
   const execution = useWorkflowStore((state) => state.execution)
-  const setSelectedTemplate = useWorkflowStore((state) => state.setSelectedTemplate)
+  const updateExecution = useWorkflowStore((state) => state.updateExecution)
   const [showCustom, setShowCustom] = useState(false)
   const [customPrompt, setCustomPrompt] = useState('')
   const [templates, setTemplates] = useState<WorkflowTemplate[]>([])
@@ -65,7 +65,7 @@ export function Step2WorkflowSelection() {
   const handleSelectTemplate = (templateId: string) => {
     const template = templates.find((t) => t.id === templateId)
     if (template) {
-      setSelectedTemplate(template)
+      updateExecution({ workflowTemplateId: template.id })
     }
   }
 
@@ -107,7 +107,7 @@ export function Step2WorkflowSelection() {
             <h3 className="text-sm font-medium text-muted-foreground">Available Templates</h3>
             <div className="space-y-3">
               {templates.map((template) => {
-                const isSelected = execution?.selectedTemplate?.id === template.id
+                const isSelected = (execution as any)?.selectedTemplate?.id === template.id || execution?.workflowTemplateId === template.id
 
                 return (
                   <Card
@@ -173,14 +173,14 @@ export function Step2WorkflowSelection() {
 
           {/* Right Panel: Template Preview */}
           <div className="lg:sticky lg:top-4 lg:self-start">
-            {execution?.selectedTemplate ? (
+            {(execution as any)?.selectedTemplate ? (
               <Card>
                 <CardHeader>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className="text-3xl">{execution.selectedTemplate.icon}</span>
+                    <span className="text-3xl">{(execution as any).selectedTemplate.icon}</span>
                     <div>
-                      <CardTitle>{execution.selectedTemplate.name}</CardTitle>
-                      <CardDescription>{execution.selectedTemplate.description}</CardDescription>
+                      <CardTitle>{(execution as any).selectedTemplate.name}</CardTitle>
+                      <CardDescription>{(execution as any).selectedTemplate.description}</CardDescription>
                     </div>
                   </div>
                 </CardHeader>
@@ -189,34 +189,34 @@ export function Step2WorkflowSelection() {
                   <div className="grid grid-cols-2 gap-4 p-4 bg-muted rounded-md">
                     <div>
                       <p className="text-xs text-muted-foreground">Category</p>
-                      <p className="text-sm font-medium capitalize">{execution.selectedTemplate.category}</p>
+                      <p className="text-sm font-medium capitalize">{(execution as any).selectedTemplate.category}</p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Complexity</p>
                       <p className="text-sm font-medium capitalize">
-                        {execution.selectedTemplate.axialCode.complexity}
+                        {(execution as any).selectedTemplate.axialCode.complexity}
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Duration</p>
                       <p className="text-sm font-medium">
-                        {execution.selectedTemplate.axialCode.estimatedDuration} min
+                        {(execution as any).selectedTemplate.axialCode.estimatedDuration} min
                       </p>
                     </div>
                     <div>
                       <p className="text-xs text-muted-foreground">Output</p>
                       <p className="text-sm font-medium capitalize">
-                        {execution.selectedTemplate.axialCode.outputFormat}
+                        {(execution as any).selectedTemplate.axialCode.outputFormat}
                       </p>
                     </div>
                   </div>
 
                   {/* Required Sources */}
-                  {execution.selectedTemplate.axialCode.requiredSources?.length > 0 && (
+                  {(execution as any).selectedTemplate.axialCode.requiredSources?.length > 0 && (
                     <div>
                       <p className="text-sm font-medium mb-2">Required Sources</p>
                       <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                        {execution.selectedTemplate.axialCode.requiredSources.map((source, idx) => (
+                        {(execution as any).selectedTemplate.axialCode.requiredSources.map((source: string, idx: number) => (
                           <li key={idx}>{source}</li>
                         ))}
                       </ul>
@@ -228,7 +228,7 @@ export function Step2WorkflowSelection() {
                     <p className="text-sm font-medium mb-2">What Claude Will Do</p>
                     <div className="bg-muted p-3 rounded-md max-h-64 overflow-y-auto">
                       <p className="text-xs whitespace-pre-wrap text-muted-foreground">
-                        {execution.selectedTemplate.openCodeTemplate}
+                        {(execution as any).selectedTemplate.openCodeTemplate}
                       </p>
                     </div>
                   </div>

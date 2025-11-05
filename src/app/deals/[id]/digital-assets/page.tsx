@@ -39,6 +39,14 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { TrustChainVisualization } from '@/components/guardian/TrustChainVisualization'
+import {
+  getMockCertificate,
+  getMockVP,
+  getMockSukukToken,
+  type MockCertificate,
+  type MockVP,
+  type MockSukukToken
+} from '@/lib/mock-data'
 
 interface Certificate {
   token_id: string
@@ -85,6 +93,7 @@ interface SukukToken {
   treasury_account: string
   holders_count: number
   hashscan_url: string
+  status?: string
 }
 
 export default function DigitalAssetsPage() {
@@ -117,6 +126,13 @@ export default function DigitalAssetsPage() {
         setSukukToken(tokenData)
       } catch (error) {
         console.error('Error fetching digital assets:', error)
+
+        // Fallback to mock data for Netlify deployment (no backend)
+        // This ensures the demo works identically on Netlify as it does locally
+        console.log('Using mock data fallback for deal:', dealId)
+        setCertificate(getMockCertificate(dealId))
+        setVp(getMockVP(dealId))
+        setSukukToken(getMockSukukToken(dealId))
       } finally {
         setLoading(false)
       }

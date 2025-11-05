@@ -72,7 +72,7 @@ export function BpmnViewer({
         console.log('[BPMN Viewer] Import result:', result)
 
         // Fit diagram to viewport
-        const canvas = viewer.get('canvas')
+        const canvas = viewer.get('canvas') as any
         canvas.zoom('fit-viewport', 'auto')
 
         console.log('[BPMN Viewer] Successfully loaded and fitted diagram')
@@ -90,7 +90,7 @@ export function BpmnViewer({
 
     // Setup click handler
     if (onElementClick) {
-      const eventBus = viewer.get('eventBus')
+      const eventBus = viewer.get('eventBus') as any
 
       const handleClick = (event: any) => {
         const { element } = event
@@ -117,21 +117,21 @@ export function BpmnViewer({
   // Zoom controls
   const zoomIn = () => {
     if (!viewerRef.current) return
-    const canvas = viewerRef.current.get('canvas')
+    const canvas = viewerRef.current.get('canvas') as any
     const currentZoom = canvas.zoom()
     canvas.zoom(currentZoom * 1.2) // Zoom in by 20%
   }
 
   const zoomOut = () => {
     if (!viewerRef.current) return
-    const canvas = viewerRef.current.get('canvas')
+    const canvas = viewerRef.current.get('canvas') as any
     const currentZoom = canvas.zoom()
     canvas.zoom(currentZoom * 0.8) // Zoom out by 20%
   }
 
   const zoomToFit = () => {
     if (!viewerRef.current) return
-    const canvas = viewerRef.current.get('canvas')
+    const canvas = viewerRef.current.get('canvas') as any
     canvas.zoom('fit-viewport', 'auto')
   }
 

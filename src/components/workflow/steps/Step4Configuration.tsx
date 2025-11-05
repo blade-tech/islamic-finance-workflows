@@ -52,7 +52,7 @@ export function Step4Configuration() {
       </Card>
 
       {/* Selected Template Info */}
-      {execution?.selectedTemplate && (
+      {(execution as any)?.selectedTemplate && (
         <Card>
           <CardHeader>
             <CardTitle>Selected Workflow Template</CardTitle>
@@ -63,44 +63,44 @@ export function Step4Configuration() {
           <CardContent className="space-y-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">{execution.selectedTemplate.icon}</span>
-                <h3 className="text-lg font-semibold">{execution.selectedTemplate.name}</h3>
+                <span className="text-2xl">{(execution as any)?.selectedTemplate.icon}</span>
+                <h3 className="text-lg font-semibold">{(execution as any)?.selectedTemplate.name}</h3>
               </div>
               <p className="text-sm text-muted-foreground">
-                {execution.selectedTemplate.description}
+                {(execution as any)?.selectedTemplate.description}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 pt-4 border-t">
               <div>
                 <p className="text-sm font-medium">Category</p>
-                <p className="text-sm text-muted-foreground capitalize">{execution.selectedTemplate.category}</p>
+                <p className="text-sm text-muted-foreground capitalize">{(execution as any)?.selectedTemplate.category}</p>
               </div>
               <div>
                 <p className="text-sm font-medium">Complexity</p>
                 <p className="text-sm text-muted-foreground capitalize">
-                  {execution.selectedTemplate.axialCode.complexity}
+                  {(execution as any)?.selectedTemplate.axialCode.complexity}
                 </p>
               </div>
               <div>
                 <p className="text-sm font-medium">Estimated Duration</p>
                 <p className="text-sm text-muted-foreground">
-                  {execution.selectedTemplate.axialCode.estimatedDuration} minutes
+                  {(execution as any)?.selectedTemplate.axialCode.estimatedDuration} minutes
                 </p>
               </div>
               <div>
                 <p className="text-sm font-medium">Output Format</p>
                 <p className="text-sm text-muted-foreground capitalize">
-                  {execution.selectedTemplate.axialCode.outputFormat}
+                  {(execution as any)?.selectedTemplate.axialCode.outputFormat}
                 </p>
               </div>
             </div>
 
-            {execution.selectedTemplate.axialCode.requiredSources?.length > 0 && (
+            {(execution as any)?.selectedTemplate.axialCode.requiredSources?.length > 0 && (
               <div className="pt-4 border-t">
                 <p className="text-sm font-medium mb-2">Required Sources</p>
                 <ul className="list-disc list-inside text-sm text-muted-foreground">
-                  {execution.selectedTemplate.axialCode.requiredSources.map((source, idx) => (
+                  {(execution as any)?.selectedTemplate.axialCode.requiredSources.map((source: string, idx: number) => (
                     <li key={idx}>{source}</li>
                   ))}
                 </ul>
@@ -111,7 +111,7 @@ export function Step4Configuration() {
               <p className="text-sm font-medium mb-2">System Prompt</p>
               <div className="bg-muted p-3 rounded-md">
                 <p className="text-sm whitespace-pre-wrap">
-                  {execution.selectedTemplate.openCodeTemplate}
+                  {(execution as any)?.selectedTemplate.openCodeTemplate}
                 </p>
               </div>
             </div>

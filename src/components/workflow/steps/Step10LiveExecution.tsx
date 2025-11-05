@@ -153,14 +153,14 @@ export function Step10LiveExecution() {
 
     try {
       const dealData = {
-        deal_name: dealConfiguration.deal_name || 'Unnamed Deal',
-        shariah_structure: dealConfiguration.shariah_structure,
-        jurisdiction: dealConfiguration.jurisdiction,
-        accounting_standard: dealConfiguration.accounting_standard,
-        impact_framework: dealConfiguration.impact_framework,
-        deal_amount: dealConfiguration.deal_amount,
-        currency: dealConfiguration.currency,
-        originator: dealConfiguration.originator,
+        deal_name: (dealConfiguration as any).deal_name || dealConfiguration.configurationName || 'Unnamed Deal',
+        shariah_structure: (dealConfiguration as any).shariah_structure || dealConfiguration.shariahStructure?.id || '',
+        jurisdiction: (dealConfiguration as any).jurisdiction || dealConfiguration.jurisdiction?.id || '',
+        accounting_standard: (dealConfiguration as any).accounting_standard || dealConfiguration.accounting?.id || '',
+        impact_framework: (dealConfiguration as any).impact_framework || (dealConfiguration.impacts?.[0]?.id || ''),
+        deal_amount: (dealConfiguration as any).deal_amount,
+        currency: (dealConfiguration as any).currency,
+        originator: (dealConfiguration as any).originator,
         guardian_policy_id: policyId || undefined,
         guardian_transaction_id: workflowTopicId || undefined,
       }
@@ -172,10 +172,10 @@ export function Step10LiveExecution() {
 
         // Store deal ID in workflow store for Step 11 to access
         useWorkflowStore.setState((state) => ({
-          execution: {
+          execution: state.execution ? {
             ...state.execution,
             dealId: createdDeal.deal_id,
-          },
+          } : null,
         }))
 
         console.log('[Step10] Deal created successfully:', createdDeal.deal_id)
@@ -455,13 +455,13 @@ export function Step10LiveExecution() {
             <p className="text-sm text-muted-foreground">{dealConfiguration.configurationName}</p>
           </div>
 
-          {dealConfiguration.derivedFields && Object.keys(dealConfiguration.derivedFields).length > 0 && (
+          {(dealConfiguration as any).derivedFields && Object.keys((dealConfiguration as any).derivedFields).length > 0 && (
             <>
               <Separator />
               <div className="space-y-2">
                 <p className="text-sm font-medium">Derived Configuration Fields</p>
                 <div className="grid grid-cols-2 gap-2 text-sm text-muted-foreground">
-                  {Object.entries(dealConfiguration.derivedFields).slice(0, 4).map(([key, value]) => (
+                  {Object.entries((dealConfiguration as any).derivedFields).slice(0, 4).map(([key, value]) => (
                     <div key={key}>
                       <span className="font-medium">{key}:</span> {String(value)}
                     </div>
@@ -662,7 +662,7 @@ export function Step10LiveExecution() {
       {/* Deployment Complete */}
       {deploymentComplete && (
         <>
-          <Alert variant="success" className="border-green-500">
+          <Alert variant="default" className="border-green-500">
             <CheckCircle2 className="h-4 w-4" />
             <AlertTitle>Deployment Successful!</AlertTitle>
             <AlertDescription>

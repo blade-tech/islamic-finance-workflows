@@ -39,7 +39,7 @@ export function Step1_5MethodologySelection() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
-  const { setSelectedMethodologies, setSelectedTemplate, nextStep } = useWorkflowStore()
+  const { setSelectedMethodologies, updateExecution, nextStep } = useWorkflowStore()
 
   const handleApplyMethodologies = async () => {
     if (localSelectedMethodologies.length === 0) {
@@ -76,7 +76,7 @@ export function Step1_5MethodologySelection() {
 
       // Update workflow store
       setSelectedMethodologies(localSelectedMethodologies)
-      setSelectedTemplate(generatedTemplate)
+      updateExecution({ workflowTemplateId: generatedTemplate.id })
 
       setSuccess(true)
 
