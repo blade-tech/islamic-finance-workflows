@@ -17,6 +17,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { CollaborationNav } from '@/components/layout/CollaborationNav'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -110,7 +111,9 @@ export default function UserTasksPage() {
   // ============================================================================
 
   return (
-    <div className="container mx-auto py-8 max-w-7xl space-y-6">
+    <>
+      <CollaborationNav />
+      <div className="container mx-auto py-8 max-w-7xl space-y-6">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold flex items-center gap-3">
@@ -383,5 +386,6 @@ export default function UserTasksPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 }

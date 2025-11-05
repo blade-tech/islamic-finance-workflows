@@ -1,29 +1,34 @@
 /**
- * ISLAMIC FINANCE COMPLIANCE DASHBOARD
- * =====================================
- * Main dashboard page showing compliance status across 4 modular components:
- * 1. Shariah Structure compliance
- * 2. Jurisdiction compliance
- * 3. Accounting Framework compliance
- * 4. Impact Metrics compliance
+ * ISLAMIC FINANCE COMPLIANCE DASHBOARD (ROLE: MANAGERS)
+ * ======================================================
+ * Compliance monitoring and metrics dashboard for managers.
+ * Primary interface for tracking compliance across all deals.
  *
- * Also displays:
- * - Monitoring cards (Contracts, Shariah Reviews, Impact Validations, Documents)
- * - Active deals summary
- * - Overall platform compliance score
+ * DISPLAYS:
+ * 1. Overall platform compliance score
+ * 2. Component compliance metrics (Shariah, Jurisdiction, Accounting, Impact)
+ * 3. Monitoring cards (Contracts, Reviews, Validations, Documents)
+ * 4. Quick summary stats
+ *
+ * ROLE: Managers - Monitor compliance, not manage individual deals
+ * For deal management → Navigate to Deals page
  */
 
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { backendClient } from '@/lib/backend-client'
 import { DashboardMetrics } from '@/lib/types'
 import { ComponentProgressCard } from '@/components/dashboard/ComponentProgressCard'
 import { MonitoringCard } from '@/components/dashboard/MonitoringCard'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function DashboardPage() {
+  const router = useRouter()
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -182,7 +187,11 @@ export default function DashboardPage() {
           Monitoring & Status
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MonitoringCard card={metrics.contracts_card} icon="📄" />
+          <MonitoringCard
+            card={metrics.contracts_card}
+            icon="📄"
+            onClick={() => router.push('/contracts')}
+          />
           <MonitoringCard card={metrics.shariah_reviews_card} icon="✓" />
           <MonitoringCard
             card={metrics.impact_validations_card}
@@ -192,67 +201,87 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Active Deals Summary */}
+      {/* Quick Actions */}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Active Deals
+          Quick Actions
         </h2>
-        <Card className="bg-white">
-          <CardContent className="p-6">
-            <div className="space-y-3">
-              {metrics.active_deals.length === 0 ? (
-                <p className="text-center text-gray-500 py-8">
-                  No active deals yet. Create your first deal to start tracking
-                  compliance.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/deals')}>
+            <CardContent className="pt-6 pb-6">
+              <div className="text-center">
+                <div className="text-4xl mb-3">📊</div>
+                <h3 className="font-semibold text-blue-900 mb-2">
+                  Manage Deals
+                </h3>
+                <p className="text-sm text-blue-700 mb-3">
+                  View and manage all {metrics.total_deals} active deals
                 </p>
-              ) : (
-                metrics.active_deals.map((deal) => (
-                  <div
-                    key={deal.deal_id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <div>
-                      <div className="font-semibold text-gray-900">
-                        {deal.deal_name}
-                      </div>
-                      <div className="text-sm text-gray-600 mt-1">
-                        <span className="capitalize">
-                          {deal.shariah_structure.replace(/_/g, ' ')}
-                        </span>{' '}
-                        •{' '}
-                        <span className="capitalize">
-                          {deal.jurisdiction.replace(/_/g, ' ')}
-                        </span>{' '}
-                        •{' '}
-                        <span className="uppercase">{deal.accounting}</span>
-                        {deal.impact !== 'none' && (
-                          <>
-                            {' '}
-                            •{' '}
-                            <span className="capitalize">
-                              {deal.impact.replace(/_/g, ' ')}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
-                        <div className="text-2xl font-bold text-blue-600">
-                          {deal.overall_completion.toFixed(0)}%
-                        </div>
-                        <div className="text-xs text-gray-500">Complete</div>
-                      </div>
-                      <button className="px-4 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">
-                        View Details →
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </CardContent>
-        </Card>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white hover:bg-blue-50 border-blue-300"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push('/deals')
+                  }}
+                >
+                  View All Deals →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/digital-assets')}>
+            <CardContent className="pt-6 pb-6">
+              <div className="text-center">
+                <div className="text-4xl mb-3">🛡️</div>
+                <h3 className="font-semibold text-purple-900 mb-2">
+                  Digital Assets
+                </h3>
+                <p className="text-sm text-purple-700 mb-3">
+                  Guardian certificates and ATS tokens
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white hover:bg-purple-50 border-purple-300"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push('/digital-assets')
+                  }}
+                >
+                  View Assets →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/')}>
+            <CardContent className="pt-6 pb-6">
+              <div className="text-center">
+                <div className="text-4xl mb-3">✨</div>
+                <h3 className="font-semibold text-green-900 mb-2">
+                  Create New Deal
+                </h3>
+                <p className="text-sm text-green-700 mb-3">
+                  Start a new 11-step workflow
+                </p>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white hover:bg-green-50 border-green-300"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    router.push('/')
+                  }}
+                >
+                  Start Workflow →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

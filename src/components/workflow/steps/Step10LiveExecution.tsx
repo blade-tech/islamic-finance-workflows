@@ -27,6 +27,7 @@
 
 import { useState } from 'react'
 import { useWorkflowStore } from '@/lib/store'
+import { backendClient } from '@/lib/backend-client'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -45,7 +46,8 @@ import {
   Clock,
   Link as LinkIcon,
   Copy,
-  Check
+  Check,
+  Database
 } from 'lucide-react'
 
 interface DeploymentPhase {
@@ -110,6 +112,11 @@ export function Step10LiveExecution() {
   const [copiedTx, setCopiedTx] = useState<string | null>(null)
   const [showConfirmation, setShowConfirmation] = useState(false)
 
+  // Deal creation state
+  const [isCreatingDeal, setIsCreatingDeal] = useState(false)
+  const [dealCreationError, setDealCreationError] = useState<string | null>(null)
+  const [createdDealId, setCreatedDealId] = useState<string | null>(null)
+
   // Generate mock transaction ID
   const generateMockTransactionId = (): string => {
     const accountId = `0.0.${Math.floor(100000 + Math.random() * 900000)}`
@@ -132,6 +139,55 @@ export function Step10LiveExecution() {
     navigator.clipboard.writeText(text)
     setCopiedTx(id)
     setTimeout(() => setCopiedTx(null), 2000)
+  }
+
+  // Create deal in backend after successful deployment
+  const createDeal = async () => {
+    if (!dealConfiguration) {
+      console.error('[Step10] Cannot create deal: dealConfiguration is missing')
+      return
+    }
+
+    setIsCreatingDeal(true)
+    setDealCreationError(null)
+
+    try {
+      const dealData = {
+        deal_name: dealConfiguration.deal_name || 'Unnamed Deal',
+        shariah_structure: dealConfiguration.shariah_structure,
+        jurisdiction: dealConfiguration.jurisdiction,
+        accounting_standard: dealConfiguration.accounting_standard,
+        impact_framework: dealConfiguration.impact_framework,
+        deal_amount: dealConfiguration.deal_amount,
+        currency: dealConfiguration.currency,
+        originator: dealConfiguration.originator,
+        guardian_policy_id: policyId || undefined,
+        guardian_transaction_id: workflowTopicId || undefined,
+      }
+
+      const createdDeal = await backendClient.createDeal(dealData)
+
+      if (createdDeal?.deal_id) {
+        setCreatedDealId(createdDeal.deal_id)
+
+        // Store deal ID in workflow store for Step 11 to access
+        useWorkflowStore.setState((state) => ({
+          execution: {
+            ...state.execution,
+            dealId: createdDeal.deal_id,
+          },
+        }))
+
+        console.log('[Step10] Deal created successfully:', createdDeal.deal_id)
+      } else {
+        throw new Error('Deal creation response missing deal_id')
+      }
+    } catch (error) {
+      console.error('[Step10] Failed to create deal:', error)
+      setDealCreationError(error instanceof Error ? error.message : 'Failed to create deal')
+    } finally {
+      setIsCreatingDeal(false)
+    }
   }
 
   // Start deployment process
@@ -241,6 +297,9 @@ export function Step10LiveExecution() {
 
     setIsDeploying(false)
     setDeploymentComplete(true)
+
+    // Create deal record after successful deployment
+    await createDeal()
   }
 
   // Render deployment phase
@@ -611,6 +670,69 @@ export function Step10LiveExecution() {
               been sent.
             </AlertDescription>
           </Alert>
+
+          {/* Deal Creation Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Database className="h-5 w-5" />
+                Deal Lifecycle Record
+              </CardTitle>
+              <CardDescription>
+                Creating deal record for lifecycle management
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {isCreatingDeal && (
+                <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                  <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+                  <p className="text-sm text-muted-foreground">
+                    Creating deal record in backend system...
+                  </p>
+                </div>
+              )}
+
+              {!isCreatingDeal && createdDealId && (
+                <Alert className="bg-green-50 border-green-200">
+                  <CheckCircle2 className="h-4 w-4 text-green-600" />
+                  <AlertTitle className="text-green-900">Deal Created Successfully</AlertTitle>
+                  <AlertDescription className="text-green-700">
+                    <p className="mb-2">
+                      Your deal has been registered for lifecycle management and compliance tracking.
+                    </p>
+                    <div className="mt-2 font-mono text-sm bg-white/50 p-2 rounded">
+                      Deal ID: <span className="font-semibold">{createdDealId}</span>
+                    </div>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {!isCreatingDeal && dealCreationError && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Deal Creation Failed</AlertTitle>
+                  <AlertDescription>
+                    <p className="mb-2">
+                      Failed to create deal record: {dealCreationError}
+                    </p>
+                    <p className="text-xs mt-2">
+                      Don't worry - your blockchain deployment was successful. You can manually create
+                      the deal record from the dashboard or contact support.
+                    </p>
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              {!isCreatingDeal && !createdDealId && !dealCreationError && (
+                <div className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                  <Clock className="h-5 w-5 text-muted-foreground" />
+                  <p className="text-sm text-muted-foreground">
+                    Waiting for deal creation...
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
           <Card>
             <CardHeader>

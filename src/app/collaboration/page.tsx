@@ -14,6 +14,7 @@
 
 'use client'
 
+import { CollaborationNav } from '@/components/layout/CollaborationNav'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -126,7 +127,9 @@ const ROLE_DASHBOARDS = [
 
 export default function CollaborationHubPage() {
   return (
-    <div className="container mx-auto py-8 max-w-7xl space-y-8">
+    <>
+      <CollaborationNav />
+      <div className="container mx-auto py-8 max-w-7xl space-y-8">
       {/* Hero Section */}
       <div className="text-center space-y-4 py-8">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-4">
@@ -383,5 +386,6 @@ export default function CollaborationHubPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 }

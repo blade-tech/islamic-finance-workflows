@@ -24,20 +24,22 @@ import { ErrorBoundary } from '@/components/workflow/ErrorBoundary'
 import { ErrorDisplay } from '@/components/workflow/ErrorDisplay'
 import { Toaster } from '@/components/ui/toaster'
 import { ServiceStatusButton } from '@/components/workflow/ServiceStatusButton'
+import { Navigation } from '@/components/layout/Navigation'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Islamic Finance Workflows - AI-Powered Document Generation',
+  title: 'ZeroH - Sustainable Islamic Finance Governance',
   description:
-    'Generate AAOIFI-compliant Islamic finance documents using AI workflows with Claude and Graphiti knowledge graph',
+    'Sustainable Islamic Finance governance, monitoring and risk management system',
   keywords: [
     'Islamic Finance',
-    'AAOIFI',
+    'Sustainable Finance',
+    'Governance',
+    'Risk Management',
+    'Monitoring',
     'Sukuk',
-    'Murabaha',
-    'AI Workflows',
-    'Document Generation',
+    'ESG',
   ],
 }
 
@@ -50,6 +52,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ErrorBoundary>
+          {/* Global navigation bar */}
+          <Navigation />
+
           {/* Main application content */}
           {children}
 

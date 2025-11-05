@@ -808,3 +808,96 @@ class DashboardMetrics(BaseModel):
     compliant_deals: int
     deals_needing_attention: int
     overall_platform_compliance: float  # Average across all 4 components
+
+
+# ============================================================================
+# DEAL LIFECYCLE MANAGEMENT
+# ============================================================================
+
+class DealCreate(BaseModel):
+    """Request model for creating a new deal from workflow completion"""
+    deal_name: str = Field(..., description="Name of the deal (e.g., 'QIIB Oryx Sustainability Sukuk')")
+
+    # Selected components from workflow
+    shariah_structure: str = Field(..., description="Selected Shariah structure ID")
+    jurisdiction: str = Field(..., description="Selected jurisdiction ID")
+    accounting_standard: str = Field(..., description="Selected accounting standard ID")
+    impact_framework: Optional[str] = Field(None, description="Selected impact framework ID (optional)")
+
+    # Optional deal details
+    deal_amount: Optional[float] = Field(None, description="Deal amount in base currency")
+    currency: Optional[str] = Field(None, description="Currency code (e.g., 'USD', 'QAR')")
+    originator: Optional[str] = Field(None, description="Originating institution name")
+
+    # Guardian blockchain integration (populated by Step 10)
+    guardian_policy_id: Optional[str] = Field(None, description="Hedera Guardian policy ID")
+    guardian_transaction_id: Optional[str] = Field(None, description="Hedera transaction ID")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "deal_name": "QIIB Oryx Sustainability Sukuk",
+            "shariah_structure": "wakala",
+            "jurisdiction": "qatar_qfc",
+            "accounting_standard": "aaoifi",
+            "impact_framework": "qfc_sustainable",
+            "deal_amount": 500000000.0,
+            "currency": "USD",
+            "originator": "Qatar International Islamic Bank",
+            "guardian_policy_id": "policy_qfc_wakala_v1",
+            "guardian_transaction_id": "0.0.123456@1730707200.0"
+        }
+    })
+
+
+class Deal(DealCreate):
+    """Full deal model with lifecycle tracking"""
+    deal_id: str = Field(..., description="Unique deal identifier (UUID)")
+
+    # Timestamps
+    created_at: datetime = Field(default_factory=datetime.now, description="Deal creation timestamp")
+    updated_at: datetime = Field(default_factory=datetime.now, description="Last update timestamp")
+
+    # Lifecycle status
+    status: Literal['draft', 'active', 'completed', 'archived'] = Field(
+        default='active',
+        description="Deal lifecycle status"
+    )
+
+    # Compliance tracking (optional, calculated from components)
+    overall_completion: Optional[float] = Field(
+        None,
+        description="Overall compliance completion percentage (0-100)"
+    )
+
+    # Digital Assets - Guardian Certificate
+    has_certificate: bool = Field(default=False, description="Whether Guardian certificate has been issued")
+    certificate_id: Optional[str] = Field(None, description="Guardian certificate ID if issued")
+    certificate_status: Optional[str] = Field(None, description="Certificate status (issued, revoked, pending)")
+
+    # Digital Assets - ATS Token
+    has_token: bool = Field(default=False, description="Whether deal has been tokenized on ATS")
+    token_id: Optional[str] = Field(None, description="Hedera token ID (e.g., 0.0.4929427)")
+    token_name: Optional[str] = Field(None, description="Token name")
+    token_symbol: Optional[str] = Field(None, description="Token symbol")
+    total_supply: Optional[int] = Field(None, description="Total token supply")
+    holders_count: Optional[int] = Field(None, description="Number of token holders")
+
+    model_config = ConfigDict(json_schema_extra={
+        "example": {
+            "deal_id": "deal-550e8400-e29b-41d4-a716-446655440000",
+            "deal_name": "QIIB Oryx Sustainability Sukuk",
+            "shariah_structure": "wakala",
+            "jurisdiction": "qatar_qfc",
+            "accounting_standard": "aaoifi",
+            "impact_framework": "qfc_sustainable",
+            "deal_amount": 500000000.0,
+            "currency": "USD",
+            "originator": "Qatar International Islamic Bank",
+            "guardian_policy_id": "policy_qfc_wakala_v1",
+            "guardian_transaction_id": "0.0.123456@1730707200.0",
+            "created_at": "2025-11-04T10:00:00Z",
+            "updated_at": "2025-11-04T10:00:00Z",
+            "status": "active",
+            "overall_completion": 0.0
+        }
+    })

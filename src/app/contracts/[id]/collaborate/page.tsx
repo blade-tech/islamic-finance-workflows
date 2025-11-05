@@ -40,6 +40,7 @@ import {
 import { SubscriberList } from '@/components/collaboration/SubscriberList'
 import { CommentThread } from '@/components/collaboration/CommentThread'
 import { TaskList } from '@/components/collaboration/TaskList'
+import { Breadcrumbs, BreadcrumbPresets } from '@/components/layout/Breadcrumbs'
 import { backendClient } from '@/lib/backend-client'
 import Link from 'next/link'
 
@@ -174,17 +175,19 @@ export default function ContractCollaborationPage() {
 
   return (
     <div className="container mx-auto py-8 max-w-7xl space-y-6">
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        items={BreadcrumbPresets.contractCollaboration(
+          contractId,
+          undefined, // dealId not available yet
+          undefined, // dealName not available yet
+          contractInfo.contract_name
+        )}
+      />
+
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <Link href={`/contracts/${contractId}`}>
-              <Button variant="ghost" size="sm">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Contract
-              </Button>
-            </Link>
-          </div>
           <h1 className="text-3xl font-bold flex items-center gap-3">
             <Users className="h-8 w-8" />
             Collaboration

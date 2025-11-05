@@ -50,6 +50,7 @@ import { Step7ConfigureDetails } from './steps/Step7ConfigureDetails'
 import { Step8ReviewPolicyStructure } from './steps/Step8ReviewPolicyStructure'
 import { Step3TestWorkflow } from './steps/Step3TestWorkflow'
 import { Step10LiveExecution } from './steps/Step10LiveExecution'
+import { Step11MonitorCollaborate } from './steps/Step11MonitorCollaborate'
 
 const STEPS = [
   { index: 0, title: 'Connect Sources', component: Step1SourceConnection },
@@ -62,6 +63,7 @@ const STEPS = [
   { index: 7, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
   { index: 8, title: 'Test Workflow', component: Step3TestWorkflow },
   { index: 9, title: 'Live Execution', component: Step10LiveExecution },
+  { index: 10, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
 ]
 
 export function WorkflowContainer() {
@@ -182,9 +184,9 @@ export function WorkflowContainer() {
             {/* Title and Demo Button */}
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold">Islamic Finance Workflows</h1>
+                <h1 className="text-3xl font-bold">ZeroH</h1>
                 <p className="text-sm text-muted-foreground mt-1">
-                  AI-powered AAOIFI-compliant document generation
+                  Sustainable Islamic Finance governance, monitoring and risk management system
                 </p>
               </div>
               <Button

@@ -57,6 +57,11 @@ async def lifespan(app: FastAPI):
     os.makedirs(os.getenv("UPLOAD_DIR", "./uploads"), exist_ok=True)
     os.makedirs(os.getenv("OUTPUT_DIR", "./outputs"), exist_ok=True)
 
+    # Seed mock data for development
+    from app.services.deal_storage import seed_mock_deals
+    seed_mock_deals()
+    logger.info("✅ Seeded mock deals with digital assets")
+
     yield
 
     # Shutdown
@@ -100,6 +105,8 @@ app.add_middleware(
 # Import routers (will create these next)
 from app.api import graphiti, documents, templates, workflows, citations, learnings, sessions, methodologies, dashboard
 from app.api import collaboration, comments, tasks, notifications  # Vanta Phase A
+from app.api import deals  # NEW: Deal lifecycle management
+from app.api import mock_guardian  # NEW: Mock Guardian endpoints for UX development
 
 app.include_router(graphiti.router, prefix="/api", tags=["Graphiti"])
 app.include_router(documents.router, prefix="/api", tags=["Documents"])
@@ -110,12 +117,16 @@ app.include_router(citations.router, prefix="/api", tags=["Citations"])
 app.include_router(learnings.router, prefix="/api", tags=["Learnings"])
 app.include_router(methodologies.router, prefix="/api", tags=["Methodologies"])  # NEW: Methodology management
 app.include_router(dashboard.router, tags=["Dashboard"])  # NEW: Compliance dashboard (4-component architecture)
+app.include_router(deals.router, tags=["Deals"])  # NEW: Deal lifecycle management (Phase 1)
 
 # Vanta Phase A: Collaboration features
 app.include_router(collaboration.router, prefix="/api", tags=["Collaboration"])
 app.include_router(comments.router, prefix="/api", tags=["Comments"])
 app.include_router(tasks.router, prefix="/api", tags=["Tasks"])
 app.include_router(notifications.router, prefix="/api", tags=["Notifications"])
+
+# Mock Guardian endpoints (UX development)
+app.include_router(mock_guardian.router, tags=["Mock Guardian"])
 
 
 # ============================================================================

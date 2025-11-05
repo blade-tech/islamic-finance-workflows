@@ -56,9 +56,11 @@ import {
   FileText,
   Coins,
   Shield,
+  Upload,
 } from 'lucide-react'
 import { ALL_SHARIAH_STRUCTURES } from '@/data/shariah-structures'
 import type { ShariahStructure, TakafulOverlay } from '@/lib/types'
+import { MethodologyUploadFlow } from '../MethodologyUploadFlow'
 
 // Icon mapping for dynamic rendering
 const ICON_MAP: Record<string, any> = {
@@ -445,6 +447,22 @@ export function Step2SelectShariahStructure() {
           Not all Islamic finance uses Sukuk - you can use contracts directly for bilateral financing, leasing, or trade.
         </AlertDescription>
       </Alert>
+
+      {/* Document Upload Section */}
+      <Card className="border-2 border-dashed border-amber-500/30 bg-amber-50/50 dark:bg-amber-950/30">
+        <CardHeader>
+          <div className="flex items-center gap-2 mb-2">
+            <Upload className="h-5 w-5 text-amber-600" />
+            <CardTitle className="text-lg">Or Upload Your Own Methodology</CardTitle>
+          </div>
+          <CardDescription>
+            Already have a methodology document (IIFM, AAOIFI, custom)? Upload it to digitize the policy intent and extract the Shariah structure.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <MethodologyUploadFlow />
+        </CardContent>
+      </Card>
     </div>
   )
 }

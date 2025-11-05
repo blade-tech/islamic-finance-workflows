@@ -16,6 +16,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { CollaborationNav } from '@/components/layout/CollaborationNav'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -184,7 +185,9 @@ export default function NotificationPreferencesPage() {
   }
 
   return (
-    <div className="container mx-auto py-8 max-w-3xl space-y-6">
+    <>
+      <CollaborationNav />
+      <div className="container mx-auto py-8 max-w-3xl space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -452,5 +455,6 @@ export default function NotificationPreferencesPage() {
         </Button>
       </div>
     </div>
+    </>
   )
 }
