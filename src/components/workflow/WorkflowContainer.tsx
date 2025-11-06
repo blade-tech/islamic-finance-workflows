@@ -39,6 +39,10 @@ import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 
+// Onboarding components
+import { WelcomeModal } from '@/components/onboarding/WelcomeModal'
+import { ProductTour } from '@/components/onboarding/ProductTour'
+
 // Step components
 import { Step1SourceConnection } from './steps/Step1SourceConnection'
 import { Step2SelectShariahStructure } from './steps/Step2SelectShariahStructure'
@@ -72,6 +76,10 @@ export function WorkflowContainer() {
   const nextStep = useWorkflowStore((state) => state.nextStep)
   const previousStep = useWorkflowStore((state) => state.previousStep)
   const loadDemoConfiguration = useWorkflowStore((state) => state.loadDemoConfiguration)
+
+  // Tour state management
+  const [runTour, setRunTour] = useState(false)
+  const [isTourRunning, setIsTourRunning] = useState(false)
 
   // Scroll controls for step indicators
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -176,7 +184,7 @@ export function WorkflowContainer() {
   })()
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" data-tour="dashboard">
       {/* Header with progress */}
       <div className="border-b bg-card">
         <div className="container mx-auto px-4 py-6">
@@ -322,6 +330,17 @@ export function WorkflowContainer() {
           </div>
         </div>
       </div>
+
+      {/* Onboarding System */}
+      <WelcomeModal
+        onStartTour={() => setRunTour(true)}
+        onSkip={() => setRunTour(false)}
+      />
+      <ProductTour
+        run={runTour}
+        onComplete={() => setRunTour(false)}
+        onStateChange={setIsTourRunning}
+      />
     </div>
   )
 }
