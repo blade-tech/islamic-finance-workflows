@@ -131,7 +131,7 @@ export function Step11MonitorCollaborate() {
       </Card>
 
       {/* Navigation Cards Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4" data-tour="collaboration">
         {navigationCards.map((card) => {
           const Icon = card.icon
 

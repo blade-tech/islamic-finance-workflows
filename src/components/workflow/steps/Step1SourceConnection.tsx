@@ -95,7 +95,7 @@ export function Step1SourceConnection() {
       {/* ============================================================ */}
       {/* SECTION 1: WHAT'S HAPPENING - UPDATED */}
       {/* ============================================================ */}
-      <Card className="border-blue-200 bg-blue-50">
+      <Card className="border-blue-200 bg-blue-50" data-tour="methodology-connect">
         <CardHeader>
           <div className="flex items-center gap-2">
             <Info className="h-5 w-5 text-blue-600" />
@@ -724,7 +724,7 @@ export function Step1SourceConnection() {
       {/* ============================================================ */}
       {/* SECTION 4: OPTIONAL KNOWLEDGE GRAPH SEARCH */}
       {/* ============================================================ */}
-      <Card>
+      <Card data-tour="ai-analysis">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Search className="h-5 w-5 text-gray-600" />

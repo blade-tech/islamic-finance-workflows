@@ -42,6 +42,7 @@ import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
 // Onboarding components
 import { WelcomeModal } from '@/components/onboarding/WelcomeModal'
 import { ProductTour } from '@/components/onboarding/ProductTour'
+import { useTour } from '@/hooks/useTour'
 
 // Step components
 import { Step1SourceConnection } from './steps/Step1SourceConnection'
@@ -77,8 +78,8 @@ export function WorkflowContainer() {
   const previousStep = useWorkflowStore((state) => state.previousStep)
   const loadDemoConfiguration = useWorkflowStore((state) => state.loadDemoConfiguration)
 
-  // Tour state management
-  const [runTour, setRunTour] = useState(false)
+  // Tour state management (global state via Zustand)
+  const { runTour, startTour, stopTour } = useTour()
   const [isTourRunning, setIsTourRunning] = useState(false)
 
   // Scroll controls for step indicators
@@ -333,12 +334,12 @@ export function WorkflowContainer() {
 
       {/* Onboarding System */}
       <WelcomeModal
-        onStartTour={() => setRunTour(true)}
-        onSkip={() => setRunTour(false)}
+        onStartTour={startTour}
+        onSkip={stopTour}
       />
       <ProductTour
         run={runTour}
-        onComplete={() => setRunTour(false)}
+        onComplete={stopTour}
         onStateChange={setIsTourRunning}
       />
     </div>
