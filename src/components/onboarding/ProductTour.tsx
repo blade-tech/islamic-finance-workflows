@@ -26,7 +26,7 @@ export function ProductTour({ run, onComplete, onStateChange }: ProductTourProps
     const { status, type, action } = data;
 
     // Handle tour completion
-    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+    if (status === STATUS.FINISHED || status === STATUS.SKIPPED) {
       setRunTour(false);
       localStorage.setItem(TOUR_COMPLETED_KEY, 'true');
       onStateChange?.(false);
