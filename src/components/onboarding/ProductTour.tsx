@@ -7,6 +7,8 @@ import { tourSteps, tourStyles, tourLocale } from '@/lib/tour-steps';
 interface ProductTourProps {
   /** Whether to run the tour automatically */
   run: boolean;
+  /** Optional custom steps (if not provided, uses default tourSteps) */
+  steps?: any[];
   /** Callback when tour is completed or skipped */
   onComplete?: () => void;
   /** Callback when tour state changes */
@@ -15,8 +17,11 @@ interface ProductTourProps {
 
 const TOUR_COMPLETED_KEY = 'zeroh-tour-completed';
 
-export function ProductTour({ run, onComplete, onStateChange }: ProductTourProps) {
+export function ProductTour({ run, steps, onComplete, onStateChange }: ProductTourProps) {
   const [runTour, setRunTour] = useState(false);
+
+  // Use custom steps if provided, otherwise use default tourSteps
+  const activeSteps = steps && steps.length > 0 ? steps : tourSteps;
 
   useEffect(() => {
     setRunTour(run);
@@ -42,12 +47,12 @@ export function ProductTour({ run, onComplete, onStateChange }: ProductTourProps
     // Track tour navigation events
     if (type === EVENTS.STEP_AFTER || type === EVENTS.TARGET_NOT_FOUND) {
       const stepIndex = data.index;
-      console.log(`[ProductTour] Step ${stepIndex + 1} of ${tourSteps.length}`);
+      console.log(`[ProductTour] Step ${stepIndex + 1} of ${activeSteps.length}`);
 
       // Log analytics event (can be replaced with actual analytics)
       trackTourEvent('tour_step_viewed', {
         step_number: stepIndex + 1,
-        step_name: tourSteps[stepIndex]?.target || 'unknown',
+        step_name: activeSteps[stepIndex]?.target || 'unknown',
       });
     }
 
@@ -77,7 +82,7 @@ export function ProductTour({ run, onComplete, onStateChange }: ProductTourProps
 
   return (
     <Joyride
-      steps={tourSteps}
+      steps={activeSteps}
       run={runTour}
       continuous
       showProgress
@@ -85,6 +90,7 @@ export function ProductTour({ run, onComplete, onStateChange }: ProductTourProps
       disableOverlayClose
       disableCloseOnEsc={false}
       spotlightPadding={8}
+      spotlightClicks={true}
       callback={handleJoyrideCallback}
       styles={tourStyles}
       locale={tourLocale}
