@@ -26,12 +26,21 @@ import { MonitoringCard } from '@/components/dashboard/MonitoringCard'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { HelpCircle } from 'lucide-react'
+
+// Tour components
+import { ProductTour } from '@/components/onboarding/ProductTour'
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 export default function DashboardPage() {
   const router = useRouter()
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
 
   useEffect(() => {
     loadDashboard()
@@ -48,6 +57,17 @@ export default function DashboardPage() {
       setError('Failed to load dashboard. Please try again.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    const steps = getTourForPage('/dashboard')
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log('[PageTour] No tour available for /dashboard')
     }
   }
 
@@ -84,7 +104,7 @@ export default function DashboardPage() {
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       {/* Header with Overall Compliance */}
       <div className="flex items-center justify-between">
-        <div>
+        <div data-tour="dashboard-header">
           <h1 className="text-3xl font-bold text-gray-900">
             Islamic Finance Compliance Dashboard
           </h1>
@@ -92,7 +112,7 @@ export default function DashboardPage() {
             4-Component Modular Architecture Tracking
           </p>
         </div>
-        <Card className="px-6 py-4 bg-white shadow-md">
+        <Card className="px-6 py-4 bg-white shadow-md" data-tour="overall-compliance">
           <div className="text-center">
             <div className="text-sm text-gray-500 font-medium">
               Overall Platform Compliance
@@ -108,7 +128,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-tour="summary-stats">
         <Card className="bg-white">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -153,7 +173,7 @@ export default function DashboardPage() {
       </div>
 
       {/* 4-Component Progress Cards */}
-      <div>
+      <div data-tour="component-cards">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
           Component Compliance Overview
         </h2>
@@ -182,7 +202,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Monitoring Cards */}
-      <div>
+      <div data-tour="monitoring-cards">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
           Monitoring & Status
         </h2>
@@ -202,7 +222,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div>
+      <div data-tour="quick-actions">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">
           Quick Actions
         </h2>
@@ -283,6 +303,28 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
+
+      {/* Page-Specific Tour */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button */}
+      {hasTourForPage('/dashboard') && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

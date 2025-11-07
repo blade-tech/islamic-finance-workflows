@@ -36,9 +36,14 @@ import {
   Users,
   Clock,
   BarChart3,
-  ShieldCheck
+  ShieldCheck,
+  HelpCircle
 } from 'lucide-react'
 import Link from 'next/link'
+
+// Tour components
+import { ProductTour } from '@/components/onboarding/ProductTour'
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 export default function DealDetailPage() {
   const params = useParams()
@@ -48,6 +53,10 @@ export default function DealDetailPage() {
   const [dealData, setDealData] = useState<DealConfigurationDashboard | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  // Tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
 
   useEffect(() => {
     if (dealId) {
@@ -70,6 +79,17 @@ export default function DealDetailPage() {
       setError('Failed to load deal details. Please try again.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    const steps = getTourForPage('/deals/[id]')
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log('[PageTour] No tour available for /deals/[id]')
     }
   }
 
@@ -157,7 +177,7 @@ export default function DealDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b" data-tour="deal-header">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -199,7 +219,7 @@ export default function DealDetailPage() {
           {/* Main Content - 3 columns */}
           <div className="lg:col-span-3 space-y-6">
             {/* Component Stats Overview */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4" data-tour="component-stats">
               <Card className="bg-purple-50 border-purple-200">
                 <CardContent className="pt-6">
                   <div className="text-center">
@@ -260,7 +280,7 @@ export default function DealDetailPage() {
             </div>
 
             {/* Component Details Tabs */}
-            <Card>
+            <Card data-tour="component-tabs">
               <CardHeader>
                 <CardTitle>Component Compliance Details</CardTitle>
                 <CardDescription>
@@ -546,7 +566,7 @@ export default function DealDetailPage() {
             </Card>
 
             {/* Deal Configuration Details */}
-            <Card>
+            <Card data-tour="deal-config">
               <CardHeader>
                 <CardTitle>Deal Configuration</CardTitle>
               </CardHeader>
@@ -582,7 +602,7 @@ export default function DealDetailPage() {
           </div>
 
           {/* Quick Actions Sidebar - 1 column */}
-          <div className="space-y-4">
+          <div className="space-y-4" data-tour="quick-actions">
             <Card>
               <CardHeader>
                 <CardTitle className="text-base">Quick Actions</CardTitle>
@@ -665,6 +685,28 @@ export default function DealDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* Page-Specific Tour */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button */}
+      {hasTourForPage('/deals/[id]') && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

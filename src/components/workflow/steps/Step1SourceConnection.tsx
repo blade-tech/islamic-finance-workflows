@@ -135,7 +135,7 @@ export function Step1SourceConnection() {
       {/* ============================================================ */}
       {/* SECTION 2A: CORE AI SERVICES (CONNECTED) */}
       {/* ============================================================ */}
-      <Card>
+      <Card data-tour="core-ai-services">
         <CardHeader>
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-purple-600" />
@@ -463,7 +463,7 @@ export function Step1SourceConnection() {
       {/* ============================================================ */}
       {/* SECTION 3: AI KNOWLEDGE BASE */}
       {/* ============================================================ */}
-      <Card className="border-purple-200">
+      <Card className="border-purple-200" data-tour="knowledge-base">
         <CardHeader>
           <div className="flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-purple-600" />

@@ -29,8 +29,13 @@ import {
   TrendingUp,
   Building2,
   FileCheck,
-  Wallet
+  Wallet,
+  HelpCircle
 } from 'lucide-react'
+
+// Tour components
+import { ProductTour } from '@/components/onboarding/ProductTour'
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 interface DealDigitalAssets {
   deal_id: string
@@ -57,9 +62,24 @@ export default function DigitalAssetsPage() {
   const [deals, setDeals] = useState<DealDigitalAssets[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
+
   useEffect(() => {
     fetchDigitalAssets()
   }, [])
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    const steps = getTourForPage('/digital-assets')
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log('[PageTour] No tour available for /digital-assets')
+    }
+  }
 
   const fetchDigitalAssets = async () => {
     try {
@@ -202,7 +222,7 @@ export default function DigitalAssetsPage() {
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-8" data-tour="assets-header">
         <h1 className="text-3xl font-bold mb-2">Digital Assets Management</h1>
         <p className="text-muted-foreground">
           Cross-deal view of Guardian certificates and ATS tokenization for treasury and finance teams
@@ -210,7 +230,7 @@ export default function DigitalAssetsPage() {
       </div>
 
       {/* Summary Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8" data-tour="assets-metrics">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
@@ -283,7 +303,7 @@ export default function DigitalAssetsPage() {
       </div>
 
       {/* Tabbed View */}
-      <Tabs defaultValue="all" className="space-y-6">
+      <Tabs defaultValue="all" className="space-y-6" data-tour="assets-tabs">
         <TabsList>
           <TabsTrigger value="all">
             All Assets ({deals.length})
@@ -299,7 +319,7 @@ export default function DigitalAssetsPage() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all">
+        <TabsContent value="all" data-tour="assets-grid">
           <DealAssetGrid deals={deals} router={router} />
         </TabsContent>
 
@@ -315,6 +335,28 @@ export default function DigitalAssetsPage() {
           <DealAssetGrid deals={dealsWithBoth} router={router} />
         </TabsContent>
       </Tabs>
+
+      {/* Page-Specific Tour */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button */}
+      {hasTourForPage('/digital-assets') && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

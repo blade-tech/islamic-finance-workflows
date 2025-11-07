@@ -29,9 +29,14 @@ import {
   Clock,
   FileText,
   Building2,
-  AlertCircle
+  AlertCircle,
+  HelpCircle
 } from 'lucide-react'
 import { backendClient } from '@/lib/backend-client'
+
+// Tour components
+import { ProductTour } from '@/components/onboarding/ProductTour'
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 interface Deal {
   deal_id: string
@@ -64,6 +69,10 @@ export default function DealsPage() {
   const [deals, setDeals] = useState<Deal[]>([])
   const [loading, setLoading] = useState(true)
 
+  // Tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
+
   useEffect(() => {
     const fetchDeals = async () => {
       try {
@@ -81,6 +90,17 @@ export default function DealsPage() {
 
     fetchDeals()
   }, [])
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    const steps = getTourForPage('/deals')
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log('[PageTour] No tour available for /deals')
+    }
+  }
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -114,7 +134,7 @@ export default function DealsPage() {
   return (
     <div className="container mx-auto p-6">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-8" data-tour="deals-header">
         <h1 className="text-3xl font-bold mb-2">Deals & Digital Assets</h1>
         <p className="text-muted-foreground">
           Manage Guardian compliance certificates and ATS tokenization across all deals
@@ -135,12 +155,13 @@ export default function DealsPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {deals.map((deal) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" data-tour="deals-grid">
+          {deals.map((deal, index) => (
             <Card
               key={deal.deal_id}
               className="hover:shadow-lg transition-shadow cursor-pointer"
               onClick={() => router.push(`/deals/${deal.deal_id}`)}
+              data-tour={index === 0 ? "deal-card-example" : undefined}
             >
               <CardHeader>
                 <div className="flex items-start justify-between mb-2">
@@ -248,6 +269,28 @@ export default function DealsPage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      )}
+
+      {/* Page-Specific Tour */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button */}
+      {hasTourForPage('/deals') && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
         </div>
       )}
     </div>

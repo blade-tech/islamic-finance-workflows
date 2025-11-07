@@ -14,6 +14,7 @@
 
 'use client'
 
+import { useState } from 'react'
 import { CollaborationNav } from '@/components/layout/CollaborationNav'
 import { Button } from '@/components/ui/button'
 import {
@@ -32,9 +33,14 @@ import {
   Settings,
   FileText,
   ArrowRight,
-  Sparkles
+  Sparkles,
+  HelpCircle
 } from 'lucide-react'
 import Link from 'next/link'
+
+// Tour components
+import { ProductTour } from '@/components/onboarding/ProductTour'
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 // ============================================================================
 // FEATURE CARDS DATA
@@ -126,12 +132,27 @@ const ROLE_DASHBOARDS = [
 // ============================================================================
 
 export default function CollaborationHubPage() {
+  // Tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    const steps = getTourForPage('/collaboration')
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log('[PageTour] No tour available for /collaboration')
+    }
+  }
+
   return (
     <>
       <CollaborationNav />
       <div className="container mx-auto py-8 max-w-7xl space-y-8">
       {/* Hero Section */}
-      <div className="text-center space-y-4 py-8">
+      <div className="text-center space-y-4 py-8" data-tour="collab-hero">
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm font-medium mb-4">
           <Sparkles className="h-4 w-4" />
           Vanta-Inspired Collaboration Features
@@ -186,7 +207,7 @@ export default function CollaborationHubPage() {
       </div>
 
       {/* Feature Cards */}
-      <div>
+      <div data-tour="collab-features">
         <h2 className="text-2xl font-bold mb-4">Features</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {FEATURES.map((feature) => {
@@ -228,7 +249,7 @@ export default function CollaborationHubPage() {
       </div>
 
       {/* Role-Based Dashboards */}
-      <div>
+      <div data-tour="collab-roles">
         <h2 className="text-2xl font-bold mb-4">Role-Based Dashboards</h2>
         <Card>
           <CardHeader>
@@ -293,7 +314,7 @@ export default function CollaborationHubPage() {
       </Card>
 
       {/* Demo Contract CTA */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200" data-tour="demo-cta">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <FileText className="h-6 w-6" />
@@ -386,6 +407,28 @@ export default function CollaborationHubPage() {
         </CardContent>
       </Card>
     </div>
+
+      {/* Page-Specific Tour */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button */}
+      {hasTourForPage('/collaboration') && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </>
   )
 }
