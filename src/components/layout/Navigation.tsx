@@ -31,12 +31,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LayoutDashboard, Home, Users, Bell, Sparkles, ShieldCheck, Wallet, PlayCircle } from 'lucide-react'
-import { useTour } from '@/hooks/useTour'
+import { LayoutDashboard, Home, Users, Bell, Sparkles, ShieldCheck, Wallet } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
-  const { resetTour } = useTour()
 
   // Determine active section
   const isWelcomeActive = pathname === '/welcome'
@@ -71,16 +69,6 @@ export function Navigation() {
               <Sparkles className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Get Started</span>
             </Link>
-          </Button>
-
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={resetTour}
-            title="Restart Product Tour"
-          >
-            <PlayCircle className="h-4 w-4 mr-2" />
-            <span className="hidden sm:inline">Tour</span>
           </Button>
 
           <Button

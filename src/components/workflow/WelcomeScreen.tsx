@@ -1,6 +1,25 @@
 'use client'
 
+/**
+ * WELCOME SCREEN - 5-STAGE WORKFLOW EXPLANATION
+ * =============================================
+ * Educational landing page explaining ZeroH's 5-stage process.
+ *
+ * PURPOSE:
+ * - Introduce users to the platform's capabilities
+ * - Explain the end-to-end workflow visually
+ * - Build confidence before starting
+ *
+ * 5 STAGES:
+ * 1. Policy Intent - Define Islamic finance requirements
+ * 2. Digitization - AI extracts workflows from documents
+ * 3. Workflow Execution - AI + human collaboration
+ * 4. Verifiable Proofs - Guardian issues VP/VC and mints NFT
+ * 5. Tokenization - Optional: Create tradeable tokens
+ */
+
 import React from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
@@ -17,13 +36,11 @@ import {
   Sparkles
 } from 'lucide-react'
 
-interface WelcomeScreenProps {
-  onGetStarted: () => void
-}
+export default function WelcomeScreen() {
+  const router = useRouter()
 
-export default function WelcomeScreen({ onGetStarted }: WelcomeScreenProps) {
   const handleGetStarted = () => {
-    onGetStarted()
+    router.push('/')
   }
 
   const stages = [

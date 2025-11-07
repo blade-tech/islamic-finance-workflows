@@ -95,6 +95,10 @@ export interface WorkflowExecution {
   status: 'not_started' | 'running' | 'interrupted' | 'completed' | 'failed'
   currentStepIndex: number
 
+  // Workflow mode (for modular use cases - Option C)
+  workflowMode?: 'full' | 'impact-only' | 'compliance-check' | 'tokenization-only'
+  skippedSteps?: number[]               // Steps to skip for modular workflows
+
   // Step 1: Sources
   graphitiConnected: boolean
   aaaoifiDocuments: UploadedDocument[]
@@ -662,4 +666,357 @@ export interface DashboardMetrics {
   compliant_deals: number
   deals_needing_attention: number
   overall_platform_compliance: number  // Average across all 4 components
+}
+
+// ============================================================================
+// AI-NATIVE GRC TYPES (Standards-Aligned v2.0)
+// ============================================================================
+// These types support the AI-native GRC demo with 5-bucket taxonomy
+// aligned to IFSB, AAOIFI, BNM, FATF, ICMA standards
+//
+// Source: ZEROH_SYSTEM_ARCHITECTURE.md v2.0
+
+/**
+ * AI TASK CARD
+ * Generated from control library - appears in "My Tasks" screen
+ */
+export interface AITaskCard {
+  // Identity
+  id: string                          // "task-SG-02-deal-123"
+  controlId: string                   // "SG-02"
+  dealId: string
+  dealName: string
+
+  // Metadata
+  priority: 'critical' | 'high' | 'medium' | 'low'
+  status: 'pending' | 'in_progress' | 'blocked' | 'completed' | 'failed'
+  createdAt: string                   // ISO 8601
+  dueDate?: string
+  assignedTo: string                  // User email or role
+
+  // AI-Generated Content
+  summary: string                     // Plain English summary
+  aiInsight?: string                  // Predictive insight
+
+  // Evidence
+  evidence: Array<{
+    type: 'document' | 'api_response' | 'blockchain_tx' | 'calculation'
+    name: string
+    status: 'verified' | 'pending' | 'missing' | 'stale'
+    source: 'SharePoint' | 'S3' | 'API' | 'Agent' | 'Manual'
+    url?: string
+    hash?: string
+    collectedAt?: string
+    lastVerified?: string
+  }>
+
+  // Compliance Rule
+  rule: {
+    standard: string                  // "AAOIFI FAS 28 §4.2"
+    text: string
+    citation_url?: string
+  }
+
+  // Agent Proposed Fix
+  proposedFix?: {
+    description: string
+    confidence: number                // 0-100
+    actions: Array<{
+      type: 'send_email' | 'create_doc' | 'update_field' | 'request_approval' | 'mint_vc'
+      params: Record<string, any>
+      preview?: string                // For emails/docs
+    }>
+  }
+
+  // Available Actions
+  availableActions: Array<'approve' | 'reject' | 'do_it_for_me' | 'ask_why' | 'delegate'>
+
+  // Execution Log
+  executionLog?: Array<{
+    timestamp: string
+    actor: 'user' | 'agent'
+    action: string
+    result: 'success' | 'failure'
+  }>
+}
+
+/**
+ * EVIDENCE
+ * Evidence artifact for control execution
+ */
+export interface Evidence {
+  // Identity
+  id: string                          // "ev-001"
+  controlId: string                   // "SG-02"
+  dealId: string
+  name: string
+
+  // Source
+  source: 'SharePoint' | 'S3' | 'API' | 'Agent' | 'Manual' | 'Guardian'
+  sourcePath?: string                 // "Finance/Deals/2024/Sukuk/"
+  sourceUrl?: string
+
+  // Collection
+  collectedBy: 'agent' | 'user'
+  collectedByName?: string            // "evidence-agent" or user email
+  collectedAt: string                 // ISO 8601
+
+  // Verification
+  verified: boolean
+  lastVerified?: string
+  verifiedBy?: string
+  hash?: string                       // SHA-256
+
+  // Verifiable Credential
+  vcId?: string                       // "VC-2024-001234"
+  hederaTx?: string                   // "0.0.123456@1699564800.123"
+
+  // Metadata
+  fileType?: string                   // "application/pdf"
+  fileSize?: number                   // bytes
+  version?: string
+  expiryDate?: string                 // For time-sensitive evidence
+  stale: boolean                      // True if past expiry
+
+  // Selective Disclosure
+  selectiveDisclosureEnabled: boolean
+  visibilityRules?: Record<string, string[]>  // role → fields visible
+}
+
+/**
+ * VERIFIABLE CREDENTIAL (W3C Standard)
+ * Blockchain-anchored proof of control execution
+ */
+export interface VerifiableCredential {
+  // W3C VC Standard Fields
+  "@context": string[]                // ["https://www.w3.org/2018/credentials/v1", ...]
+  type: string[]                      // ["VerifiableCredential", "ShariahApprovalCredential"]
+  issuer: string                      // DID: "did:hedera:mainnet:..."
+  issuanceDate: string                // ISO 8601
+  expirationDate?: string
+
+  // ZeroH Credential Subject
+  credentialSubject: {
+    // Control Reference
+    controlId: string                 // "SG-01"
+    controlName: string
+    bucketId: number
+    bucketName: string
+
+    // Deal Reference
+    dealId: string
+    dealName: string
+    productType: string               // "Sukuk", "Murabaha", etc.
+
+    // Control-Specific Data (varies by control)
+    [key: string]: any                // SG-01: fatwa details, RL-02: KYC status, etc.
+
+    // Evidence Reference
+    evidenceHash?: string             // SHA-256 of evidence bundle
+    evidenceCount?: number
+
+    // Status
+    status: 'approved' | 'rejected' | 'conditional' | 'expired'
+    conditions?: string[]             // For conditional approvals
+  }
+
+  // Blockchain Proof
+  proof: {
+    type: string                      // "Ed25519Signature2020"
+    created: string                   // ISO 8601
+    verificationMethod: string        // DID URL
+    proofPurpose: string              // "assertionMethod"
+    jws?: string
+    hederaTxId?: string               // "0.0.123456@1699564800.123"
+  }
+
+  // Selective Disclosure (SD-JWT)
+  selectiveDisclosure?: {
+    salt?: string
+    disclosures?: string[]            // Base64-encoded disclosures
+  }
+}
+
+/**
+ * DEAL (AI-Native GRC Version)
+ * Islamic finance deal with 5-bucket compliance tracking
+ */
+export interface Deal {
+  // Identity
+  dealId: string                      // "deal-123"
+  dealName: string
+  productType: 'Sukuk' | 'Murabaha' | 'Ijara' | 'Musharaka' | 'Mudaraba' | 'Istisna'
+
+  // Status
+  status: 'draft' | 'in_progress' | 'completed' | 'suspended'
+  phase: 'pre-issuance' | 'issuance' | 'post-issuance' | 'audit'
+  createdAt: string
+  updatedAt: string
+  completedAt?: string
+
+  // Parties
+  issuer: string
+  shariahAdvisor?: string
+  auditor?: string
+  trustee?: string
+  verifier?: string
+
+  // Compliance Scores (5-bucket taxonomy)
+  compliance: {
+    overall: number                   // 0-100
+    buckets: {
+      shariah: number                 // Bucket 1: Shariah Governance
+      regulatory: number              // Bucket 2: Regulatory & Legal
+      risk: number                    // Bucket 3: Risk Management
+      financial: number               // Bucket 4: Financial & Product Reporting
+      audit: number                   // Bucket 5: Audit & Assurance
+    }
+  }
+
+  // Control Execution Status
+  controls: Array<{
+    controlId: string
+    status: 'not_started' | 'in_progress' | 'passed' | 'failed' | 'conditional'
+    lastExecuted?: string
+    nextExecution?: string
+    kri?: number                      // Latest KRI value
+    vcId?: string                     // If proof minted
+  }>
+
+  // Blockers
+  blockers: Array<{
+    controlId: string
+    severity: 'critical' | 'high' | 'medium' | 'low'
+    description: string
+    since: string
+    assignedTo?: string
+  }>
+
+  // Product-Specific Data
+  productData?: {
+    // Sukuk
+    issueAmount?: number
+    currency?: string
+    maturityDate?: string
+    structure?: 'Ijara' | 'Murabaha' | 'Wakala' | 'Musharaka'
+
+    // Murabaha
+    assetType?: string
+    costPrice?: number
+    profitMargin?: number
+
+    // Common
+    jurisdiction?: string
+    framework?: 'AAOIFI' | 'BNM VBI' | 'ICMA SRI' | 'IFSB'
+  }
+}
+
+/**
+ * DASHBOARD CONFIG (AI-Native GRC Version)
+ * Configuration for AI-native dashboard with 5-bucket metrics
+ */
+export interface DashboardConfig {
+  // Overall Platform Metrics
+  overall: {
+    totalDeals: number
+    activeDeals: number
+    compliantDeals: number              // 100% compliance
+    dealsNeedingAttention: number       // < 100% compliance
+    overallPlatformCompliance: number   // Average across all deals
+  }
+
+  // Bucket-Level Metrics (5 buckets)
+  buckets: Array<{
+    bucketId: number                    // 1-5
+    bucketName: string
+    icon: string                        // Emoji or icon name
+    color: string                       // For UI theming
+
+    // Aggregated across all deals
+    totalControls: number
+    passedControls: number
+    failedControls: number
+    inProgressControls: number
+    score: number                       // 0-100
+
+    // KRIs (from control library)
+    kris: Array<{
+      controlId: string
+      metric: string
+      value: number
+      target: number
+      unit?: string                     // "%", "days", "count"
+      status: 'pass' | 'warning' | 'fail'
+      trend?: 'up' | 'down' | 'stable'
+    }>
+
+    // AI-Generated Insights
+    insights: string[]                  // Natural language insights
+
+    // Actions
+    actions: Array<{
+      label: string
+      route: string
+      count?: number                    // Badge count
+    }>
+  }>
+
+  // Predictive Timeline
+  prediction?: {
+    currentComplianceRate: number
+    projectedCompletionDate: string
+    bottleneck?: string                 // Which bucket/control is slowing
+    confidence: number                  // 0-100
+  }
+}
+
+/**
+ * AG-UI EVENT
+ * Agent-User Interaction Protocol event
+ */
+export interface AGUIEvent {
+  type: 'message' | 'status' | 'typing' | 'tool_call' | 'state_update'
+  agentId: string
+  timestamp: string
+  payload: any
+}
+
+/**
+ * AGENT ACTION
+ * Action request for an AI agent
+ */
+export interface AgentAction {
+  type: 'collect_evidence' | 'validate_control' | 'mint_vc' | 'send_notification' | 'detect_drift'
+  controlId: string
+  dealId?: string
+  params: Record<string, any>
+}
+
+/**
+ * AGENT
+ * AI agent specification
+ */
+export interface Agent {
+  id: string
+  name: string
+  role: string
+  capabilities: string[]
+
+  // Which controls this agent supports
+  supportedControls: string[]         // Control IDs or ['*'] for all
+
+  // Execution method signature (implementation in agent files)
+  // execute(action: AgentAction): AsyncGenerator<AGUIEvent>
+}
+
+/**
+ * AGENT CONTEXT
+ * Shared context for agent execution
+ */
+export interface AgentContext {
+  currentDeal?: Deal
+  controlLibrary: any                 // Reference to control library
+  evidenceVault: Evidence[]
+  kris: Record<string, number>        // controlId → current KRI value
+  [key: string]: any                  // Additional context
 }

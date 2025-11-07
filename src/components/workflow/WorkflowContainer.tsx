@@ -37,14 +37,18 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { ChevronLeft, ChevronRight, Sparkles } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Sparkles, HelpCircle } from 'lucide-react'
 
 // Onboarding components
 import { WelcomeModal } from '@/components/onboarding/WelcomeModal'
 import { ProductTour } from '@/components/onboarding/ProductTour'
 import { useTour } from '@/hooks/useTour'
 
+// Per-page tours
+import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
+
 // Step components
+import OverviewScreen from './OverviewScreen'
 import { Step1SourceConnection } from './steps/Step1SourceConnection'
 import { Step2SelectShariahStructure } from './steps/Step2SelectShariahStructure'
 import { Step3SelectJurisdiction } from './steps/Step3SelectJurisdiction'
@@ -58,17 +62,18 @@ import { Step10LiveExecution } from './steps/Step10LiveExecution'
 import { Step11MonitorCollaborate } from './steps/Step11MonitorCollaborate'
 
 const STEPS = [
-  { index: 0, title: 'Connect Sources', component: Step1SourceConnection },
-  { index: 1, title: 'Select Shariah Structure', component: Step2SelectShariahStructure },
-  { index: 2, title: 'Select Jurisdiction', component: Step3SelectJurisdiction },
-  { index: 3, title: 'Select Accounting', component: Step4SelectAccounting },
-  { index: 4, title: 'Select Impact Metrics', component: Step5SelectImpact },
-  { index: 5, title: 'Review Configuration', component: Step6ReviewConfiguration },
-  { index: 6, title: 'Configure Details', component: Step7ConfigureDetails },
-  { index: 7, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
-  { index: 8, title: 'Test Workflow', component: Step3TestWorkflow },
-  { index: 9, title: 'Live Execution', component: Step10LiveExecution },
-  { index: 10, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
+  { index: 0, title: 'Overview', component: OverviewScreen },
+  { index: 1, title: 'Connect Sources', component: Step1SourceConnection },
+  { index: 2, title: 'Select Shariah Structure', component: Step2SelectShariahStructure },
+  { index: 3, title: 'Select Jurisdiction', component: Step3SelectJurisdiction },
+  { index: 4, title: 'Select Accounting', component: Step4SelectAccounting },
+  { index: 5, title: 'Select Impact Metrics', component: Step5SelectImpact },
+  { index: 6, title: 'Review Configuration', component: Step6ReviewConfiguration },
+  { index: 7, title: 'Configure Details', component: Step7ConfigureDetails },
+  { index: 8, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
+  { index: 9, title: 'Test Workflow', component: Step3TestWorkflow },
+  { index: 10, title: 'Live Execution', component: Step10LiveExecution },
+  { index: 11, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
 ]
 
 export function WorkflowContainer() {
@@ -81,6 +86,10 @@ export function WorkflowContainer() {
   // Tour state management (global state via Zustand)
   const { runTour, startTour, stopTour } = useTour()
   const [isTourRunning, setIsTourRunning] = useState(false)
+
+  // Page-specific tour state
+  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
+  const [showPageTour, setShowPageTour] = useState(false)
 
   // Scroll controls for step indicators
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -107,6 +116,20 @@ export function WorkflowContainer() {
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
+    }
+  }
+
+  // Start page-specific tour
+  const startPageTour = () => {
+    if (!execution) return
+
+    const steps = getTourForPage(execution.currentStepIndex)
+
+    if (steps) {
+      setPageTourSteps(steps)
+      setShowPageTour(true)
+    } else {
+      console.log(`[PageTour] No tour available for step ${execution.currentStepIndex}`)
     }
   }
 
@@ -159,26 +182,30 @@ export function WorkflowContainer() {
 
     // Step-specific validation (RELAXED FOR TESTING - enable strict validation later)
     switch (execution.currentStepIndex) {
-      case 0: // Step 1: Connect Sources - ALLOW PROCEED (for testing)
+      case 0: // Step 0: Welcome Screen - always allow proceed
+        return true
+      case 1: // Step 1: Connect Sources - ALLOW PROCEED (for testing)
         return true // STRICT: execution.graphitiConnected
-      case 1: // Step 2: Select Shariah Structure - ALLOW PROCEED (for testing)
+      case 2: // Step 2: Select Shariah Structure - ALLOW PROCEED (for testing)
         return true // STRICT: execution.selectedShariahStructure !== null
-      case 2: // Step 3: Select Jurisdiction - ALLOW PROCEED (for testing)
+      case 3: // Step 3: Select Jurisdiction - ALLOW PROCEED (for testing)
         return true // STRICT: execution.selectedJurisdiction !== null
-      case 3: // Step 4: Select Accounting - ALLOW PROCEED (for testing)
+      case 4: // Step 4: Select Accounting - ALLOW PROCEED (for testing)
         return true // STRICT: execution.selectedAccounting !== null
-      case 4: // Step 5: Select Impact Metrics - ALLOW PROCEED (for testing)
+      case 5: // Step 5: Select Impact Metrics - ALLOW PROCEED (for testing)
         return true // STRICT: execution.selectedImpact !== null
-      case 5: // Step 6: Review Configuration - ALLOW PROCEED (for testing)
+      case 6: // Step 6: Review Configuration - ALLOW PROCEED (for testing)
         return true // STRICT: execution.dealConfiguration?.isValid === true
-      case 6: // Step 7: Configure Details (includes optional uploads) - ALLOW PROCEED
+      case 7: // Step 7: Configure Details (includes optional uploads) - ALLOW PROCEED
         return true // STRICT: validate form completion
-      case 7: // Step 8: Review Policy Structure - allow proceed
+      case 8: // Step 8: Review Policy Structure - allow proceed
         return true
-      case 8: // Step 9: Test Workflow - allow proceed
+      case 9: // Step 9: Test Workflow - allow proceed
         return true
-      case 9: // Step 10: Live Execution - Final step
-        return false // No next step after deployment
+      case 10: // Step 10: Live Execution - allow proceed to monitor
+        return true
+      case 11: // Step 11: Monitor & Collaborate - Final step
+        return false // No next step after this
       default:
         return true
     }
@@ -246,6 +273,7 @@ export function WorkflowContainer() {
                     const isCompleted = step.index < execution.currentStepIndex
                     const isCurrent = step.index === execution.currentStepIndex
                     const isUpcoming = step.index > execution.currentStepIndex
+                    const isSkipped = execution.skippedSteps?.includes(step.index) || false
 
                     return (
                       <button
@@ -260,7 +288,7 @@ export function WorkflowContainer() {
                         }}
                         disabled={false} // was: disabled={isUpcoming}
                         className={`
-                          flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer
+                          flex-shrink-0 px-3 py-2 rounded-md text-xs font-medium transition-colors cursor-pointer relative
                           ${
                             isCurrent
                               ? 'bg-primary text-primary-foreground'
@@ -268,9 +296,16 @@ export function WorkflowContainer() {
                               ? 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
                               : 'bg-muted text-muted-foreground hover:bg-muted/80'
                           }
+                          ${isSkipped ? 'opacity-40 line-through' : ''}
                         `}
+                        title={isSkipped ? `Skipped for ${execution.workflowMode} mode` : undefined}
                       >
                         {step.index + 1}. {step.title}
+                        {isSkipped && (
+                          <span className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center bg-amber-500 text-white rounded-full text-[10px]">
+                            ✓
+                          </span>
+                        )}
                       </button>
                     )
                   })}
@@ -332,16 +367,37 @@ export function WorkflowContainer() {
         </div>
       </div>
 
-      {/* Onboarding System */}
-      <WelcomeModal
-        onStartTour={startTour}
-        onSkip={stopTour}
-      />
+      {/* Onboarding System - DISABLED FOR DEMO */}
+      {/* <WelcomeModal onStartTour={startTour} onSkip={stopTour} /> */}
+
+      {/* Full Platform Tour (from welcome modal) */}
       <ProductTour
         run={runTour}
         onComplete={stopTour}
         onStateChange={setIsTourRunning}
       />
+
+      {/* Page-Specific Tour (from help button) */}
+      <ProductTour
+        run={showPageTour}
+        steps={pageTourSteps}
+        onComplete={() => setShowPageTour(false)}
+        onStateChange={(running) => !running && setShowPageTour(false)}
+      />
+
+      {/* Floating Help Button - Always Visible */}
+      {hasTourForPage(execution.currentStepIndex) && (
+        <div className="fixed bottom-6 right-6 z-50">
+          <Button
+            onClick={startPageTour}
+            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
+            size="icon"
+            title="Tour This Page"
+          >
+            <HelpCircle className="h-6 w-6" />
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

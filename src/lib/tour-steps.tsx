@@ -59,32 +59,7 @@ export const tourSteps: Step[] = [
     spotlightClicks: true,
   },
 
-  // Step 3: Structure Selection (30 sec)
-  {
-    target: '[data-tour="structure-selection"]',
-    content: (
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-emerald-900">Choose Your Financial Structure 🏗️</h3>
-        <p className="text-sm text-gray-700">
-          Select from various Shariah-compliant structures:
-        </p>
-        <ul className="list-disc list-inside ml-2 space-y-1 text-sm">
-          <li><strong>Murabaha:</strong> Cost-plus financing</li>
-          <li><strong>Ijara:</strong> Islamic leasing</li>
-          <li><strong>Musharaka:</strong> Partnership financing</li>
-          <li><strong>Sukuk:</strong> Islamic bonds</li>
-        </ul>
-        <div className="mt-3 p-2 bg-amber-50 border border-amber-200 rounded">
-          <p className="text-xs text-amber-800">
-            ℹ️ Hover over info icons to see Shariah rulings and use cases
-          </p>
-        </div>
-      </div>
-    ),
-    placement: 'bottom',
-  },
-
-  // Step 4: AI Assistance (45 sec)
+  // Step 3: AI Assistance (45 sec) - MOVED UP from step 4
   {
     target: '[data-tour="ai-analysis"]',
     content: (
@@ -109,31 +84,6 @@ export const tourSteps: Step[] = [
       </div>
     ),
     placement: 'left',
-  },
-
-  // Step 5: Collaboration (30 sec)
-  {
-    target: '[data-tour="collaboration"]',
-    content: (
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-emerald-900">Multi-Stakeholder Collaboration 👥</h3>
-        <p className="text-sm text-gray-700">
-          Collaborate with scholars and business teams in real-time:
-        </p>
-        <ul className="list-disc list-inside ml-2 space-y-1 text-sm">
-          <li><strong>Comment threads</strong> on specific sections</li>
-          <li><strong>Approval workflows</strong> with notifications</li>
-          <li><strong>Audit trails</strong> for full transparency</li>
-          <li><strong>Version control</strong> for documents</li>
-        </ul>
-        <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded">
-          <p className="text-xs text-green-800">
-            ✅ All changes are tracked for compliance and audit purposes
-          </p>
-        </div>
-      </div>
-    ),
-    placement: 'top',
   },
 ];
 

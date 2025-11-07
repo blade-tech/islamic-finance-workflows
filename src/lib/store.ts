@@ -156,6 +156,9 @@ interface WorkflowStore {
   /** Load demo configuration (QIIB Oryx Sukuk) - pre-populates all 4 components */
   loadDemoConfiguration: () => void
 
+  /** Set workflow mode and navigate to appropriate step (Option C modular workflows) */
+  setWorkflowMode: (mode: 'full' | 'impact-only' | 'compliance-check' | 'tokenization-only', startStep: number) => void
+
   /** Add context text */
   setContextText: (text: string) => void
 
@@ -365,8 +368,8 @@ export const useWorkflowStore = create<WorkflowStore>()(
         const { execution } = get()
         if (!execution) return
 
-        // Step 0-10 (11 steps total)
-        const nextIndex = Math.min(execution.currentStepIndex + 1, 10)
+        // Step 0-11 (12 steps total: Welcome + 11 workflow steps)
+        const nextIndex = Math.min(execution.currentStepIndex + 1, 11)
         set({
           execution: {
             ...execution,
@@ -670,10 +673,48 @@ export const useWorkflowStore = create<WorkflowStore>()(
         })
 
         // Auto-advance to step 2 (Shariah Structure) to show pre-populated configuration
+        // NOTE: Step indices are now: 0=Welcome, 1=Connect, 2=Shariah, etc.
         set({
           execution: {
             ...get().execution!,
-            currentStepIndex: 1,
+            currentStepIndex: 2,
+          },
+        })
+      },
+
+      setWorkflowMode: (mode: 'full' | 'impact-only' | 'compliance-check' | 'tokenization-only', startStep: number) => {
+        const { execution } = get()
+        if (!execution) return
+
+        // Define which steps to skip based on mode
+        let skippedSteps: number[] = []
+
+        switch (mode) {
+          case 'impact-only':
+            // Skip all steps except Impact (Step 5) - go directly to impact metrics
+            skippedSteps = [1, 2, 3, 4, 6, 7, 8, 9, 10, 11]
+            break
+          case 'compliance-check':
+            // Quick compliance: Source connection + AI analysis, skip configuration
+            skippedSteps = [2, 3, 4, 5, 6, 8, 9, 10, 11]
+            break
+          case 'tokenization-only':
+            // Jump to testing/deployment (Steps 9-10), skip configuration
+            skippedSteps = [1, 2, 3, 4, 5, 6, 7, 8]
+            break
+          case 'full':
+          default:
+            // No steps skipped - full workflow
+            skippedSteps = []
+            break
+        }
+
+        set({
+          execution: {
+            ...execution,
+            workflowMode: mode,
+            skippedSteps,
+            currentStepIndex: startStep,
           },
         })
       },
