@@ -3,6 +3,7 @@
 # ============================================================================
 # Islamic Finance Workflows - Next.js 14 App Router Demo
 # Netlify auto-detects Next.js and uses OpenNext adapter - no configuration needed
+# Last updated: 2025-11-08 - Clean rebuild after removing .netlify directory
 
 [build]
   command = "npm run build"
