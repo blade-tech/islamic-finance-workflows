@@ -80,3 +80,6 @@ vanta-credentials.json
 # Build artifacts
 tsconfig.tsbuildinfo
 .playwright-mcp/
+
+# Netlify local build output and state
+.netlify/
