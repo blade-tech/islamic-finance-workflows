@@ -9,16 +9,23 @@
  * 1. 🌟 Get Started    → /welcome           [All Users] - Onboarding
  * 2. 🏠 Workflow       → /                  [Creators] - 11-step deal creation
  * 3. 📊 Dashboard      → /ai-native         [Managers] - AI-enhanced compliance monitoring
- * 4. 🛡️  Deals         → /deals             [Operators] - Deal lifecycle management
- * 5. 💼 Digital Assets → /digital-assets    [Treasury/Finance] - Certificates & tokens
- * 6. 👥 Collaboration  → /collaboration     [All Roles] - Tasks & mentions
- * 7. 🔔 Notifications  → /notifications     [All Users] - Notification center
+ * 4. 💼 Digital Assets → /digital-assets    [Treasury/Finance] - Certificates & tokens
+ * 5. 🛡️  GRC           → /obligations       [Compliance] - Governance, Risk & Compliance
+ * 6. 🔔 Notifications  → /notifications     [All Users] - Notification center
+ *
+ * GRC PAGES:
+ * - /obligations - Qatar regulatory obligations register (QCB + QFCRA)
+ * - /controls    - Control library with activation logic transparency
+ * - /ssb         - Shariah Supervisory Board governance
+ * - /sncr        - Shariah Non-Compliance Risk tracking & purification
+ * - /research    - Research documentation and mapping
  *
  * ROLE SEPARATION:
  * - Creators: Build new workflows
  * - Managers: Monitor compliance metrics
  * - Operators: Manage active deals
  * - Treasury/Finance: Oversee digital assets
+ * - Compliance: Manage obligations, controls, SSB, and SNCR
  *
  * DESIGN:
  * - Clean, minimal design with proper hierarchy
@@ -31,7 +38,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet } from 'lucide-react'
+import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet, Shield } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -41,6 +48,7 @@ export function Navigation() {
   const isWorkflowActive = pathname === '/'
   const isDashboardActive = pathname.startsWith('/ai-native') || pathname.startsWith('/dashboard')
   const isDigitalAssetsActive = pathname.startsWith('/digital-assets')
+  const isGRCActive = pathname.startsWith('/obligations') || pathname.startsWith('/controls') || pathname.startsWith('/ssb') || pathname.startsWith('/sncr') || pathname.startsWith('/research')
 
   // Mock unread count (will be replaced with real data)
   const unreadNotifications = 0
@@ -96,6 +104,17 @@ export function Navigation() {
             <Link href="/digital-assets">
               <Wallet className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Digital Assets</span>
+            </Link>
+          </Button>
+
+          <Button
+            variant={isGRCActive ? 'default' : 'ghost'}
+            size="sm"
+            asChild
+          >
+            <Link href="/obligations">
+              <Shield className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">GRC</span>
             </Link>
           </Button>
         </div>
