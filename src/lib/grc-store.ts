@@ -541,6 +541,7 @@ const mockSSBDecisions: SSBDecision[] = [
     ruling: 'Late distribution constitutes SNCR. Purify late payment fees (QAR 1,500) and implement enhanced distribution controls.',
     unanimous: false,
     dissenting_opinions: 'One member argued no purification needed as delay was administrative, not Shariah violation.',
+    related_products: [],
     related_incidents: ['sncr-001'],
     effective_date: '2025-09-20',
     documents: ['incident-analysis.pdf', 'purification-calculation.pdf']
