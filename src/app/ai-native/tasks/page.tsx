@@ -29,6 +29,7 @@ import {
   getBlockedTasks
 } from '@/lib/mock-data/tasks'
 import { bucketTheme } from '@/lib/control-library'
+import { TaskLineage } from '@/components/workflow/TaskLineage'
 
 export default function TasksPage() {
   const [selectedTask, setSelectedTask] = useState<string | null>(null)
@@ -195,6 +196,9 @@ export default function TasksPage() {
                         <span>Ask Why</span>
                       </button>
                     )}
+                    <div onClick={(e) => e.stopPropagation()}>
+                      <TaskLineage taskId={task.controlId} />
+                    </div>
                   </div>
                 </div>
 

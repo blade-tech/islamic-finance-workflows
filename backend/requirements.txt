@@ -27,6 +27,12 @@ pypandoc==1.14
 # OpenAI (for Graphiti embeddings)
 openai==1.55.3
 
+# Database (PostgreSQL for GRC infrastructure)
+sqlalchemy==2.0.35
+asyncpg==0.30.0  # Async PostgreSQL driver
+alembic==1.14.0  # Database migrations
+psycopg2-binary==2.9.10  # PostgreSQL adapter
+
 # Utilities
 pydantic==2.10.2
 pydantic-settings==2.6.1
@@ -35,3 +41,6 @@ aiofiles==24.1.0
 
 # CORS
 fastapi-cors==0.0.6
+
+# Server-Sent Events (for streaming execution)
+sse-starlette==2.2.1

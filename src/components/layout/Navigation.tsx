@@ -38,7 +38,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet, Shield } from 'lucide-react'
+import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet, Shield, GitBranch } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -47,6 +47,7 @@ export function Navigation() {
   const isWelcomeActive = pathname === '/welcome'
   const isWorkflowActive = pathname === '/'
   const isDashboardActive = pathname.startsWith('/ai-native') || pathname.startsWith('/dashboard')
+  const isWorkflowsActive = pathname.startsWith('/workflows')
   const isDigitalAssetsActive = pathname.startsWith('/digital-assets')
   const isGRCActive = pathname.startsWith('/obligations') || pathname.startsWith('/controls') || pathname.startsWith('/ssb') || pathname.startsWith('/sncr') || pathname.startsWith('/research')
 
@@ -93,6 +94,24 @@ export function Navigation() {
             <Link href="/ai-native">
               <LayoutDashboard className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Dashboard</span>
+            </Link>
+          </Button>
+
+          <Button
+            variant={isWorkflowsActive ? 'default' : 'ghost'}
+            size="sm"
+            asChild
+            className="relative"
+          >
+            <Link href="/workflows/executions">
+              <GitBranch className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Workflows</span>
+              <Badge
+                variant="secondary"
+                className="ml-2 h-5 px-1.5 text-xs"
+              >
+                3
+              </Badge>
             </Link>
           </Button>
 
