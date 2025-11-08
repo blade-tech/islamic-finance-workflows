@@ -17,6 +17,9 @@ export const mockDeals: Deal[] = [
     productType: 'Sukuk',
     status: 'in_progress',
     phase: 'issuance',
+    createdAt: '2024-10-15T09:00:00Z',
+    updatedAt: '2024-11-07T16:30:00Z',
+    issuer: 'GreenTech Energy Solutions',
 
     compliance: {
       overall: 88,
@@ -92,6 +95,9 @@ export const mockDeals: Deal[] = [
     productType: 'Murabaha',
     status: 'in_progress',
     phase: 'pre-issuance',
+    createdAt: '2024-10-20T11:00:00Z',
+    updatedAt: '2024-11-08T10:15:00Z',
+    issuer: 'Global Trade Corporation',
 
     compliance: {
       overall: 62,
@@ -181,6 +187,9 @@ export const mockDeals: Deal[] = [
     productType: 'Ijara',
     status: 'in_progress',
     phase: 'post-issuance',
+    createdAt: '2024-09-10T08:00:00Z',
+    updatedAt: '2024-11-08T09:45:00Z',
+    issuer: 'Aviation Finance Holdings',
 
     compliance: {
       overall: 96,
@@ -249,6 +258,9 @@ export const mockDeals: Deal[] = [
     productType: 'Musharaka',
     status: 'draft',
     phase: 'pre-issuance',
+    createdAt: '2024-11-01T14:00:00Z',
+    updatedAt: '2024-11-08T08:30:00Z',
+    issuer: 'Urban Development Partners',
 
     compliance: {
       overall: 35,
@@ -305,6 +317,9 @@ export const mockDeals: Deal[] = [
     productType: 'Sukuk',
     status: 'completed',
     phase: 'audit',
+    createdAt: '2024-08-01T10:00:00Z',
+    updatedAt: '2024-10-30T17:00:00Z',
+    issuer: 'Infrastructure Investment Fund',
 
     compliance: {
       overall: 100,

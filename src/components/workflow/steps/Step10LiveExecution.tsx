@@ -427,25 +427,25 @@ export function Step10LiveExecution() {
             <div>
               <p className="text-sm font-medium text-muted-foreground">Shariah Structure</p>
               <p className="text-sm font-semibold">
-                {execution.selectedShariahStructure?.name || 'Not selected'}
+                {execution?.selectedShariahStructure?.name || 'Not selected'}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Jurisdiction</p>
               <p className="text-sm font-semibold">
-                {execution.selectedJurisdiction?.name || 'Not selected'}
+                {execution?.selectedJurisdiction?.name || 'Not selected'}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Accounting Framework</p>
               <p className="text-sm font-semibold">
-                {execution.selectedAccounting?.name || 'Not selected'}
+                {execution?.selectedAccounting?.name || 'Not selected'}
               </p>
             </div>
             <div>
               <p className="text-sm font-medium text-muted-foreground">Impact Metrics</p>
               <p className="text-sm font-semibold">
-                {execution.selectedImpacts?.length || 0} framework(s) selected
+                {execution?.selectedImpacts?.length || 0} framework(s) selected
               </p>
             </div>
           </div>

@@ -30,7 +30,7 @@ export function Step6SustainabilityV2() {
   // Convert main demo ImpactMetrics[] to V2 SustainabilityConfig
   const currentSustainabilityConfig: SustainabilityConfig = execution?.selectedImpacts
     ? mapImpactsToSustainability(execution.selectedImpacts)
-    : { type: 'None', frameworks: [] }
+    : { enabled: false, type: 'none', frameworks: [] }
 
   // Handle V2 sustainability configuration changes
   const handleSustainabilityChange = (sustainabilityConfig: SustainabilityConfig) => {

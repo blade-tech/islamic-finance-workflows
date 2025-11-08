@@ -9,19 +9,25 @@ import { Evidence } from '@/lib/types'
 export const mockEvidence: Evidence[] = [
   // DEAL-001: Green Sukuk Evidence
   {
-    type: 'document',
+    id: 'ev-001',
+    controlId: 'SG-01',
+    dealId: 'deal-001',
     name: 'SSB Fatwa - Green Sukuk Structure',
-    status: 'verified',
+    type: 'document',
     source: 'SharePoint',
     url: '/evidence/ssb-fatwa-green-sukuk-2024.pdf',
-    hash: 'sha256:a1b2c3d4e5f6...',
+    collectedBy: 'agent' as const,
     collectedAt: '2024-11-01T09:00:00Z',
-    lastVerified: '2024-11-01T09:00:00Z'
+    verified: true,
+    lastVerified: '2024-11-01T09:00:00Z',
+    hash: 'sha256:a1b2c3d4e5f6...',
+    stale: false,
+    selectiveDisclosureEnabled: true
   },
   {
     type: 'document',
     name: 'Asset Purchase Agreement (Solar Portfolio)',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/asset-purchase-solar-portfolio.pdf',
     hash: 'sha256:f1e2d3c4b5a6...',
@@ -31,7 +37,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Shariah Approval VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.12345@1730462400.000',
     hash: 'hedera:mainnet:0.0.12345@1730462400.000',
@@ -41,7 +47,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'api_response',
     name: 'PEP Screening - Cayman Investor',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://dowjones.com/risk-compliance/results/987654',
     collectedAt: '2024-11-04T13:15:00Z',
@@ -50,7 +56,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'UBO Declaration - Cayman Green Investment Fund',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/ubo-cayman-investor.pdf',
     hash: 'sha256:1a2b3c4d5e6f...',
@@ -59,14 +65,14 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Source of Funds Verification',
-    status: 'pending',
+    verified: false,
     source: 'Manual',
     collectedAt: '2024-11-05T14:00:00Z'
   },
   {
     type: 'api_response',
     name: 'Bloomberg RoR Data (Q1-Q3 2024)',
-    status: 'stale',
+    verified: false,
     source: 'API',
     url: 'https://bloomberg.com/data/sukuk-benchmarks',
     collectedAt: '2024-09-30T00:00:00Z',
@@ -75,14 +81,15 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'calculation',
     name: 'RoR Projection Model - Q4 2024',
-    status: 'pending',
+    verified: false,
     source: 'Agent',
-    url: '/evidence/ror-projection-q4-2024.xlsx'
+    url: '/evidence/ror-projection-q4-2024.xlsx',
+    collectedAt: '2024-10-15T00:00:00Z'
   },
   {
     type: 'document',
     name: 'Comparable Sukuk Analysis',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/comparable-sukuk-analysis.pdf',
     hash: 'sha256:9f8e7d6c5b4a...',
@@ -91,7 +98,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Green Sukuk Framework',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/green-sukuk-framework.pdf',
     hash: 'sha256:7g8h9i0j1k2l...',
@@ -101,7 +108,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'api_response',
     name: 'Project KPI Data Feed - Solar Farm A',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://projectapi.example.com/solar-farm-a/kpis',
     collectedAt: '2024-11-06T09:00:00Z',
@@ -110,7 +117,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'External Verifier Contract - Sustainalytics',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/sustainalytics-contract-2024.pdf',
     hash: 'sha256:3m4n5o6p7q8r...',
@@ -119,16 +126,17 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'calculation',
     name: 'UoP Allocation Report - Q4 2024',
-    status: 'pending',
+    verified: false,
     source: 'Agent',
-    url: '/evidence/uop-allocation-q4-2024.xlsx'
+    url: '/evidence/uop-allocation-q4-2024.xlsx',
+    collectedAt: '2024-11-06T11:00:00Z'
   },
 
   // DEAL-002: Murabaha Evidence (Blocked Deal)
   {
     type: 'document',
     name: 'Commodity Purchase Agreement (Draft)',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/murabaha-purchase-agreement-draft.pdf',
     hash: 'sha256:def456...',
@@ -137,7 +145,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Shariah Review Findings - Dr. Ahmed',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: '/evidence/shariah-review-findings-deal-002.pdf',
     collectedAt: '2024-10-30T10:00:00Z'
@@ -145,13 +153,14 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Warehouse Receipt',
-    status: 'missing',
-    source: 'Manual'
+    verified: false,
+    source: 'Manual',
+    collectedAt: '2024-10-30T12:00:00Z'
   },
   {
     type: 'api_response',
     name: 'OFAC SDN Search Result',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://sanctionslistsearch.ofac.treas.gov/Details/12345678',
     collectedAt: '2024-11-02T15:00:00Z',
@@ -160,7 +169,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Counterparty KYC Form',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/kyc-albaraka-2024.pdf',
     hash: 'sha256:abc123...',
@@ -169,7 +178,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'api_response',
     name: 'S&P Credit Rating - Al-Baraka Trading',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://spglobal.com/ratings/entity/12345',
     collectedAt: '2024-11-01T09:00:00Z',
@@ -178,7 +187,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Credit Policy (Internal)',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/credit-policy-2024.pdf',
     hash: 'sha256:5s6t7u8v9w0x...',
@@ -187,7 +196,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'calculation',
     name: 'Risk-Adjusted Capital Calculation',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/risk-adjusted-capital-deal-002.xlsx',
     collectedAt: '2024-11-01T10:00:00Z'
@@ -195,7 +204,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Commodity Valuation Report (Expired)',
-    status: 'stale',
+    verified: false,
     source: 'S3',
     url: '/evidence/commodity-valuation-aug-2024.pdf',
     collectedAt: '2024-08-01T00:00:00Z',
@@ -204,7 +213,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'External Valuator Email - Nov 12 Delivery',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/valuator-email-nov-12-delivery.pdf',
     collectedAt: '2024-11-03T14:00:00Z'
@@ -214,7 +223,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'SSB Fatwa - Ijara Muntahia Bittamleek',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/ssb-fatwa-ijara-2024.pdf',
     hash: 'sha256:ijara123...',
@@ -224,7 +233,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Shariah Approval VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.23456@1728990000.000',
     hash: 'hedera:mainnet:0.0.23456@1728990000.000',
@@ -234,7 +243,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Aircraft Lease Agreement',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/aircraft-lease-agreement.pdf',
     hash: 'sha256:lease987...',
@@ -243,7 +252,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Asset Ownership Certificate - Aircraft',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/aircraft-ownership-cert.pdf',
     hash: 'sha256:own654...',
@@ -252,7 +261,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Insurance Certificate - Aircraft Hull & Liability',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: '/evidence/aircraft-insurance-cert.pdf',
     collectedAt: '2024-10-18T10:00:00Z',
@@ -261,7 +270,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Investor KYC Package - Complete',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/investor-kyc-package-deal-003.pdf',
     hash: 'sha256:kyc321...',
@@ -270,7 +279,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'api_response',
     name: 'Sanctions Screening Results - All Clear',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://dowjones.com/sanctions/results/deal-003',
     collectedAt: '2024-10-22T09:00:00Z',
@@ -279,7 +288,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Trust Deed (Signed)',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/trust-deed-deal-003.pdf',
     hash: 'sha256:trust456...',
@@ -288,7 +297,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Trustee Reminder Email (Sent)',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/trustee-reminder-nov-5.pdf',
     collectedAt: '2024-11-05T10:00:00Z'
@@ -296,7 +305,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Trustee Confirmation Response',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/trustee-confirmation-nov-5.pdf',
     collectedAt: '2024-11-05T11:30:00Z'
@@ -304,7 +313,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Shariah Review VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.34567@1729612800.000',
     hash: 'hedera:mainnet:0.0.34567@1729612800.000',
@@ -314,7 +323,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Internal Audit Completion VC - Hedera',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.45678@1730822400.000',
     hash: 'hedera:mainnet:0.0.45678@1730822400.000',
@@ -326,7 +335,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Product Structure Memo (Draft)',
-    status: 'pending',
+    verified: false,
     source: 'Agent',
     url: '/evidence/musharaka-structure-memo-draft.pdf',
     collectedAt: '2024-11-07T09:30:00Z'
@@ -334,7 +343,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Comparable Fatwa Analysis',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/comparable-musharaka-fatwas.pdf',
     hash: 'sha256:comp789...',
@@ -343,14 +352,15 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Profit-Loss Sharing Calculation',
-    status: 'pending',
+    verified: false,
     source: 'Agent',
-    url: '/evidence/pls-calculation-deal-004.xlsx'
+    url: '/evidence/pls-calculation-deal-004.xlsx',
+    collectedAt: '2024-11-07T11:00:00Z'
   },
   {
     type: 'document',
     name: 'Real Estate Valuation Report',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: '/evidence/real-estate-valuation-deal-004.pdf',
     hash: 'sha256:val321...',
@@ -361,7 +371,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'SSB Fatwa - Infrastructure Sukuk',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/ssb-fatwa-infrastructure-2024.pdf',
     hash: 'sha256:infra123...',
@@ -371,7 +381,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Shariah Approval VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.56789@1726387200.000',
     hash: 'hedera:mainnet:0.0.56789@1726387200.000',
@@ -381,7 +391,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Asset Transfer Agreement - Infrastructure Portfolio',
-    status: 'verified',
+    verified: true,
     source: 'SharePoint',
     url: '/evidence/asset-transfer-infrastructure.pdf',
     hash: 'sha256:transfer456...',
@@ -390,7 +400,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Complete Investor Registry',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: '/evidence/investor-registry-deal-005.xlsx',
     hash: 'sha256:registry789...',
@@ -399,7 +409,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'api_response',
     name: 'Sanctions Screening - All Investors Clear',
-    status: 'verified',
+    verified: true,
     source: 'API',
     url: 'https://dowjones.com/sanctions/results/deal-005',
     collectedAt: '2024-09-22T09:00:00Z',
@@ -408,7 +418,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'Financial Statements - Audited',
-    status: 'verified',
+    verified: true,
     source: 'S3',
     url: '/evidence/financial-statements-deal-005.pdf',
     hash: 'sha256:fin123...',
@@ -417,7 +427,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Shariah Review VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.67890@1727078400.000',
     hash: 'hedera:mainnet:0.0.67890@1727078400.000',
@@ -426,7 +436,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'Internal Audit VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.78901@1728288000.000',
     hash: 'hedera:mainnet:0.0.78901@1728288000.000',
@@ -435,7 +445,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'blockchain_tx',
     name: 'External Audit VC - Hedera Mainnet',
-    status: 'verified',
+    verified: true,
     source: 'Agent',
     url: 'https://hashscan.io/mainnet/transaction/0.0.89012@1728892800.000',
     hash: 'hedera:mainnet:0.0.89012@1728892800.000',
@@ -446,7 +456,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'AAOIFI FAS 28 Standard (Murabaha)',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: 'https://aaoifi.com/fas-28-murabaha-and-other-deferred-payment-sales/',
     collectedAt: '2024-10-01T00:00:00Z'
@@ -454,7 +464,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'IFSB-1 Risk Management Standard',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: 'https://www.ifsb.org/standard.php?id=1',
     collectedAt: '2024-10-01T00:00:00Z'
@@ -462,7 +472,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'FATF 40 Recommendations (2025)',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: 'https://www.fatf-gafi.org/en/publications/Fatfrecommendations/Fatf-recommendations.html',
     collectedAt: '2024-10-01T00:00:00Z'
@@ -470,7 +480,7 @@ export const mockEvidence: Evidence[] = [
   {
     type: 'document',
     name: 'ICMA Green Bond Principles (2021)',
-    status: 'verified',
+    verified: true,
     source: 'Manual',
     url: 'https://www.icmagroup.org/sustainable-finance/the-principles-guidelines-and-handbooks/green-bond-principles-gbp/',
     collectedAt: '2024-10-01T00:00:00Z'
@@ -490,8 +500,12 @@ export const getEvidenceBySource = (source: Evidence['source']): Evidence[] => {
   return mockEvidence.filter(e => e.source === source)
 }
 
-export const getEvidenceByStatus = (status: Evidence['status']): Evidence[] => {
-  return mockEvidence.filter(e => e.status === status)
+export const getVerifiedEvidence = (): Evidence[] => {
+  return mockEvidence.filter(e => e.verified === true)
+}
+
+export const getPendingEvidence = (): Evidence[] => {
+  return mockEvidence.filter(e => e.verified === false)
 }
 
 export const getEvidenceByType = (type: Evidence['type']): Evidence[] => {
@@ -507,9 +521,9 @@ export const getAgentCollectedEvidence = (): Evidence[] => {
 }
 
 export const getStaleEvidence = (): Evidence[] => {
-  return mockEvidence.filter(e => e.status === 'stale')
+  return mockEvidence.filter(e => e.stale === true)
 }
 
 export const getMissingEvidence = (): Evidence[] => {
-  return mockEvidence.filter(e => e.status === 'missing')
+  return mockEvidence.filter(e => !e.name || e.verified === false)
 }

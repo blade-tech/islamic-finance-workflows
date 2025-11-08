@@ -43,7 +43,12 @@ export function Step5AccountingV2() {
 
     if (accountingFramework) {
       setAccounting(accountingFramework)
-      setReportingFrequency(accountingConfig.reportingFrequency)
+      // Main demo only supports quarterly, semi-annual, and annual
+      // Convert monthly to quarterly as fallback
+      const frequency = accountingConfig.reportingFrequency === 'monthly'
+        ? 'quarterly'
+        : accountingConfig.reportingFrequency
+      setReportingFrequency(frequency)
     }
   }
 

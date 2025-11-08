@@ -771,18 +771,20 @@ export interface AITaskCard {
  */
 export interface Evidence {
   // Identity
-  id: string                          // "ev-001"
-  controlId: string                   // "SG-02"
-  dealId: string
+  id?: string                         // "ev-001"
+  controlId?: string                  // "SG-02"
+  dealId?: string
   name: string
+  type: 'document' | 'api_response' | 'blockchain_tx' | 'calculation' | 'credential'
 
   // Source
   source: 'SharePoint' | 'S3' | 'API' | 'Agent' | 'Manual' | 'Guardian'
   sourcePath?: string                 // "Finance/Deals/2024/Sukuk/"
   sourceUrl?: string
+  url?: string                        // Display URL for evidence viewing
 
   // Collection
-  collectedBy: 'agent' | 'user'
+  collectedBy?: 'agent' | 'user'
   collectedByName?: string            // "evidence-agent" or user email
   collectedAt: string                 // ISO 8601
 
@@ -801,10 +803,10 @@ export interface Evidence {
   fileSize?: number                   // bytes
   version?: string
   expiryDate?: string                 // For time-sensitive evidence
-  stale: boolean                      // True if past expiry
+  stale?: boolean                     // True if past expiry
 
   // Selective Disclosure
-  selectiveDisclosureEnabled: boolean
+  selectiveDisclosureEnabled?: boolean
   visibilityRules?: Record<string, string[]>  // role → fields visible
 }
 

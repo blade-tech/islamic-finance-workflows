@@ -15,7 +15,7 @@ export default function EvidencePage() {
   const filteredEvidence = (() => {
     switch (filter) {
       case 'verified':
-        return mockEvidence.filter(e => e.status === 'verified')
+        return mockEvidence.filter(e => e.verified === true)
       case 'agent':
         return getEvidenceBySource('Agent')
       case 'blockchain':
@@ -27,7 +27,7 @@ export default function EvidencePage() {
 
   const stats = {
     total: mockEvidence.length,
-    verified: mockEvidence.filter(e => e.status === 'verified').length,
+    verified: mockEvidence.filter(e => e.verified === true).length,
     agentCollected: getEvidenceBySource('Agent').length,
     blockchain: getBlockchainEvidence().length
   }
@@ -116,7 +116,7 @@ export default function EvidencePage() {
             <div className="flex items-start justify-between">
               <div className="flex items-start space-x-3 flex-1">
                 <div className="flex-shrink-0 mt-1">
-                  {getStatusIcon(evidence.status)}
+                  {getStatusIcon(evidence.verified ? 'verified' : 'pending')}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">

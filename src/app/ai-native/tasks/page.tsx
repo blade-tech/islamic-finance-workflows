@@ -174,6 +174,7 @@ export default function TasksPage() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
+                          if (!task.proposedFix) return
                           alert(`Agent will execute ${task.proposedFix.actions.length} actions with ${task.proposedFix.confidence}% confidence`)
                         }}
                         className="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors whitespace-nowrap flex items-center space-x-2"

@@ -121,7 +121,7 @@ const BUCKET_CONFIG = [
 
 export function Step2ConversationalConfig() {
   const execution = useWorkflowStore((state) => state.execution)
-  const setDealConfiguration = useWorkflowStore((state) => state.setDealConfiguration)
+  // const setDealConfiguration = useWorkflowStore((state) => state.setDealConfiguration) // TODO: Function doesn't exist in store
 
   // Chat state
   const [messages, setMessages] = useState<ChatMessage[]>([
