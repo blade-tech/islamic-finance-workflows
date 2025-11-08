@@ -69,6 +69,8 @@ export function Step7ConfigureDetails() {
   const selectedImpacts = execution?.selectedImpacts || []
   const selectedTakaful = execution?.selectedTakaful
   const dealConfiguration = execution?.dealConfiguration
+  // Detect V2 workflow (has transactionScale field)
+  const isV2Workflow = !!execution?.transactionScale
 
   // DYNAMIC FIELD COMPOSITION from all 4 components
   const allFields: FormField[] = [
@@ -224,7 +226,7 @@ export function Step7ConfigureDetails() {
   )
 
   // Show warning if configuration not complete
-  if (!dealConfiguration || !dealConfiguration.isValid) {
+  if (!isV2Workflow && (!dealConfiguration || !dealConfiguration.isValid)) {
     return (
       <div className="space-y-6">
         <Alert variant="warning">
@@ -257,7 +259,9 @@ export function Step7ConfigureDetails() {
       <Card>
         <CardHeader>
           <CardTitle className="text-base">Selected Configuration</CardTitle>
-          <CardDescription className="text-sm">{dealConfiguration.configurationName}</CardDescription>
+          <CardDescription className="text-sm">
+            {dealConfiguration?.configurationName || (isV2Workflow ? "V2 Workflow Configuration" : "Configuration")}
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">

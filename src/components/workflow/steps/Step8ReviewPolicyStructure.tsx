@@ -336,6 +336,28 @@ export function Step8ReviewPolicyStructure() {
                   <FileCheck className="h-4 w-4 text-muted-foreground" />
                   <span className="text-xs">{policyStructure.generatedFrom.accounting}</span>
                 </div>
+                {execution.transactionScale && (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <BarChart3 className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-xs">
+                        {execution.transactionScale.amount} {execution.transactionScale.currency}
+                      </span>
+                    </div>
+                    {execution.governance && (
+                      <div className="flex items-center gap-2">
+                        <Users className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs">{execution.governance.type}</span>
+                      </div>
+                    )}
+                    {execution.crossBorder && (
+                      <div className="flex items-center gap-2">
+                        <Building2 className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs">Cross-border: {execution.crossBorder.primaryJurisdiction} → {execution.crossBorder.secondaryJurisdictions?.join(", ")}</span>
+                      </div>
+                    )}
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>

@@ -147,11 +147,36 @@ export interface WorkflowExecution {
   // Step 10: Live Execution (Guardian Deployment)
   dealId?: string                     // Deal ID created after Guardian deployment (for Step 11)
 
+  // V2 Workflow Extensions (optional for backward compatibility)
+  transactionScale?: {
+    size: number
+    offeringType: 'private' | 'public' | 'hybrid'
+    listed: boolean
+    exchange?: string
+  }
+  governance?: {
+    ssb: {
+      mandated: boolean
+      members: number
+      independenceRequired: boolean
+    }
+    complianceOwner: string
+    complianceReviewSLA: 'weekly' | 'monthly'
+    riskOwner: string
+    riskAppetite: 'conservative' | 'moderate' | 'aggressive'
+    enableVCs: boolean
+    disclosurePolicy: 'status-only' | 'full-audit-trail' | 'custom'
+  }
+  crossBorder?: boolean
+  additionalJurisdictions?: Jurisdiction[]
+  reportingFrequency?: 'quarterly' | 'semi-annual' | 'annual'
+
   // Metadata
   startedAt: string
   completedAt: string | null
   durationSeconds: number
   tokensUsed: number
+  metadata?: Record<string, any>  // Additional metadata for extensions
 }
 
 /**

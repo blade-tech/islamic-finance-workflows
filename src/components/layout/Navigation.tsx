@@ -8,7 +8,7 @@
  * NAVIGATION STRUCTURE (BY ROLE):
  * 1. 🌟 Get Started    → /welcome           [All Users] - Onboarding
  * 2. 🏠 Workflow       → /                  [Creators] - 11-step deal creation
- * 3. 📊 Dashboard      → /dashboard         [Managers] - Compliance monitoring
+ * 3. 📊 Dashboard      → /ai-native         [Managers] - AI-enhanced compliance monitoring
  * 4. 🛡️  Deals         → /deals             [Operators] - Deal lifecycle management
  * 5. 💼 Digital Assets → /digital-assets    [Treasury/Finance] - Certificates & tokens
  * 6. 👥 Collaboration  → /collaboration     [All Roles] - Tasks & mentions
@@ -31,21 +31,16 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LayoutDashboard, Home, Users, Bell, Sparkles, ShieldCheck, Wallet } from 'lucide-react'
+import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
 
-  // Determine active section
+  // Determine active section (check more specific paths first)
   const isWelcomeActive = pathname === '/welcome'
   const isWorkflowActive = pathname === '/'
-  const isDashboardActive = pathname.startsWith('/dashboard')
-  const isDealsActive = pathname.startsWith('/deals')
+  const isDashboardActive = pathname.startsWith('/ai-native') || pathname.startsWith('/dashboard')
   const isDigitalAssetsActive = pathname.startsWith('/digital-assets')
-  const isCollaborationActive = pathname.startsWith('/collaboration') ||
-                                pathname.startsWith('/tasks') ||
-                                pathname.startsWith('/mentions') ||
-                                pathname.startsWith('/notifications')
 
   // Mock unread count (will be replaced with real data)
   const unreadNotifications = 0
@@ -87,20 +82,9 @@ export function Navigation() {
             size="sm"
             asChild
           >
-            <Link href="/dashboard">
+            <Link href="/ai-native">
               <LayoutDashboard className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Dashboard</span>
-            </Link>
-          </Button>
-
-          <Button
-            variant={isDealsActive ? 'default' : 'ghost'}
-            size="sm"
-            asChild
-          >
-            <Link href="/deals">
-              <ShieldCheck className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Deals</span>
             </Link>
           </Button>
 
@@ -112,17 +96,6 @@ export function Navigation() {
             <Link href="/digital-assets">
               <Wallet className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">Digital Assets</span>
-            </Link>
-          </Button>
-
-          <Button
-            variant={isCollaborationActive ? 'default' : 'ghost'}
-            size="sm"
-            asChild
-          >
-            <Link href="/collaboration">
-              <Users className="h-4 w-4 mr-2" />
-              <span className="hidden sm:inline">Collaboration</span>
             </Link>
           </Button>
         </div>

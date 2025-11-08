@@ -21,7 +21,7 @@ import { cn } from '@/lib/utils'
 
 interface ComponentProgressCardProps {
   component: ComponentCompliance
-  color: 'purple' | 'orange' | 'blue' | 'green'
+  color: 'purple' | 'orange' | 'blue' | 'green' | 'red'
   icon: string
   onClick?: () => void
 }
@@ -50,6 +50,12 @@ const colorVariants = {
     text: 'text-green-700',
     progress: 'bg-green-500',
     border: 'border-green-200',
+  },
+  red: {
+    bg: 'bg-red-50',
+    text: 'text-red-700',
+    progress: 'bg-red-500',
+    border: 'border-red-200',
   },
 }
 

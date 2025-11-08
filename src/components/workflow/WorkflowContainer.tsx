@@ -3,32 +3,40 @@
 /**
  * WORKFLOW CONTAINER
  * ==================
- * Main workflow orchestrator displaying the 10-step modular architecture process.
+ * Main workflow orchestrator for GRC-aligned Islamic finance deal configuration.
  *
- * 10 WORKFLOW STEPS (4-Component Modular Architecture → Guardian Policy Execution):
- * 1.  Connect Sources         - Check backend services, connect to Graphiti
- * 2.  Select Shariah Structure - Choose Islamic finance mechanism (Component 1 of 4)
- * 3.  Select Jurisdiction     - Choose legal/regulatory framework (Component 2 of 4)
- * 4.  Select Accounting       - Choose accounting standards (Component 3 of 4)
- * 5.  Select Impact Metrics   - Choose ESG/sustainability framework (Component 4 of 4)
- * 6.  Review Configuration    - Validate 4-component configuration
- * 7.  Configure Details       - Fill workflow parameters + optional document uploads
- * 8.  Review Policy Structure - View Guardian policy (schemas, steps, roles) generated from config
- * 9.  Test Workflow           - Run Guardian dry run simulation (sandbox, not blockchain)
- * 10. Live Execution          - Deploy to Guardian & execute on Hedera Blockchain
+ * 11 WORKFLOW STEPS (V2 Jurisdiction-First Approach → Guardian Policy Execution):
+ * 1.  Connect Sources              - Check backend services, connect to Graphiti
+ * 2.  Regulatory Jurisdiction (V2) - Choose jurisdiction FIRST (enables prohibition filtering)
+ * 3.  Product Structure (V2)       - Choose Islamic finance product (filtered by jurisdiction)
+ * 4.  Transaction Scale (V2)       - Define size, offering type, listing (activates scale-based controls)
+ * 5.  Accounting & Reporting (V2)  - Choose accounting standard + reporting frequency
+ * 6.  Sustainability & Impact (V2) - Optional ESG/sustainability framework
+ * 7.  Configure Details            - Fill workflow parameters + optional document uploads
+ * 8.  Review Policy Structure      - View Guardian policy (schemas, steps, roles) generated from config
+ * 9.  Test Workflow                - Run Guardian dry run simulation (sandbox, not blockchain)
+ * 10. Live Execution               - Deploy to Guardian & execute on Hedera Blockchain
+ * 11. Monitor & Collaborate        - Track execution, collaborate with stakeholders
+ *
+ * V2 INTEGRATION (GRC-ALIGNED WORKFLOW):
+ * - Jurisdiction-first philosophy: Start with regulatory context, then filter products
+ * - Prohibition filtering: Malaysia prohibits Bay Al-Inah and Organized Tawarruq
+ * - Inline control activation: Each step shows which controls activate
+ * - Transaction scale-based controls: Large deals (>$50M) trigger external Shariah audit
+ * - Dual reporting: AAOIFI + IFRS support with reconciliation controls
+ *
+ * DATA MODEL:
+ * - V2 components wrap around main demo Zustand store via adapter layer
+ * - Bidirectional mapping: V2 ↔ Main demo (ProductStructure ↔ ShariahStructure, etc.)
+ * - V2-specific fields: transactionScale, governance, crossBorder, reportingFrequency
+ * - Backward compatible: V2 fields are optional in WorkflowExecution type
  *
  * UX PATTERN:
  * - Human-in-the-loop (AI works → human guides)
- * - 4-component modular selection (Shariah, Jurisdiction, Accounting, Impact)
- * - Configuration composition from all 4 components
- * - Optional document uploads integrated into Configure Details (Step 7)
+ * - GRC-aligned compliance-first workflow
+ * - Self-documenting steps with inline control activation previews
  * - Sandbox testing before production execution
  * - Real-time oversight and interruption capability
- *
- * NOTE: Steps 2-6 are new for modular architecture (Phase 4A pivot)
- * NOTE: Legacy "Select Template" step removed - 4 components ARE the methodologies
- * NOTE: Context Upload removed as separate step - now integrated into Step 7
- * NOTE: Citation Verification and Outcome steps removed - workflow ends at deployment
  */
 
 import { useEffect, useRef, useState } from 'react'
@@ -48,13 +56,12 @@ import { useTour } from '@/hooks/useTour'
 import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
 
 // Step components
-import OverviewScreen from './OverviewScreen'
 import { Step1SourceConnection } from './steps/Step1SourceConnection'
-import { Step2SelectShariahStructure } from './steps/Step2SelectShariahStructure'
-import { Step3SelectJurisdiction } from './steps/Step3SelectJurisdiction'
-import { Step4SelectAccounting } from './steps/Step4SelectAccounting'
-import { Step5SelectImpact } from './steps/Step5SelectImpact'
-import { Step6ReviewConfiguration } from './steps/Step6ReviewConfiguration'
+import { Step2JurisdictionV2 } from './steps-v2-wrappers/Step2JurisdictionV2'
+import { Step3ProductStructureV2 } from './steps-v2-wrappers/Step3ProductStructureV2'
+import { Step4TransactionScaleV2 } from './steps-v2-wrappers/Step4TransactionScaleV2'
+import { Step5AccountingV2 } from './steps-v2-wrappers/Step5AccountingV2'
+import { Step6SustainabilityV2 } from './steps-v2-wrappers/Step6SustainabilityV2'
 import { Step7ConfigureDetails } from './steps/Step7ConfigureDetails'
 import { Step8ReviewPolicyStructure } from './steps/Step8ReviewPolicyStructure'
 import { Step3TestWorkflow } from './steps/Step3TestWorkflow'
@@ -62,18 +69,17 @@ import { Step10LiveExecution } from './steps/Step10LiveExecution'
 import { Step11MonitorCollaborate } from './steps/Step11MonitorCollaborate'
 
 const STEPS = [
-  { index: 0, title: 'Overview', component: OverviewScreen },
-  { index: 1, title: 'Connect Sources', component: Step1SourceConnection },
-  { index: 2, title: 'Select Shariah Structure', component: Step2SelectShariahStructure },
-  { index: 3, title: 'Select Jurisdiction', component: Step3SelectJurisdiction },
-  { index: 4, title: 'Select Accounting', component: Step4SelectAccounting },
-  { index: 5, title: 'Select Impact Metrics', component: Step5SelectImpact },
-  { index: 6, title: 'Review Configuration', component: Step6ReviewConfiguration },
-  { index: 7, title: 'Configure Details', component: Step7ConfigureDetails },
-  { index: 8, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
-  { index: 9, title: 'Test Workflow', component: Step3TestWorkflow },
-  { index: 10, title: 'Live Execution', component: Step10LiveExecution },
-  { index: 11, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
+  { index: 0, title: 'Connect Sources', component: Step1SourceConnection },
+  { index: 1, title: 'Regulatory Jurisdiction', component: Step2JurisdictionV2 },
+  { index: 2, title: 'Product Structure', component: Step3ProductStructureV2 },
+  { index: 3, title: 'Transaction Scale', component: Step4TransactionScaleV2 },
+  { index: 4, title: 'Accounting & Reporting', component: Step5AccountingV2 },
+  { index: 5, title: 'Sustainability & Impact', component: Step6SustainabilityV2 },
+  { index: 6, title: 'Configure Details', component: Step7ConfigureDetails },
+  { index: 7, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
+  { index: 8, title: 'Test Workflow', component: Step3TestWorkflow },
+  { index: 9, title: 'Live Execution', component: Step10LiveExecution },
+  { index: 10, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
 ]
 
 export function WorkflowContainer() {

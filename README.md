@@ -16,7 +16,7 @@ ZeroH is a **comprehensive platform for structuring, monitoring, and managing Sh
 
 ### What Makes ZeroH Different
 
-- **Modular Component Architecture**: Mix and match Shariah structures, jurisdictions, accounting standards, and impact metrics
+- **5-Pillar Compliance Framework**: Comprehensive governance across Shariah, Regulatory, Risk, Financial, and Audit dimensions
 - **AI-Powered Automation**: Claude AI orchestrates document processing, compliance checking, and policy generation
 - **Blockchain Verification**: Hedera Guardian integration for immutable compliance certificates
 - **Digital Asset Management**: Cross-deal tracking of Guardian certificates and ATS tokens
@@ -39,6 +39,17 @@ ZeroH is a **comprehensive platform for structuring, monitoring, and managing Sh
 ---
 
 ## ✨ Key Features
+
+### 5-Pillar Compliance Framework
+The platform tracks compliance across five comprehensive governance areas:
+
+1. **🕌 Shariah Governance & Compliance** (Purple) - Islamic law adherence, Shariah board oversight, religious compliance
+2. **⚖️ Regulatory & Legal Compliance** (Orange) - Jurisdiction-specific regulations, legal requirements, licensing
+3. **🛡️ Risk Management** (Red) - Operational, market, credit, and Shariah-specific risk controls
+4. **📊 Financial & Product Reporting** (Blue) - Accounting standards, financial disclosures, product documentation
+5. **✓ Audit & Assurance** (Green) - Internal/external audits, quality assurance, compliance verification
+
+Each deal is monitored across all five pillars with real-time compliance tracking, evidence management, and automated control validation.
 
 ### Phase 1: Core Workflow (Completed)
 - ✅ **10-step modular workflow** with component-based configuration
@@ -226,13 +237,14 @@ View **cross-deal digital assets** including:
 
 ### Exploring Deals
 
-**URL**: http://localhost:3040/deals
+**URL**: http://localhost:3040/ai-native/deals
 
 Browse all Islamic finance deals with:
-- Deal name, Shariah structure, jurisdiction
-- Status tracking (active, pending, completed)
-- Guardian certificate and token badges
-- Quick navigation to deal details and digital assets
+- Deal name, product type, status tracking
+- **5-pillar compliance visualization** with progress bars for each governance area
+- Overall compliance percentage and color-coded status
+- Blocker alerts and quick navigation to deal details
+- Filter by status (all, in progress, complete, blocked)
 
 ### Methodology Upload (Alternative to Component Selection)
 
@@ -501,7 +513,15 @@ kill <process_id>
 - ZeroH rebranding
 - Comprehensive navigation
 
-### Phase 5: Real Guardian Integration 🔄 IN PROGRESS
+### Phase 5: 5-Pillar Compliance Framework ✅ COMPLETE
+- 5-pillar governance model (Shariah, Regulatory, Risk, Financial, Audit)
+- AI-native dashboard with deal monitoring
+- Deals list page with 5-pillar visualization
+- Deal detail pages with comprehensive compliance tracking
+- 5 mock deals with full compliance data (deal-001 through deal-005)
+- Color-coded compliance status and progress tracking
+
+### Phase 6: Real Guardian Integration 🔄 IN PROGRESS
 - Live Hedera Guardian connection
 - Real policy deployment to testnet
 - NFT certificate minting (HTS)
@@ -552,7 +572,7 @@ For issues and questions:
 
 ---
 
-**Current Phase**: Phase 3 Complete - Digital Assets & Deal Lifecycle Management
-**Last Updated**: November 5, 2025
-**Version**: 1.3.0
-**Demo Status**: Fully functional with 6 auto-seeded Islamic finance deals
+**Current Phase**: Phase 4 Complete - 5-Pillar Compliance Framework & AI-Native Dashboard
+**Last Updated**: November 8, 2025
+**Version**: 1.4.0
+**Demo Status**: Fully functional with 5-pillar compliance tracking across 5 deals

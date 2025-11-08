@@ -27,7 +27,6 @@
 
 import { useState } from 'react'
 import { useWorkflowStore } from '@/lib/store'
-import { backendClient } from '@/lib/backend-client'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -71,6 +70,7 @@ interface ParticipantRole {
 export function Step10LiveExecution() {
   const execution = useWorkflowStore((state) => state.execution)
   const dealConfiguration = execution?.dealConfiguration
+  const isV2Workflow = !!execution?.transactionScale
 
   // Deployment state
   const [isDeploying, setIsDeploying] = useState(false)
@@ -142,8 +142,11 @@ export function Step10LiveExecution() {
   }
 
   // Create deal in backend after successful deployment
+  // DEMO MODE: Mock deal creation without backend
   const createDeal = async () => {
-    if (!dealConfiguration) {
+    // DEMO MODE: Allow deal creation even without complete configuration
+    const isDemoMode = true
+    if (!isDemoMode && !isV2Workflow && !dealConfiguration) {
       console.error('[Step10] Cannot create deal: dealConfiguration is missing')
       return
     }
@@ -152,36 +155,23 @@ export function Step10LiveExecution() {
     setDealCreationError(null)
 
     try {
-      const dealData = {
-        deal_name: (dealConfiguration as any).deal_name || dealConfiguration.configurationName || 'Unnamed Deal',
-        shariah_structure: (dealConfiguration as any).shariah_structure || dealConfiguration.shariahStructure?.id || '',
-        jurisdiction: (dealConfiguration as any).jurisdiction || dealConfiguration.jurisdiction?.id || '',
-        accounting_standard: (dealConfiguration as any).accounting_standard || dealConfiguration.accounting?.id || '',
-        impact_framework: (dealConfiguration as any).impact_framework || (dealConfiguration.impacts?.[0]?.id || ''),
-        deal_amount: (dealConfiguration as any).deal_amount,
-        currency: (dealConfiguration as any).currency,
-        originator: (dealConfiguration as any).originator,
-        guardian_policy_id: policyId || undefined,
-        guardian_transaction_id: workflowTopicId || undefined,
-      }
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500))
 
-      const createdDeal = await backendClient.createDeal(dealData)
+      // Generate mock deal ID
+      const mockDealId = `DEAL-${Date.now()}-${Math.floor(Math.random() * 10000)}`
 
-      if (createdDeal?.deal_id) {
-        setCreatedDealId(createdDeal.deal_id)
+      setCreatedDealId(mockDealId)
 
-        // Store deal ID in workflow store for Step 11 to access
-        useWorkflowStore.setState((state) => ({
-          execution: state.execution ? {
-            ...state.execution,
-            dealId: createdDeal.deal_id,
-          } : null,
-        }))
+      // Store deal ID in workflow store for Step 11 to access
+      useWorkflowStore.setState((state) => ({
+        execution: state.execution ? {
+          ...state.execution,
+          dealId: mockDealId,
+        } : null,
+      }))
 
-        console.log('[Step10] Deal created successfully:', createdDeal.deal_id)
-      } else {
-        throw new Error('Deal creation response missing deal_id')
-      }
+      console.log('[Step10 DEMO] Mock deal created successfully:', mockDealId)
     } catch (error) {
       console.error('[Step10] Failed to create deal:', error)
       setDealCreationError(error instanceof Error ? error.message : 'Failed to create deal')
@@ -192,7 +182,9 @@ export function Step10LiveExecution() {
 
   // Start deployment process
   const handleDeploy = async () => {
-    if (!dealConfiguration) return
+    // DEMO MODE: Allow deployment even without dealConfiguration
+    const isDemoMode = true // Set to false for production
+    if (!isDemoMode && !dealConfiguration) return
 
     setIsDeploying(true)
     setShowConfirmation(false)
@@ -381,7 +373,12 @@ export function Step10LiveExecution() {
     </div>
   )
 
-  if (!dealConfiguration || !dealConfiguration.isValid) {
+  // DEMO MODE: Relax validation to allow deployment without complete configuration
+  // In production, this would enforce strict validation
+  const isDemoMode = true // Set to false for production
+  const hasMinimalConfig = dealConfiguration || execution?.selectedShariahStructure || isV2Workflow
+
+  if (!isDemoMode && !isV2Workflow && (!dealConfiguration || !dealConfiguration.isValid)) {
     return (
       <div className="space-y-6">
         <Alert variant="warning">
@@ -394,6 +391,11 @@ export function Step10LiveExecution() {
         </Alert>
       </div>
     )
+  }
+
+  // DEMO MODE: Show info if configuration is incomplete
+  if (isDemoMode && !hasMinimalConfig) {
+    console.warn('[Step10 DEMO] No configuration found, using demo defaults')
   }
 
   return (
@@ -452,10 +454,10 @@ export function Step10LiveExecution() {
 
           <div className="space-y-2">
             <p className="text-sm font-medium">Configuration Name</p>
-            <p className="text-sm text-muted-foreground">{dealConfiguration.configurationName}</p>
+            <p className="text-sm text-muted-foreground">{dealConfiguration?.configurationName || (isV2Workflow ? "V2 Workflow Configuration" : "No configuration name")}</p>
           </div>
 
-          {(dealConfiguration as any).derivedFields && Object.keys((dealConfiguration as any).derivedFields).length > 0 && (
+          {(dealConfiguration as any)?.derivedFields && Object.keys((dealConfiguration as any).derivedFields).length > 0 && (
             <>
               <Separator />
               <div className="space-y-2">
@@ -617,7 +619,6 @@ export function Step10LiveExecution() {
               <Button
                 onClick={handleDeploy}
                 className="flex-1"
-                disabled={!dealConfiguration.isValid}
               >
                 <Rocket className="h-4 w-4 mr-2" />
                 Confirm & Deploy

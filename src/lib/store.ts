@@ -146,6 +146,8 @@ interface WorkflowStore {
 
   /** Clear all selected impacts */
   clearImpacts: () => void
+  /** Set impacts array (V2 workflow extension) */
+  setImpacts: (impacts: ImpactMetrics[]) => void
 
   /** Set Takaful overlay configuration */
   setTakaful: (takaful: TakafulOverlay) => void
@@ -155,6 +157,25 @@ interface WorkflowStore {
 
   /** Load demo configuration (QIIB Oryx Sukuk) - pre-populates all 4 components */
   loadDemoConfiguration: () => void
+
+  // -------------------------
+  // V2 Workflow Actions (Transaction Scale, Governance, etc.)
+  // -------------------------
+
+  /** Set transaction scale (V2 workflow extension) */
+  setTransactionScale: (scale: NonNullable<WorkflowExecution['transactionScale']>) => void
+
+  /** Set governance configuration (V2 workflow extension) */
+  setGovernance: (governance: NonNullable<WorkflowExecution['governance']>) => void
+
+  /** Set cross-border flag (V2 workflow extension) */
+  setCrossBorder: (crossBorder: boolean) => void
+
+  /** Set additional jurisdictions (V2 workflow extension) */
+  setAdditionalJurisdictions: (jurisdictions: Jurisdiction[]) => void
+
+  /** Set reporting frequency (V2 workflow extension) */
+  setReportingFrequency: (frequency: 'quarterly' | 'semi-annual' | 'annual') => void
 
   /** Set workflow mode and navigate to appropriate step (Option C modular workflows) */
   setWorkflowMode: (mode: 'full' | 'impact-only' | 'compliance-check' | 'tokenization-only', startStep: number) => void
@@ -718,6 +739,85 @@ export const useWorkflowStore = create<WorkflowStore>()(
           },
         })
       },
+
+      // -------------------------
+      // ACTIONS: V2 WORKFLOW EXTENSIONS
+      // -------------------------
+
+      setTransactionScale: (scale: NonNullable<WorkflowExecution['transactionScale']>) => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            transactionScale: scale,
+          },
+        })
+      },
+
+      setGovernance: (governance: NonNullable<WorkflowExecution['governance']>) => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            governance,
+          },
+        })
+      },
+
+      setCrossBorder: (crossBorder: boolean) => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            crossBorder,
+          },
+        })
+      },
+
+      setAdditionalJurisdictions: (jurisdictions: Jurisdiction[]) => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            additionalJurisdictions: jurisdictions,
+          },
+        })
+      },
+
+      setReportingFrequency: (frequency: 'quarterly' | 'semi-annual' | 'annual') => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            reportingFrequency: frequency,
+          },
+        })
+      },
+      setImpacts: (impacts: ImpactMetrics[]) => {
+        const { execution } = get()
+        if (!execution) return
+
+        set({
+          execution: {
+            ...execution,
+            selectedImpacts: impacts,
+          },
+        })
+      },
+
+      // -------------------------
+      // ACTIONS: CONTEXT
+      // -------------------------
 
       setContextText: (text: string) => {
         const { execution } = get()

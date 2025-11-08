@@ -1,380 +1,51 @@
 /**
- * ISLAMIC FINANCE COMPLIANCE DASHBOARD (ROLE: MANAGERS)
- * ======================================================
- * Compliance monitoring and metrics dashboard for managers.
- * Primary interface for tracking compliance across all deals.
+ * DASHBOARD PAGE REDIRECT
+ * =======================
+ * Redirects to the enhanced AI Native dashboard at /ai-native
  *
- * DISPLAYS:
- * 1. Overall platform compliance score
- * 2. Component compliance metrics (Shariah, Jurisdiction, Accounting, Impact)
- * 3. Monitoring cards (Contracts, Reviews, Validations, Documents)
- * 4. Quick summary stats
- *
- * ROLE: Managers - Monitor compliance, not manage individual deals
- * For deal management → Navigate to Deals page
+ * The AI Native dashboard now includes all features from the original dashboard:
+ * - Backend data integration
+ * - 4-component progress cards (Shariah, Jurisdiction, Accounting, Impact)
+ * - Monitoring cards (Contracts, Reviews, Validations, Documents)
+ * - AI insights and predictions
+ * - Deal prioritization and blocker detection
+ * - Compliance forecasting
  */
 
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { backendClient } from '@/lib/backend-client'
-import { DashboardMetrics } from '@/lib/types'
-import { ComponentProgressCard } from '@/components/dashboard/ComponentProgressCard'
-import { MonitoringCard } from '@/components/dashboard/MonitoringCard'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
-import { HelpCircle } from 'lucide-react'
 
-// Tour components
-import { ProductTour } from '@/components/onboarding/ProductTour'
-import { getTourForPage, hasTourForPage } from '@/lib/page-tours'
-
-export default function DashboardPage() {
+export default function DashboardRedirect() {
   const router = useRouter()
-  const [metrics, setMetrics] = useState<DashboardMetrics | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  // Tour state
-  const [pageTourSteps, setPageTourSteps] = useState<any[]>([])
-  const [showPageTour, setShowPageTour] = useState(false)
 
   useEffect(() => {
-    loadDashboard()
-  }, [])
-
-  async function loadDashboard() {
-    setLoading(true)
-    setError(null)
-    try {
-      const data = await backendClient.getDashboardOverview()
-      setMetrics(data)
-    } catch (err) {
-      console.error('Failed to load dashboard:', err)
-      setError('Failed to load dashboard. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Start page-specific tour
-  const startPageTour = () => {
-    const steps = getTourForPage('/dashboard')
-    if (steps) {
-      setPageTourSteps(steps)
-      setShowPageTour(true)
-    } else {
-      console.log('[PageTour] No tour available for /dashboard')
-    }
-  }
-
-  if (loading) {
-    return <DashboardSkeleton />
-  }
-
-  if (error) {
-    return (
-      <div className="p-6">
-        <Card className="border-red-200">
-          <CardContent className="pt-6">
-            <div className="text-center text-red-600">
-              <p className="font-semibold mb-2">Error Loading Dashboard</p>
-              <p className="text-sm">{error}</p>
-              <button
-                onClick={loadDashboard}
-                className="mt-4 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-              >
-                Retry
-              </button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  if (!metrics) {
-    return null
-  }
+    // Redirect to AI Native dashboard
+    router.replace('/ai-native')
+  }, [router])
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Header with Overall Compliance */}
-      <div className="flex items-center justify-between">
-        <div data-tour="dashboard-header">
-          <h1 className="text-3xl font-bold text-gray-900">
-            Islamic Finance Compliance Dashboard
-          </h1>
-          <p className="text-gray-600 mt-1">
-            4-Component Modular Architecture Tracking
-          </p>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+      <div className="text-center max-w-md mx-auto p-8">
+        <div className="mb-6">
+          <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-purple-600 mx-auto"></div>
         </div>
-        <Card className="px-6 py-4 bg-white shadow-md" data-tour="overall-compliance">
-          <div className="text-center">
-            <div className="text-sm text-gray-500 font-medium">
-              Overall Platform Compliance
-            </div>
-            <div className="text-4xl font-bold text-blue-600 mt-1">
-              {metrics.overall_platform_compliance.toFixed(1)}%
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Across {metrics.total_deals} active deals
-            </div>
-          </div>
-        </Card>
-      </div>
-
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4" data-tour="summary-stats">
-        <Card className="bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Deals</p>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {metrics.total_deals}
-                </p>
-              </div>
-              <div className="text-4xl">📊</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Compliant Deals</p>
-                <p className="text-2xl font-bold text-green-600 mt-1">
-                  {metrics.compliant_deals}
-                </p>
-              </div>
-              <div className="text-4xl">✅</div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-white">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Need Attention</p>
-                <p className="text-2xl font-bold text-red-600 mt-1">
-                  {metrics.deals_needing_attention}
-                </p>
-              </div>
-              <div className="text-4xl">⚠️</div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* 4-Component Progress Cards */}
-      <div data-tour="component-cards">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Component Compliance Overview
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          Redirecting to AI Native Dashboard
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <ComponentProgressCard
-            component={metrics.shariah_compliance}
-            color="purple"
-            icon="🕌"
-          />
-          <ComponentProgressCard
-            component={metrics.jurisdiction_compliance}
-            color="orange"
-            icon="⚖️"
-          />
-          <ComponentProgressCard
-            component={metrics.accounting_compliance}
-            color="blue"
-            icon="📊"
-          />
-          <ComponentProgressCard
-            component={metrics.impact_compliance}
-            color="green"
-            icon="🌱"
-          />
+        <p className="text-gray-600 mb-4">
+          We've enhanced your dashboard with AI-powered insights and predictions.
+        </p>
+        <div className="bg-white rounded-lg border border-purple-200 p-4 text-left">
+          <h3 className="font-semibold text-gray-900 mb-2">New Features:</h3>
+          <ul className="text-sm text-gray-600 space-y-1">
+            <li>✨ AI-powered deal prioritization</li>
+            <li>📊 Compliance forecasting</li>
+            <li>🎯 Intelligent blocker detection</li>
+            <li>📈 All original dashboard metrics</li>
+          </ul>
         </div>
-      </div>
-
-      {/* Monitoring Cards */}
-      <div data-tour="monitoring-cards">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Monitoring & Status
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <MonitoringCard
-            card={metrics.contracts_card}
-            icon="📄"
-            onClick={() => router.push('/contracts')}
-          />
-          <MonitoringCard card={metrics.shariah_reviews_card} icon="✓" />
-          <MonitoringCard
-            card={metrics.impact_validations_card}
-            icon="🌍"
-          />
-          <MonitoringCard card={metrics.documents_card} icon="📁" />
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div data-tour="quick-actions">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Quick Actions
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/deals')}>
-            <CardContent className="pt-6 pb-6">
-              <div className="text-center">
-                <div className="text-4xl mb-3">📊</div>
-                <h3 className="font-semibold text-blue-900 mb-2">
-                  Manage Deals
-                </h3>
-                <p className="text-sm text-blue-700 mb-3">
-                  View and manage all {metrics.total_deals} active deals
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white hover:bg-blue-50 border-blue-300"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push('/deals')
-                  }}
-                >
-                  View All Deals →
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/digital-assets')}>
-            <CardContent className="pt-6 pb-6">
-              <div className="text-center">
-                <div className="text-4xl mb-3">🛡️</div>
-                <h3 className="font-semibold text-purple-900 mb-2">
-                  Digital Assets
-                </h3>
-                <p className="text-sm text-purple-700 mb-3">
-                  Guardian certificates and ATS tokens
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white hover:bg-purple-50 border-purple-300"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push('/digital-assets')
-                  }}
-                >
-                  View Assets →
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow cursor-pointer" onClick={() => router.push('/')}>
-            <CardContent className="pt-6 pb-6">
-              <div className="text-center">
-                <div className="text-4xl mb-3">✨</div>
-                <h3 className="font-semibold text-green-900 mb-2">
-                  Create New Deal
-                </h3>
-                <p className="text-sm text-green-700 mb-3">
-                  Start a new 11-step workflow
-                </p>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="bg-white hover:bg-green-50 border-green-300"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push('/')
-                  }}
-                >
-                  Start Workflow →
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Page-Specific Tour */}
-      <ProductTour
-        run={showPageTour}
-        steps={pageTourSteps}
-        onComplete={() => setShowPageTour(false)}
-        onStateChange={(running) => !running && setShowPageTour(false)}
-      />
-
-      {/* Floating Help Button */}
-      {hasTourForPage('/dashboard') && (
-        <div className="fixed bottom-6 right-6 z-50">
-          <Button
-            onClick={startPageTour}
-            className="rounded-full h-14 w-14 shadow-lg hover:shadow-xl transition-all"
-            size="icon"
-            title="Tour This Page"
-          >
-            <HelpCircle className="h-6 w-6" />
-          </Button>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/**
- * Loading skeleton for dashboard
- */
-function DashboardSkeleton() {
-  return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Header Skeleton */}
-      <div className="flex items-center justify-between">
-        <div>
-          <Skeleton className="h-10 w-96" />
-          <Skeleton className="h-4 w-64 mt-2" />
-        </div>
-        <Skeleton className="h-24 w-48" />
-      </div>
-
-      {/* Summary Stats Skeleton */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {[...Array(3)].map((_, i) => (
-          <Skeleton key={i} className="h-24" />
-        ))}
-      </div>
-
-      {/* Component Cards Skeleton */}
-      <div>
-        <Skeleton className="h-6 w-64 mb-4" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-64" />
-          ))}
-        </div>
-      </div>
-
-      {/* Monitoring Cards Skeleton */}
-      <div>
-        <Skeleton className="h-6 w-48 mb-4" />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Skeleton key={i} className="h-48" />
-          ))}
-        </div>
-      </div>
-
-      {/* Active Deals Skeleton */}
-      <div>
-        <Skeleton className="h-6 w-32 mb-4" />
-        <Skeleton className="h-64" />
       </div>
     </div>
   )
