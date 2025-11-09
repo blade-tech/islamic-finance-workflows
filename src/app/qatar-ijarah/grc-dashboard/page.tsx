@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useIjarahStore } from '@/lib/qatar-ijarah/ijarah-store'
 import type { QatarIjarahControl } from '@/lib/qatar-ijarah/ijarah-controls'
+import { PodCard, BeforeAfterMetrics } from '@/lib/qatar-ijarah/pod-components'
+import type { PodStatus, CCMPodOutput } from '@/lib/qatar-ijarah/pod-types'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -18,18 +20,109 @@ import {
   AlertTriangle,
   Target,
   BarChart3,
-  Award
+  Award,
+  Brain,
+  Activity
 } from 'lucide-react'
 
 export default function GRCDashboardPage() {
   const router = useRouter()
   const { currentProject, ijarahControls, loadDemoData } = useIjarahStore()
 
+  // CCM Pod state
+  const [ccmPodStatus, setCcmPodStatus] = useState<PodStatus>('idle')
+  const [ccmPodOutput, setCcmPodOutput] = useState<CCMPodOutput | null>(null)
+  const [showCcmPod, setShowCcmPod] = useState(false)
+
   useEffect(() => {
     if (!currentProject) {
       loadDemoData()
     }
   }, [currentProject, loadDemoData])
+
+  // Run CCM Pod to test all controls
+  const handleRunCCMPod = async () => {
+    setShowCcmPod(true)
+    setCcmPodStatus('intake')
+
+    // Step 1: Intake (1 sec)
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    setCcmPodStatus('evaluating')
+
+    // Step 2: Run all control tests (3 sec)
+    await new Promise(resolve => setTimeout(resolve, 3000))
+    setCcmPodStatus('proposing')
+
+    // Generate findings for all 15 controls
+    const controlFindings = [
+      { control_id: 'IJR-A1', status: 'pass' as const, evidence_refs: ['/evidence/completion-cert.pdf'], test_logic: 'lease_start_date <= rent_start_date', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-A2', status: 'pass' as const, evidence_refs: ['/evidence/inspection-report.pdf'], test_logic: 'asset_inspected == true', actual_value: true, expected_value: true, severity: 'high' as const },
+      { control_id: 'IJR-A3', status: 'fail' as const, evidence_refs: ['/logs/payment-log.json'], test_logic: 'payment_date <= due_date', actual_value: false, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-A4', status: 'pass' as const, evidence_refs: ['/evidence/rent-calc.json'], test_logic: 'rent_amount == computed_rent', actual_value: true, expected_value: true, severity: 'high' as const },
+      { control_id: 'IJR-B5', status: 'pass' as const, evidence_refs: ['/evidence/spv-cert.pdf'], test_logic: 'spv_registered == true', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-B6', status: 'pass' as const, evidence_refs: ['/evidence/title-deed.pdf'], test_logic: 'title_owner == lessor', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-B7', status: 'pass' as const, evidence_refs: ['/evidence/contract-signed.pdf'], test_logic: 'lessor_signature_present == true', actual_value: true, expected_value: true, severity: 'high' as const },
+      { control_id: 'IJR-B8', status: 'pass' as const, evidence_refs: ['/evidence/escrow-log.json'], test_logic: 'disbursement <= whitelisted_amount', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-B9', status: 'pass' as const, evidence_refs: ['/evidence/revenue-calc.json'], test_logic: 'revenue_recognized == actual_received', actual_value: true, expected_value: true, severity: 'high' as const },
+      { control_id: 'IJR-C10', status: 'pass' as const, evidence_refs: ['/evidence/risk-disclosure.pdf'], test_logic: 'risks_disclosed_count >= 8', actual_value: true, expected_value: true, severity: 'medium' as const },
+      { control_id: 'IJR-C11', status: 'pass' as const, evidence_refs: ['/evidence/screening-report.pdf'], test_logic: 'investor_screened == true', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-C12', status: 'pass' as const, evidence_refs: ['/evidence/kyc-aml.pdf'], test_logic: 'kyc_complete && !sanctions_match', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-C13', status: 'pass' as const, evidence_refs: ['/evidence/sncr-case.json'], test_logic: 'non_compliant_income == 0', actual_value: true, expected_value: true, severity: 'critical' as const },
+      { control_id: 'IJR-C14', status: 'pass' as const, evidence_refs: ['/logs/audit-trail.json'], test_logic: 'all_actions_logged == true', actual_value: true, expected_value: true, severity: 'high' as const },
+      { control_id: 'IJR-C15', status: 'pass' as const, evidence_refs: ['/evidence/ssb-resolution.pdf'], test_logic: 'ssb_approved == true', actual_value: true, expected_value: true, severity: 'critical' as const }
+    ]
+
+    const passedControls = controlFindings.filter(f => f.status === 'pass').length
+    const failedControls = controlFindings.filter(f => f.status === 'fail').length
+
+    setCcmPodOutput({
+      status: 'proposed',
+      recommendation: failedControls > 0 ? 'OPEN_CASE' : 'ALLOW',
+      reasons: [
+        `Tested all 15 controls in 3 seconds`,
+        `${passedControls} controls PASSED`,
+        `${failedControls} control(s) FAILED`,
+        failedControls > 0 ? 'SNCR case opened for IJR-A3 failure' : 'All controls operating effectively'
+      ],
+      evidence_refs: [
+        '/evidence/control-test-results.json',
+        '/logs/ccm-execution-log.json'
+      ],
+      next_actions: failedControls > 0 ? [
+        'Review IJR-A3 failure details',
+        'Approve SNCR triage recommendation',
+        'Process charity payment for late rent penalty'
+      ] : [
+        'Approve control test results',
+        'Continue automated monitoring'
+      ],
+      time_saved: '39 minutes 55 seconds',
+      confidence: 100,
+      findings: controlFindings,
+      summary: {
+        total_tested: 15,
+        passed: passedControls,
+        failed: failedControls,
+        warnings: 0,
+        test_duration_seconds: 3
+      }
+    })
+  }
+
+  const handleCcmPodApprove = () => {
+    setCcmPodStatus('completed')
+    setTimeout(() => {
+      setShowCcmPod(false)
+      setCcmPodStatus('idle')
+      setCcmPodOutput(null)
+    }, 2000)
+  }
+
+  const handleCcmPodReject = () => {
+    setShowCcmPod(false)
+    setCcmPodStatus('idle')
+    setCcmPodOutput(null)
+  }
 
   if (!currentProject) {
     return (
@@ -187,8 +280,11 @@ export default function GRCDashboardPage() {
                 Back to Overview
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Scene 8: GRC Dashboard</h1>
-                <p className="text-sm text-gray-600">7 Key Performance Indicators - Real-time Monitoring</p>
+                <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                  Scene 8: GRC Dashboard
+                  <Badge className="bg-orange-500">🤖 CCM Pod</Badge>
+                </h1>
+                <p className="text-sm text-gray-600">7 Key Performance Indicators • AI-Powered Control Testing</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -269,6 +365,152 @@ export default function GRCDashboardPage() {
             )
           })}
         </div>
+
+        {/* CCM Pod Section */}
+        {!showCcmPod && (
+          <Card className="border-2 border-orange-300 bg-gradient-to-r from-orange-50 to-amber-50 mb-8">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center text-orange-900">
+                    <Activity className="h-6 w-6 mr-2 text-orange-600" />
+                    Continuous Controls Monitoring
+                  </CardTitle>
+                  <CardDescription className="text-orange-700">
+                    AI-powered control testing for all 15 controls (99% time savings)
+                  </CardDescription>
+                </div>
+                <Button
+                  onClick={handleRunCCMPod}
+                  size="lg"
+                  className="bg-orange-600 hover:bg-orange-700"
+                >
+                  <Brain className="h-5 w-5 mr-2" />
+                  Run Control Tests
+                </Button>
+              </div>
+            </CardHeader>
+          </Card>
+        )}
+
+        {/* CCM Pod Card */}
+        {showCcmPod && (
+          <div className="mb-8 space-y-6">
+            <Card className="border-2 border-orange-300 shadow-lg">
+              <CardHeader className="bg-gradient-to-r from-orange-50 to-amber-50">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center text-xl">
+                      <Activity className="h-6 w-6 mr-2 text-orange-600" />
+                      Continuous Controls Monitoring Pod
+                    </CardTitle>
+                    <CardDescription className="mt-1">
+                      Testing all 15 controls for compliance and effectiveness
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <PodCard
+                  podId="ccm-monitoring"
+                  status={ccmPodStatus}
+                  output={ccmPodOutput}
+                  onApprove={handleCcmPodApprove}
+                  onReject={handleCcmPodReject}
+                  compact={false}
+                />
+
+                {/* Control Findings Table */}
+                {ccmPodOutput && ccmPodStatus === 'proposing' && (
+                  <div className="mt-6 p-4 bg-white rounded-lg border border-orange-200">
+                    <h4 className="text-sm font-semibold text-gray-800 mb-3">Control Test Results</h4>
+                    <div className="space-y-2 max-h-64 overflow-y-auto">
+                      {ccmPodOutput.findings?.map((finding) => {
+                        const control = ijarahControls.find((c: QatarIjarahControl) => c.id === finding.control_id)
+                        return (
+                          <div
+                            key={finding.control_id}
+                            className={`flex items-center justify-between p-2 rounded ${
+                              finding.status === 'pass'
+                                ? 'bg-green-50 border border-green-200'
+                                : finding.status === 'fail'
+                                ? 'bg-red-50 border border-red-200'
+                                : 'bg-yellow-50 border border-yellow-200'
+                            }`}
+                          >
+                            <div className="flex items-center space-x-3">
+                              {finding.status === 'pass' ? (
+                                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                              ) : finding.status === 'fail' ? (
+                                <AlertTriangle className="h-4 w-4 text-red-600" />
+                              ) : (
+                                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                              )}
+                              <div>
+                                <p className="text-sm font-semibold text-gray-800">
+                                  {finding.control_id}: {control?.name || 'Unknown Control'}
+                                </p>
+                                <p className="text-xs text-gray-600 mt-1">
+                                  Test: {finding.test_logic}
+                                  {finding.status === 'fail' && ' • Late payment detected: 7 days overdue, QAR 11,667 penalty'}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <Badge
+                                variant="outline"
+                                className="text-xs"
+                              >
+                                {finding.severity.toUpperCase()}
+                              </Badge>
+                              <Badge
+                                variant={finding.status === 'pass' ? 'default' : 'destructive'}
+                                className="text-xs"
+                              >
+                                {finding.status.toUpperCase()}
+                              </Badge>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Before/After Metrics for CCM */}
+            {ccmPodStatus === 'proposing' && (
+              <BeforeAfterMetrics
+                before={{
+                  steps: [
+                    '👤 Review transaction logs manually (10 min)',
+                    '👤 Test IJR-A1 (Lease Commencement) - 3 min',
+                    '👤 Test IJR-A2 (Asset Inspection) - 2 min',
+                    '👤 Test IJR-A3 (Rent Payment Timing) - 4 min',
+                    '👤 Test remaining 11 controls - 18 min',
+                    '👤 Document findings in spreadsheet - 3 min'
+                  ],
+                  time: '40 minutes',
+                  errors: '~8% human error in test execution'
+                }}
+                after={{
+                  steps: [
+                    '🤖 CCM Pod ingests transaction data (1 sec)',
+                    '🤖 Runs all 15 control test rules (3 sec)',
+                    '👤 Review + Approve findings (1 click)'
+                  ],
+                  time: '4 seconds',
+                  errors: '<0.1% error rate'
+                }}
+                savings={{
+                  time: '99.8%',
+                  accuracy: '+7.9%'
+                }}
+              />
+            )}
+          </div>
+        )}
 
         {/* Control Breakdown */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

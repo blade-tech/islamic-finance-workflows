@@ -215,6 +215,13 @@ export interface CCMPodOutput extends PodOutput {
     expected_value: any
     severity: 'low' | 'medium' | 'high' | 'critical'
   }>
+  summary?: {
+    total_tested: number
+    passed: number
+    failed: number
+    warnings: number
+    test_duration_seconds: number
+  }
 }
 
 // Pod #3: Product/Process Gatekeeping
