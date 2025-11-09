@@ -74,11 +74,12 @@ const scenes = [
     sceneId: 'rent-gating',
     name: 'Rent Gating ⭐ SHOWSTOPPER',
     icon: Lock,
-    description: 'Hard gate blocks rent until usufruct delivered (AAOIFI SS-9 4/1/3)',
+    description: '2 AI Pods: Evidence Intake + Gatekeeping (91% time savings)',
     url: '/qatar-ijarah/rent-gating',
     color: 'bg-red-50 border-red-200',
     iconColor: 'text-red-600',
-    featured: true
+    featured: true,
+    aiPods: 2
   },
   {
     id: 6,
@@ -105,10 +106,11 @@ const scenes = [
     sceneId: 'grc-dashboard',
     name: 'GRC Dashboard',
     icon: LineChart,
-    description: '7 KPI tiles with click-through to audit trails',
+    description: '1 AI Pod: CCM Monitoring (99.8% time savings) + 7 KPIs',
     url: '/qatar-ijarah/grc-dashboard',
     color: 'bg-teal-50 border-teal-200',
-    iconColor: 'text-teal-600'
+    iconColor: 'text-teal-600',
+    aiPods: 1
   },
   {
     id: 9,
@@ -221,7 +223,105 @@ export default function QatarIjarahLanding() {
         </Card>
       </div>
 
-      {/* 8 Scenes Grid */}
+      {/* AI Pods Showcase */}
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <h2 className="text-2xl font-bold">3 Agentic Pods Deployed</h2>
+            <p className="text-sm text-muted-foreground">HITL-first AI automation with 95%+ time savings</p>
+          </div>
+          <Button asChild>
+            <Link href="/qatar-ijarah/ai-control-center">
+              <Brain className="w-4 h-4 mr-2" />
+              See All Pods in Action
+            </Link>
+          </Button>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-cyan-50">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <Badge className="bg-blue-600 text-xs">Pod #1</Badge>
+                <Badge variant="outline" className="text-xs">Event-Driven</Badge>
+              </div>
+              <CardTitle className="text-lg mt-2">Evidence Intake</CardTitle>
+              <CardDescription className="text-xs">OCR + Hash Validation</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Time Saved:</span>
+                  <span className="font-semibold">8.5 min/doc</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Accuracy:</span>
+                  <span className="font-semibold">98% OCR</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Integrated:</span>
+                  <span className="font-semibold">Scene 5</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-orange-300 bg-gradient-to-br from-orange-50 to-amber-50">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <Badge className="bg-orange-600 text-xs">Pod #2</Badge>
+                <Badge variant="outline" className="text-xs">Scheduled</Badge>
+              </div>
+              <CardTitle className="text-lg mt-2">CCM Monitoring</CardTitle>
+              <CardDescription className="text-xs">Control Testing Engine</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Time Saved:</span>
+                  <span className="font-semibold">40 min → 4 sec</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Coverage:</span>
+                  <span className="font-semibold">15 controls</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Integrated:</span>
+                  <span className="font-semibold">Scene 8</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-pink-50">
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <Badge className="bg-purple-600 text-xs">Pod #3</Badge>
+                <Badge variant="outline" className="text-xs">Event-Driven</Badge>
+              </div>
+              <CardTitle className="text-lg mt-2">Gatekeeping</CardTitle>
+              <CardDescription className="text-xs">Precondition Validator</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <div className="text-xs space-y-1">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Time Saved:</span>
+                  <span className="font-semibold">5.5 min → 30 sec</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Savings:</span>
+                  <span className="font-semibold">91%</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Integrated:</span>
+                  <span className="font-semibold">Scene 5</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* 9 Scenes Grid */}
       <div>
         <h2 className="text-2xl font-bold mb-4">Demo Scenes</h2>
         <div className="grid grid-cols-4 gap-4">
@@ -235,9 +335,17 @@ export default function QatarIjarahLanding() {
                       <div className={`p-2 rounded-lg bg-white`}>
                         <Icon className={`w-6 h-6 ${scene.iconColor}`} />
                       </div>
-                      <Badge variant="outline" className="text-xs">
-                        Scene {scene.id}
-                      </Badge>
+                      <div className="flex flex-col gap-1 items-end">
+                        <Badge variant="outline" className="text-xs">
+                          Scene {scene.id}
+                        </Badge>
+                        {scene.aiPods && (
+                          <Badge className="text-xs bg-purple-600">
+                            <Brain className="w-3 h-3 mr-1" />
+                            {scene.aiPods} AI Pod{scene.aiPods > 1 ? 's' : ''}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
                     <CardTitle className="text-base">{scene.name}</CardTitle>
                   </CardHeader>
