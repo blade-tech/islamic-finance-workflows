@@ -61,13 +61,16 @@ export interface EscrowAccount {
   projectId: string
   accountNumber: string
   bankName: string
+  accountType: string
   balance: number // QAR
+  currency: string
   totalDeposits: number
   totalDisbursements: number
   retentionAmount: number // 10% of project value
   retentionReleased: boolean
 
   // Compliance
+  qcbCompliant: boolean
   lastReconciliationDate: string // ISO date
   nonCompliantDeposits: number
 }

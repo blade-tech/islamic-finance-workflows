@@ -58,6 +58,9 @@ interface IjarahStore {
   takafulPolicies: TakafulPolicy[]
   addTakafulPolicy: (policy: TakafulPolicy) => void
 
+  // Controls
+  ijarahControls: typeof qatarIjarahControls
+
   // Control Executions
   controlExecutions: ControlExecution[]
   executeControl: (execution: ControlExecution) => void
@@ -135,11 +138,14 @@ function generateDemoEscrowAccount(): EscrowAccount {
     projectId: 'project-alpha',
     accountNumber: 'ESC-QA-2024-001',
     bankName: 'Qatar Islamic Bank',
+    accountType: 'escrow',
     balance: 85000000, // QAR 85M
+    currency: 'QAR',
     totalDeposits: 90000000, // QAR 90M
     totalDisbursements: 5000000, // QAR 5M
     retentionAmount: 12000000, // 10% of QAR 120M
     retentionReleased: false,
+    qcbCompliant: true,
     lastReconciliationDate: new Date().toISOString().split('T')[0],
     nonCompliantDeposits: 0
   }
@@ -187,6 +193,7 @@ export const useIjarahStore = create<IjarahStore>((set, get) => ({
   rentGate: null,
   latePayments: [],
   takafulPolicies: [],
+  ijarahControls: qatarIjarahControls,
   controlExecutions: [],
   grcMetrics: null,
   sceneStatuses: {
