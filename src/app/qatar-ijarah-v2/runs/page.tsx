@@ -38,7 +38,7 @@ interface WorkflowRun {
 const mockWorkflowRuns: WorkflowRun[] = [
   {
     runId: 'run-pay-001',
-    workflowName: 'Payment Processing → PET Minting (Track A)',
+    workflowName: 'Payment Processing → Issue Payment Certificate',
     entityId: 'PAY-001',
     entityName: 'Ahmed Al-Thani - QAR 500,000 (Unit A1, M1)',
     status: 'blocked',
@@ -58,8 +58,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-2',
-        title: 'Sign CoV-VC',
-        description: 'Validator signs Certificate of Validation credential',
+        title: 'Sign Validation Certificate',
+        description: 'Authorization Officer signs Validation Certificate',
         status: 'done',
         actor: 'human',
         actorName: 'Sarah validator@qiib.qa',
@@ -69,8 +69,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-3',
-        title: 'Anchor to HCS',
-        description: 'Pod #7 posts CoV-VC hash to Hedera Consensus Service',
+        title: 'Record on Blockchain',
+        description: 'AI Assistant records Validation Certificate on blockchain',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-14T11:15:03Z',
@@ -78,8 +78,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-4',
-        title: 'Build Evidence Bundle',
-        description: 'Pod aggregates all payment evidence and metadata',
+        title: 'Collect Evidence Documents',
+        description: 'AI Assistant collects all payment documents and details',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-14T11:15:05Z',
@@ -87,8 +87,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-5',
-        title: 'Approve Mint Decision',
-        description: 'Pod #8 validates token config per DAR Article 9 & 12',
+        title: 'Approve Issuance Decision',
+        description: 'AI Assistant validates token settings per Regulations Article 9 Pod #8 validates token config per DAR Article 9 & 12 12',
         status: 'in_review',
         actor: 'human',
         actorName: 'Compliance Officer',
@@ -97,22 +97,22 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-6',
-        title: 'Mint HTS NFT',
-        description: 'Pod #9 creates Payment Evidence Token on Hedera',
+        title: 'Create Digital Token',
+        description: 'AI Assistant creates Payment Certificate as digital token',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-7',
-        title: 'Grant KYC & Transfer',
-        description: 'Associate investor account, grant KYC, transfer token',
+        title: 'Verify Identity Grant KYC & Transfer Transfer',
+        description: 'Link investor account, verify identity, transfer token',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-8',
-        title: 'Update Rights Register',
-        description: 'Link PET to off-chain rights ledger',
+        title: 'Update Rights Ledger',
+        description: 'Link Payment Certificate to off-chain rights ledger',
         status: 'todo',
         actor: 'agent'
       }
@@ -120,7 +120,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
   },
   {
     runId: 'run-pay-002',
-    workflowName: 'Payment Processing → PET Minting (Track A)',
+    workflowName: 'Payment Processing → Issue Payment Certificate',
     entityId: 'PAY-002',
     entityName: 'Fatima Al-Mansouri - QAR 500,000 (Unit B2, M1)',
     status: 'blocked',
@@ -130,8 +130,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
     steps: [
       {
         id: 'step-1',
-        title: 'Upload Evidence',
-        description: 'Evidence Custodian uploads 4 required documents',
+        title: 'Upload Documents',
+        description: 'Document Manager uploads 4 required documents',
         status: 'in_review',
         actor: 'human',
         actorName: 'Evidence Custodian',
@@ -140,50 +140,50 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-2',
-        title: 'Sign CoV-VC',
-        description: 'Validator signs Certificate of Validation credential',
+        title: 'Sign Validation Certificate',
+        description: 'Authorization Officer signs Validation Certificate',
         status: 'todo',
         actor: 'human'
       },
       {
         id: 'step-3',
-        title: 'Anchor to HCS',
-        description: 'Pod #7 posts CoV-VC hash to Hedera Consensus Service',
+        title: 'Record on Blockchain',
+        description: 'AI Assistant records Validation Certificate on blockchain',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-4',
-        title: 'Build Evidence Bundle',
-        description: 'Pod aggregates all payment evidence and metadata',
+        title: 'Collect Evidence Documents',
+        description: 'AI Assistant collects all payment documents and details',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-5',
-        title: 'Approve Mint Decision',
-        description: 'Pod #8 validates token config per DAR Article 9 & 12',
+        title: 'Approve Issuance Decision',
+        description: 'AI Assistant validates token settings per Regulations Article 9 Pod #8 validates token config per DAR Article 9 & 12 12',
         status: 'todo',
         actor: 'human'
       },
       {
         id: 'step-6',
-        title: 'Mint HTS NFT',
-        description: 'Pod #9 creates Payment Evidence Token on Hedera',
+        title: 'Create Digital Token',
+        description: 'AI Assistant creates Payment Certificate as digital token',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-7',
-        title: 'Grant KYC & Transfer',
-        description: 'Associate investor account, grant KYC, transfer token',
+        title: 'Verify Identity Grant KYC & Transfer Transfer',
+        description: 'Link investor account, verify identity, transfer token',
         status: 'todo',
         actor: 'agent'
       },
       {
         id: 'step-8',
-        title: 'Update Rights Register',
-        description: 'Link PET to off-chain rights ledger',
+        title: 'Update Rights Ledger',
+        description: 'Link Payment Certificate to off-chain rights ledger',
         status: 'todo',
         actor: 'agent'
       }
@@ -191,7 +191,7 @@ const mockWorkflowRuns: WorkflowRun[] = [
   },
   {
     runId: 'run-pay-003',
-    workflowName: 'Payment Processing → PET Minting (Track A)',
+    workflowName: 'Payment Processing → Issue Payment Certificate',
     entityId: 'PAY-003',
     entityName: 'Khalid Bin Rashid - QAR 500,000 (Unit C3, M1)',
     status: 'completed',
@@ -211,8 +211,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-2',
-        title: 'Sign CoV-VC',
-        description: 'Validator signs Certificate of Validation credential',
+        title: 'Sign Validation Certificate',
+        description: 'Authorization Officer signs Validation Certificate',
         status: 'done',
         actor: 'human',
         completedAt: '2025-01-13T10:00:00Z',
@@ -220,8 +220,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-3',
-        title: 'Anchor to HCS',
-        description: 'Pod #7 posts CoV-VC hash to Hedera Consensus Service',
+        title: 'Record on Blockchain',
+        description: 'AI Assistant records Validation Certificate on blockchain',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-13T10:00:02Z',
@@ -229,8 +229,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-4',
-        title: 'Build Evidence Bundle',
-        description: 'Pod aggregates all payment evidence and metadata',
+        title: 'Collect Evidence Documents',
+        description: 'AI Assistant collects all payment documents and details',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-13T10:00:04Z',
@@ -238,8 +238,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-5',
-        title: 'Approve Mint Decision',
-        description: 'Pod #8 validates token config per DAR Article 9 & 12',
+        title: 'Approve Issuance Decision',
+        description: 'AI Assistant validates token settings per Regulations Article 9 Pod #8 validates token config per DAR Article 9 & 12 12',
         status: 'done',
         actor: 'human',
         completedAt: '2025-01-13T11:30:00Z',
@@ -247,8 +247,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-6',
-        title: 'Mint HTS NFT',
-        description: 'Pod #9 creates Payment Evidence Token on Hedera',
+        title: 'Create Digital Token',
+        description: 'AI Assistant creates Payment Certificate as digital token',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-13T11:30:02Z',
@@ -256,8 +256,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-7',
-        title: 'Grant KYC & Transfer',
-        description: 'Associate investor account, grant KYC, transfer token',
+        title: 'Verify Identity Grant KYC & Transfer Transfer',
+        description: 'Link investor account, verify identity, transfer token',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-13T11:30:03Z',
@@ -265,8 +265,8 @@ const mockWorkflowRuns: WorkflowRun[] = [
       },
       {
         id: 'step-8',
-        title: 'Update Rights Register',
-        description: 'Link PET to off-chain rights ledger',
+        title: 'Update Rights Ledger',
+        description: 'Link Payment Certificate to off-chain rights ledger',
         status: 'done',
         actor: 'agent',
         completedAt: '2025-01-13T11:30:04Z',
@@ -295,7 +295,7 @@ export default function WorkflowRunsPage() {
       case 'running':
         return <Badge className="bg-blue-600">Running</Badge>
       case 'blocked':
-        return <Badge className="bg-orange-600">Blocked (HITL)</Badge>
+        return <Badge className="bg-orange-600">Waiting for Approval</Badge>
       case 'failed':
         return <Badge variant="destructive">Failed</Badge>
     }
@@ -401,7 +401,7 @@ export default function WorkflowRunsPage() {
           {/* Page Header */}
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900">Workflow Runs</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Process Tracking</h2>
               <p className="text-sm text-gray-600 mt-1">
                 Track all active and completed workflow executions
               </p>
@@ -415,7 +415,7 @@ export default function WorkflowRunsPage() {
               <SelectContent>
                 <SelectItem value="all">All Runs</SelectItem>
                 <SelectItem value="running">Active (Running + Blocked)</SelectItem>
-                <SelectItem value="blocked">Blocked (HITL)</SelectItem>
+                <SelectItem value="blocked">Waiting for Approval</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
               </SelectContent>
             </Select>
@@ -428,7 +428,7 @@ export default function WorkflowRunsPage() {
               <p className="text-2xl font-bold text-gray-900">{runs.length}</p>
             </div>
             <div className="bg-white p-4 rounded-lg border shadow-sm">
-              <p className="text-sm text-gray-600">Blocked (HITL)</p>
+              <p className="text-sm text-gray-600">Waiting for Approval</p>
               <p className="text-2xl font-bold text-orange-600">
                 {runs.filter(r => r.status === 'blocked').length}
               </p>

@@ -74,7 +74,7 @@ const scenes = [
     sceneId: 'rent-gating',
     name: 'Rent Gating ⭐ SHOWSTOPPER',
     icon: Lock,
-    description: '2 AI Pods: Evidence Intake + Gatekeeping (91% time savings)',
+    description: '2 AI Pods: Document Processing + Gatekeeping (91% time savings)',
     url: '/qatar-ijarah/rent-gating',
     color: 'bg-red-50 border-red-200',
     iconColor: 'text-red-600',
@@ -106,7 +106,7 @@ const scenes = [
     sceneId: 'grc-dashboard',
     name: 'GRC Dashboard',
     icon: LineChart,
-    description: '1 AI Pod: CCM Monitoring (99.8% time savings) + 7 KPIs',
+    description: '1 AI Pod: Compliance Checking (99.8% time savings) + 7 KPIs',
     url: '/qatar-ijarah/grc-dashboard',
     color: 'bg-teal-50 border-teal-200',
     iconColor: 'text-teal-600',
@@ -167,7 +167,7 @@ export default function QatarIjarahLanding() {
             <Button size="lg" className="bg-white text-purple-600 hover:bg-white/90" asChild>
               <Link href="/qatar-ijarah/rent-gating">
                 <Lock className="w-5 h-5 mr-2" />
-                Start with Showstopper (Scene 5)
+                Start with Showstopper (Section 5)
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
@@ -180,7 +180,7 @@ export default function QatarIjarahLanding() {
             <Button size="lg" variant="outline" className="border-yellow-400 bg-yellow-400/20 text-white hover:bg-yellow-400/30" asChild>
               <Link href="/qatar-ijarah-v2">
                 <Sparkles className="w-5 h-5 mr-2" />
-                Try V2: Task-First UX
+                Try V2: Task View
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
@@ -234,7 +234,7 @@ export default function QatarIjarahLanding() {
       <div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold">3 Agentic Pods Deployed</h2>
+            <h2 className="text-2xl font-bold">3 AI Assistants Deployed</h2>
             <p className="text-sm text-muted-foreground">HITL-first AI automation with 95%+ time savings</p>
           </div>
           <Button asChild>
@@ -248,10 +248,10 @@ export default function QatarIjarahLanding() {
           <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-cyan-50">
             <CardHeader>
               <div className="flex items-start justify-between">
-                <Badge className="bg-blue-600 text-xs">Pod #1</Badge>
+                <Badge className="bg-blue-600 text-xs">Assistant #1</Badge>
                 <Badge variant="outline" className="text-xs">Event-Driven</Badge>
               </div>
-              <CardTitle className="text-lg mt-2">Evidence Intake</CardTitle>
+              <CardTitle className="text-lg mt-2">Document Processing</CardTitle>
               <CardDescription className="text-xs">OCR + Hash Validation</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -266,7 +266,7 @@ export default function QatarIjarahLanding() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Integrated:</span>
-                  <span className="font-semibold">Scene 5</span>
+                  <span className="font-semibold">Section 5</span>
                 </div>
               </div>
             </CardContent>
@@ -275,10 +275,10 @@ export default function QatarIjarahLanding() {
           <Card className="border-2 border-orange-300 bg-gradient-to-br from-orange-50 to-amber-50">
             <CardHeader>
               <div className="flex items-start justify-between">
-                <Badge className="bg-orange-600 text-xs">Pod #2</Badge>
+                <Badge className="bg-orange-600 text-xs">Assistant #2</Badge>
                 <Badge variant="outline" className="text-xs">Scheduled</Badge>
               </div>
-              <CardTitle className="text-lg mt-2">CCM Monitoring</CardTitle>
+              <CardTitle className="text-lg mt-2">Compliance Checking</CardTitle>
               <CardDescription className="text-xs">Control Testing Engine</CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
@@ -293,7 +293,7 @@ export default function QatarIjarahLanding() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Integrated:</span>
-                  <span className="font-semibold">Scene 8</span>
+                  <span className="font-semibold">Section 8</span>
                 </div>
               </div>
             </CardContent>
@@ -302,7 +302,7 @@ export default function QatarIjarahLanding() {
           <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-pink-50">
             <CardHeader>
               <div className="flex items-start justify-between">
-                <Badge className="bg-purple-600 text-xs">Pod #3</Badge>
+                <Badge className="bg-purple-600 text-xs">Assistant #3</Badge>
                 <Badge variant="outline" className="text-xs">Event-Driven</Badge>
               </div>
               <CardTitle className="text-lg mt-2">Gatekeeping</CardTitle>
@@ -320,7 +320,7 @@ export default function QatarIjarahLanding() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground">Integrated:</span>
-                  <span className="font-semibold">Scene 5</span>
+                  <span className="font-semibold">Section 5</span>
                 </div>
               </div>
             </CardContent>
@@ -330,7 +330,7 @@ export default function QatarIjarahLanding() {
 
       {/* 9 Scenes Grid */}
       <div>
-        <h2 className="text-2xl font-bold mb-4">Demo Scenes</h2>
+        <h2 className="text-2xl font-bold mb-4">Demo Sections</h2>
         <div className="grid grid-cols-4 gap-4">
           {scenes.map(scene => {
             const Icon = scene.icon
@@ -344,7 +344,7 @@ export default function QatarIjarahLanding() {
                       </div>
                       <div className="flex flex-col gap-1 items-end">
                         <Badge variant="outline" className="text-xs">
-                          Scene {scene.id}
+                          Section {scene.id}
                         </Badge>
                         {scene.aiPods && (
                           <Badge className="text-xs bg-purple-600">
@@ -375,7 +375,7 @@ export default function QatarIjarahLanding() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Badge className="bg-yellow-600">NEW</Badge>
-                <CardTitle>V2: Task-First UX Now Available</CardTitle>
+                <CardTitle>V2: Task View Now Available</CardTitle>
               </div>
               <CardDescription>
                 Same demo, two different interaction models - compare and choose
@@ -394,12 +394,12 @@ export default function QatarIjarahLanding() {
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-blue-500" />
-                V1: Scene-Based UX (Current Page)
+                V1: Section-Based View (Current Page)
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-0.5">✓</span>
-                  <span>Explore 9 interactive scenes</span>
+                  <span>Explore 9 interactive sections</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-blue-500 mt-0.5">✓</span>
@@ -418,7 +418,7 @@ export default function QatarIjarahLanding() {
             <div>
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-yellow-600" />
-                V2: Task-First UX (Task Inbox)
+                V2: Task View (Task Inbox)
               </h3>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li className="flex items-start gap-2">
@@ -427,15 +427,15 @@ export default function QatarIjarahLanding() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-600 mt-0.5">✓</span>
-                  <span><strong>Workflow Runs</strong> - Track execution progress</span>
+                  <span><strong>Process Tracking</strong> - Track execution progress</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-600 mt-0.5">✓</span>
-                  <span><strong>Big Picture Map</strong> - High-level metrics</span>
+                  <span><strong>Overview Dashboard</strong> - High-level metrics</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-600 mt-0.5">✓</span>
-                  <span>Progressive disclosure + AI reasoning visible</span>
+                  <span>Show details on demand + See AI decisions</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-yellow-600 mt-0.5">✓</span>

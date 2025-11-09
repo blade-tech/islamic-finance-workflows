@@ -16,14 +16,14 @@ import { CheckSquare, Workflow, Map, ArrowLeft, User } from 'lucide-react'
 
 const navigation = [
   { name: 'My Tasks', href: '/qatar-ijarah-v2/tasks', icon: CheckSquare },
-  { name: 'Workflow Runs', href: '/qatar-ijarah-v2/runs', icon: Workflow },
-  { name: 'Big Picture', href: '/qatar-ijarah-v2/map', icon: Map },
+  { name: 'Process Tracking', href: '/qatar-ijarah-v2/runs', icon: Workflow },
+  { name: 'Overview Dashboard', href: '/qatar-ijarah-v2/map', icon: Map },
 ]
 
 const roles = [
-  { value: 'validator', label: 'Validator', description: 'Sign CoV-VCs' },
-  { value: 'compliance', label: 'Compliance Officer', description: 'Approve mints' },
-  { value: 'evidence', label: 'Evidence Custodian', description: 'Upload documents' },
+  { value: 'validator', label: 'Authorization Officer', description: 'Sign Validation Certificates' },
+  { value: 'compliance', label: 'Compliance Officer', description: 'Approve issuance' },
+  { value: 'evidence', label: 'Document Manager', description: 'Upload documents' },
   { value: 'manager', label: 'Project Manager', description: 'View all' },
 ]
 
@@ -56,7 +56,7 @@ export default function QatarIjarahV2Layout({
               <div>
                 <h1 className="text-xl font-bold text-gray-900 flex items-center">
                   Qatar Ijārah V2
-                  <Badge className="ml-2 bg-purple-600">Task-First UX</Badge>
+                  <Badge className="ml-2 bg-purple-600">Task View</Badge>
                 </h1>
                 <p className="text-xs text-gray-600">Pearl Towers Project</p>
               </div>

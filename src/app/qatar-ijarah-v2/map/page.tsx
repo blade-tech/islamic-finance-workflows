@@ -40,7 +40,7 @@ export default function BigPictureMapPage() {
   const topBlockers = [
     {
       id: 1,
-      issue: 'Validator approval pending for 3 CoV-VCs',
+      issue: 'Authorization Officer approval pending for 3 Validation Certificates',
       count: 3,
       severity: 'high',
       avgWaitTime: '2.5 hours',
@@ -52,13 +52,13 @@ export default function BigPictureMapPage() {
       count: 2,
       severity: 'medium',
       avgWaitTime: '4 hours',
-      recommendation: 'Automate evidence intake from banking API'
+      recommendation: 'Automate document collection from bank system'
     }
   ]
 
   const workflowMetrics = [
     {
-      workflowName: 'Payment Processing → PET Minting (Track A)',
+      workflowName: 'Payment Processing → Issue Payment Certificate',
       totalRuns: 15,
       completed: 12,
       blocked: 2,
@@ -73,7 +73,7 @@ export default function BigPictureMapPage() {
   const podPerformance = [
     {
       podId: 'evidence-intake',
-      podName: 'Evidence Intake Pod',
+      podName: 'Document Processing Assistant',
       executionCount: 45,
       avgDuration: '2.1 sec',
       successRate: 100,
@@ -81,7 +81,7 @@ export default function BigPictureMapPage() {
     },
     {
       podId: 'hcs-anchor',
-      podName: 'HCS Anchor Pod',
+      podName: 'Blockchain Recording Assistant',
       executionCount: 12,
       avgDuration: '2.3 sec',
       successRate: 100,
@@ -89,7 +89,7 @@ export default function BigPictureMapPage() {
     },
     {
       podId: 'hts-mint-deliver',
-      podName: 'HTS Mint & Deliver Pod',
+      podName: 'Token Creation Assistant',
       executionCount: 12,
       avgDuration: '3.1 sec',
       successRate: 100,
@@ -125,7 +125,7 @@ export default function BigPictureMapPage() {
         <Card className="border-2 border-orange-200 bg-orange-50">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Blocked (HITL)</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">Waiting for Approval</CardTitle>
               <Clock className="h-4 w-4 text-orange-600" />
             </div>
           </CardHeader>
@@ -138,7 +138,7 @@ export default function BigPictureMapPage() {
         <Card className="border-2 border-red-200 bg-red-50">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-medium text-gray-700">Over SLA</CardTitle>
+              <CardTitle className="text-sm font-medium text-gray-700">Overdue</CardTitle>
               <AlertTriangle className="h-4 w-4 text-red-600" />
             </div>
           </CardHeader>
@@ -146,7 +146,7 @@ export default function BigPictureMapPage() {
             <p className="text-3xl font-bold text-red-900">{stats.overSLA}</p>
             <p className="text-xs text-green-600 mt-1 flex items-center">
               <CheckCircle2 className="h-3 w-3 mr-1" />
-              All within SLA
+              All on time
             </p>
           </CardContent>
         </Card>
@@ -174,7 +174,7 @@ export default function BigPictureMapPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <TrendingUp className="h-5 w-5 mr-2 text-green-600" />
-                Weekly Throughput
+                Tasks Completed This Week
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -226,7 +226,7 @@ export default function BigPictureMapPage() {
             <CardHeader>
               <CardTitle className="flex items-center">
                 <Zap className="h-5 w-5 mr-2 text-purple-600" />
-                AI Pod Performance
+                AI Assistant Performance
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -236,13 +236,13 @@ export default function BigPictureMapPage() {
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <p className="font-semibold text-gray-900">{pod.podName}</p>
-                        <p className="text-xs text-gray-600">Executed {pod.executionCount} times</p>
+                        <p className="text-xs text-gray-600">Used {pod.executionCount} times</p>
                       </div>
                       <Badge className="bg-green-600">{pod.successRate}%</Badge>
                     </div>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div>
-                        <p className="text-gray-600">Avg Duration</p>
+                        <p className="text-gray-600">Average Time</p>
                         <p className="font-semibold text-gray-900">{pod.avgDuration}</p>
                       </div>
                       <div>
@@ -353,18 +353,18 @@ export default function BigPictureMapPage() {
                   {/* Performance Metrics */}
                   <div className="pt-3 border-t space-y-2">
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">Avg Duration</span>
+                      <span className="text-gray-600">Average Time</span>
                       <span className="font-semibold text-gray-900">{workflow.avgDuration}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-600">SLA Compliance</span>
+                      <span className="text-gray-600">On-Time Performance</span>
                       <span className="font-semibold text-green-600">{workflow.slaCompliance}%</span>
                     </div>
                   </div>
 
                   {/* SLA Progress Bar */}
                   <div>
-                    <p className="text-xs text-gray-600 mb-1">SLA Compliance Rate</p>
+                    <p className="text-xs text-gray-600 mb-1">On-Time Performance Rate</p>
                     <div className="w-full h-2 bg-gray-200 rounded-full">
                       <div
                         className="h-2 bg-green-600 rounded-full"
@@ -393,7 +393,7 @@ export default function BigPictureMapPage() {
               </Button>
               <Button className="w-full justify-start" variant="outline">
                 <Target className="h-4 w-4 mr-2" />
-                Configure SLA Alerts
+                Configure Deadline Alerts
               </Button>
             </CardContent>
           </Card>

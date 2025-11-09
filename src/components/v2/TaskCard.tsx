@@ -23,7 +23,7 @@ export interface TaskCardProps {
   stepNumber: number
   totalSteps: number
   severity: 'low' | 'medium' | 'high' | 'critical'
-  slaDueAt: string
+  deadlineAt: string
   primaryAction: 'APPROVE_REJECT' | 'UPLOAD' | 'REVIEW'
   why: string
   policyClause?: string
@@ -51,7 +51,7 @@ export function TaskCard({
   stepNumber,
   totalSteps,
   severity,
-  slaDueAt,
+  deadlineAt,
   primaryAction,
   why,
   policyClause,
@@ -69,7 +69,7 @@ export function TaskCard({
   // Calculate time remaining
   const timeRemaining = () => {
     const now = new Date()
-    const due = new Date(slaDueAt)
+    const due = new Date(deadlineAt)
     const diff = due.getTime() - now.getTime()
     const hours = Math.floor(diff / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
@@ -180,7 +180,7 @@ export function TaskCard({
 
           {showChainOfThought && chainOfThought && (
             <div className="mt-3 p-4 bg-purple-50 rounded-lg border border-purple-200 space-y-3">
-              <p className="text-xs font-semibold text-purple-900">AI CHAIN OF THOUGHT:</p>
+              <p className="text-xs font-semibold text-purple-900">AI REASONING STEPS:</p>
               {chainOfThought.map((item, idx) => (
                 <div key={idx} className="border-l-2 border-purple-300 pl-3">
                   <p className="text-xs font-semibold text-gray-800">{item.step}</p>
@@ -221,7 +221,7 @@ export function TaskCard({
             className="flex items-center text-sm font-semibold text-blue-700 hover:text-blue-900 w-full"
           >
             <FileText className="h-4 w-4 mr-2" />
-            EVIDENCE ({evidenceRefs.length} items):
+            DOCUMENTS ({evidenceRefs.length} items):
             {showEvidence ? (
               <ChevronDown className="h-4 w-4 ml-auto" />
             ) : (

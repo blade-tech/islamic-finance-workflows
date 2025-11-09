@@ -20,7 +20,7 @@ interface Task {
   stepNumber: number
   totalSteps: number
   severity: 'low' | 'medium' | 'high' | 'critical'
-  slaDueAt: string
+  deadlineAt: string
   primaryAction: 'APPROVE_REJECT' | 'UPLOAD' | 'REVIEW'
   why: string
   policyClause?: string
@@ -39,30 +39,30 @@ interface Task {
   assignedRoles: string[]
 }
 
-// Generate PET workflow tasks
-function generatePETWorkflowTasks(): Task[] {
+// Generate Payment Certificate workflow tasks
+function generatePaymentCertificateWorkflowTasks(): Task[] {
   const now = new Date()
   const fourHoursFromNow = new Date(now.getTime() + 4 * 60 * 60 * 1000).toISOString()
   const twoHoursFromNow = new Date(now.getTime() + 2 * 60 * 60 * 1000).toISOString()
 
   return [
-    // Task 1: Validator approves CoV-VC
+    // Task 1: Authorization Officer approves Validation Certificate
     {
       taskId: 'validate-cov-pay-001',
-      title: 'Sign Certificate of Validation (Payment PAY-001)',
-      workflowName: 'Payment Processing → PET Minting (Track A)',
+      title: 'Sign Validation Certificate (Payment PAY-001)',
+      workflowName: 'Payment Processing → Issue Payment Certificate',
       stepNumber: 2,
       totalSteps: 8,
       severity: 'high',
-      slaDueAt: fourHoursFromNow,
+      deadlineAt: fourHoursFromNow,
       primaryAction: 'APPROVE_REJECT',
-      why: 'Confirm payment ownership and issue CoV-VC per QFC DAR Article 19 (Validation Services). The Certificate of Validation is a W3C Verifiable Credential that proves the investor owns the contractual right to receive a Payment Evidence Token.',
-      policyClause: 'QFC Digital Asset Regulations 2024, Article 12(2): "The owner must receive a certificate of validation confirming their ownership of the contractual right before a token generation request can be made." Article 19: "Validation services must verify evidence and issue certificates in accordance with TSP Guidelines."',
+      why: 'Confirm payment ownership and issue Validation Certificate per QFC Digital Asset Regulations Article 19 (Validation Services). The Validation Certificate proves the investor owns the contractual right to receive a Payment Certificate.',
+      policyClause: 'QFC Digital Asset Regulations 2024, Article 12(2): "The owner must receive a certificate of validation confirming their ownership of the contractual right before a token generation request can be made." Article 19: "Validation services must verify evidence and issue certificates in accordance with Token Issuer Guidelines."',
       aiReasoning: [
         'Payment verified: QAR 500,000 received from Ahmed Al-Thani (Account: 0.0.100001)',
         'Bank reference validated: TT12345678 matches contract milestone M1 (Escrow Wiring)',
         'Milestone confirmed: M1 - QAR 500,000 due on 2025-01-15, received 2025-01-14',
-        'Investor DID verified: did:hedera:testnet:buyer-001 (KYC complete)',
+        'Investor Digital ID verified: did:hedera:testnet:buyer-001 (Identity Verification complete)',
         'Evidence bundle complete: 4 documents uploaded and hashed',
         'Contract reference valid: ctr_Alpha_01 (Pearl Towers - Unit A1)',
         'No duplicate payments detected for this milestone'
@@ -88,9 +88,9 @@ function generatePETWorkflowTasks(): Task[] {
         },
         {
           step: '4. Check Investor Identity',
-          check: 'Payer DID matches contract buyer',
+          check: 'Payer Digital ID matches contract buyer',
           result: 'pass',
-          evidence: 'did:hedera:testnet:buyer-001 (KYC: ✓ | AML: ✓)'
+          evidence: 'did:hedera:testnet:buyer-001 (Identity Verified ✓ | Anti-Money Laundering ✓)'
         },
         {
           step: '5. Validate Evidence Bundle',
@@ -100,7 +100,7 @@ function generatePETWorkflowTasks(): Task[] {
         },
         {
           step: '6. Check for Duplicates',
-          check: 'No prior CoV-VC issued for this payment',
+          check: 'No prior Validation Certificate issued for this payment',
           result: 'pass',
           evidence: 'Database query: 0 matches for payment_id=PAY-001'
         }
@@ -130,51 +130,51 @@ function generatePETWorkflowTasks(): Task[] {
       assignedRoles: ['validator']
     },
 
-    // Task 2: Compliance approves PET mint
+    // Task 2: Compliance approves Payment Certificate issuance
     {
       taskId: 'approve-mint-pay-001',
-      title: 'Approve PET Mint Decision (Payment PAY-001)',
-      workflowName: 'Payment Processing → PET Minting (Track A)',
+      title: 'Approve Payment Certificate Issuance (Payment PAY-001)',
+      workflowName: 'Payment Processing → Issue Payment Certificate',
       stepNumber: 5,
       totalSteps: 8,
       severity: 'critical',
-      slaDueAt: twoHoursFromNow,
+      deadlineAt: twoHoursFromNow,
       primaryAction: 'APPROVE_REJECT',
-      why: 'Validate that the Payment Evidence Token configuration complies with QFC DAR Article 9 (not a means of payment) and Article 12 (token generation steps). This is the final compliance gate before minting the HTS NFT on Hedera.',
-      policyClause: 'QFC Digital Asset Regulations 2024, Article 9: "A token that evidences a contractual right shall not be treated as a means of payment if it is not transferable except in accordance with the underlying contract." Article 12(1): "Token generation must follow the sequence: (a) certificate of validation, (b) generation request, (c) mint and deliver." Article 20: "Token Service Providers must implement KYC, freeze, pause, and wipe controls."',
+      why: 'Validate that the Payment Certificate settings comply with QFC Digital Asset Regulations Article 9 (not a means of payment) and Article 12 (token generation steps). This is the final compliance check before issuing the digital token.',
+      policyClause: 'QFC Digital Asset Regulations 2024, Article 9: "A token that evidences a contractual right shall not be treated as a means of payment if it is not transferable except in accordance with the underlying contract." Article 12(1): "Token generation must follow the sequence: (a) certificate of validation, (b) generation request, (c) issue and deliver." Article 20: "Token Issuers must implement identity verification, transfer lock, emergency stop, and reversal controls."',
       aiReasoning: [
-        'DAR Article 9 compliant: Token is non-transferable (freeze_default=true, no secondary market)',
-        'DAR Article 12 compliant: CoV-VC issued → Anchored to HCS → Mint request generated',
-        'HCS anchor confirmed: Topic 0.0.12345, Sequence 100432, Consensus timestamp recorded',
-        'Token config validated: KYC required, Freeze enabled, Pause enabled, Wipe enabled',
-        'Investor KYC complete: did:hedera:testnet:buyer-001 verified on 2025-01-10',
+        'Regulations Article 9 compliant: Token cannot be transferred or sold',
+        'Regulations Article 12 compliant: Validation Certificate issued → Recorded on Blockchain → Issuance request created',
+        'Blockchain record confirmed: Topic 0.0.12345, Sequence 100432, Officially timestamped',
+        'Token settings validated: Identity check required, Transfer lock enabled, Emergency stop enabled, Reversal option enabled',
+        'Investor identity verification complete: did:hedera:testnet:buyer-001 verified on 2025-01-10',
         'Rights register updated: Entry rr://alpha/ctr_Alpha_01/m1/PAY-001 reserved',
-        'No conflicting mint requests for this payment'
+        'No conflicting issuance requests for this payment'
       ],
       chainOfThought: [
         {
-          step: '1. Check DAR Article 9 (Not Means of Payment)',
-          check: 'Token config prevents use as payment instrument',
+          step: '1. Check Regulations Article 9 (Not Means of Payment)',
+          check: 'Token settings prevent use as payment instrument',
           result: 'pass',
-          evidence: 'transfer_restrictions=kyc_only | freeze_default=true'
+          evidence: 'Cannot be transferred or sold (security controls enabled)'
         },
         {
-          step: '2. Check DAR Article 12 (Generation Steps)',
-          check: 'CoV-VC → HCS anchor → Mint sequence followed',
+          step: '2. Check Regulations Article 12 (Generation Steps)',
+          check: 'Validation Certificate → Blockchain record → Issuance sequence followed',
           result: 'pass',
-          evidence: 'CoV-VC: ipfs://bafy2x7k... | HCS: 0.0.12345/100432'
+          evidence: 'Validation Cert: ipfs://bafy2x7k... | Blockchain: 0.0.12345/100432'
         },
         {
-          step: '3. Validate Token Controls (Article 20)',
-          check: 'KYC, Freeze, Pause, Wipe keys configured',
+          step: '3. Validate Security Controls (Article 20)',
+          check: 'Identity check, Transfer lock, Emergency stop, Reversal option configured',
           result: 'pass',
-          evidence: 'All 4 controls enabled per TSP Guidelines'
+          evidence: 'All 4 controls enabled per Token Issuer Guidelines'
         },
         {
-          step: '4. Verify Investor KYC',
-          check: 'Buyer account has valid KYC status',
+          step: '4. Verify Investor Identity',
+          check: 'Buyer account has valid identity verification',
           result: 'pass',
-          evidence: 'KYC completed 2025-01-10 | Status: Active'
+          evidence: 'Identity verification completed 2025-01-10 | Status: Active'
         },
         {
           step: '5. Check Rights Register',
@@ -183,31 +183,31 @@ function generatePETWorkflowTasks(): Task[] {
           evidence: 'Entry reserved: rr://alpha/ctr_Alpha_01/m1/PAY-001'
         },
         {
-          step: '6. Validate HCS Anchor',
-          check: 'CoV-VC hash matches HCS message',
+          step: '6. Validate Blockchain Record',
+          check: 'Validation Certificate hash matches blockchain message',
           result: 'pass',
-          evidence: 'HCS message hash: sha256:7b9f... (verified)'
+          evidence: 'Blockchain message hash: sha256:7b9f... (verified)'
         }
       ],
       evidenceRefs: [
         {
-          name: 'cov-vc-pay-001.json',
-          type: 'CoV-VC',
+          name: 'validation-cert-pay-001.json',
+          type: 'Validation Certificate',
           url: '/evidence/cov-vc-pay-001.json'
         },
         {
-          name: 'hcs-receipt-100432.json',
-          type: 'HCS Receipt',
+          name: 'blockchain-receipt-100432.json',
+          type: 'Blockchain Receipt',
           url: '/evidence/hcs-receipt-100432.json'
         },
         {
-          name: 'token-config-pet-receipt.json',
-          type: 'Token Config',
+          name: 'token-settings-payment-receipt.json',
+          type: 'Token Settings',
           url: '/evidence/token-config-pet-receipt.json'
         },
         {
-          name: 'investor-kyc-buyer-001.pdf',
-          type: 'KYC Certificate',
+          name: 'investor-identity-buyer-001.pdf',
+          type: 'Identity Verification Certificate',
           url: '/evidence/investor-kyc-buyer-001.pdf'
         },
         {
@@ -219,17 +219,17 @@ function generatePETWorkflowTasks(): Task[] {
       assignedRoles: ['compliance']
     },
 
-    // Task 3: Evidence upload (for Evidence Custodian role)
+    // Task 3: Evidence upload (for Document Manager role)
     {
       taskId: 'upload-evidence-pay-002',
-      title: 'Upload Payment Evidence (Payment PAY-002)',
-      workflowName: 'Payment Processing → PET Minting (Track A)',
+      title: 'Upload Payment Documents (Payment PAY-002)',
+      workflowName: 'Payment Processing → Issue Payment Certificate',
       stepNumber: 1,
       totalSteps: 8,
       severity: 'medium',
-      slaDueAt: new Date(now.getTime() + 6 * 60 * 60 * 1000).toISOString(),
+      deadlineAt: new Date(now.getTime() + 6 * 60 * 60 * 1000).toISOString(),
       primaryAction: 'UPLOAD',
-      why: 'Gather and upload the 4 required evidence documents for payment PAY-002 (Fatima Al-Mansouri, QAR 500,000, Milestone M1, Unit B2). This initiates the PET workflow.',
+      why: 'Gather and upload the 4 required documents for payment PAY-002 (Fatima Al-Mansouri, QAR 500,000, Milestone M1, Unit B2). This starts the Payment Certificate process.',
       policyClause: 'QFC Digital Asset Regulations 2024, Article 19(3): "Evidence must include bank proof, contract reference, milestone specification, and ERP reconciliation."',
       aiReasoning: [
         'Payment received: QAR 500,000 from Fatima Al-Mansouri (Account: 0.0.100002)',
@@ -244,19 +244,19 @@ function generatePETWorkflowTasks(): Task[] {
     // Task 4: Review dashboard (for Manager role)
     {
       taskId: 'review-pet-dashboard',
-      title: 'Review Weekly PET Issuance Report',
+      title: 'Review Weekly Payment Certificate Report',
       workflowName: 'Compliance Monitoring',
       stepNumber: 1,
       totalSteps: 1,
       severity: 'low',
-      slaDueAt: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString(),
+      deadlineAt: new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString(),
       primaryAction: 'REVIEW',
-      why: 'Review the weekly summary of Payment Evidence Tokens issued, including compliance metrics and reconciliation status.',
+      why: 'Review the weekly summary of Payment Certificates issued, including compliance metrics and reconciliation status.',
       aiReasoning: [
-        '12 PETs issued this week (target: 10-15)',
-        '100% DAR compliance rate maintained',
-        'Average processing time: 4.2 hours (under 6-hour SLA)',
-        '2 pending mint approvals (both within SLA)'
+        '12 Payment Certificates issued this week (target: 10-15)',
+        '100% regulatory compliance rate maintained',
+        'Average processing time: 4.2 hours (meets deadline requirements)',
+        '2 pending issuance approvals (both on time)'
       ],
       evidenceRefs: [
         {
@@ -274,12 +274,12 @@ export default function TasksPage() {
   const [allTasks, setAllTasks] = useState<Task[]>([])
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([])
   const [currentRole, setCurrentRole] = useState<string>('compliance')
-  const [sortBy, setSortBy] = useState<'severity' | 'sla' | 'workflow'>('severity')
+  const [sortBy, setSortBy] = useState<'severity' | 'deadline' | 'process'>('severity')
   const [filterStatus, setFilterStatus] = useState<'all' | 'critical' | 'overdue'>('all')
 
   // Load tasks on mount
   useEffect(() => {
-    const tasks = generatePETWorkflowTasks()
+    const tasks = generatePaymentCertificateWorkflowTasks()
     setAllTasks(tasks)
   }, [])
 
@@ -300,7 +300,7 @@ export default function TasksPage() {
     if (filterStatus === 'critical') {
       filtered = filtered.filter(t => t.severity === 'critical')
     } else if (filterStatus === 'overdue') {
-      filtered = filtered.filter(t => new Date(t.slaDueAt) < new Date())
+      filtered = filtered.filter(t => new Date(t.deadlineAt) < new Date())
     }
 
     // Sort tasks
@@ -308,8 +308,8 @@ export default function TasksPage() {
       if (sortBy === 'severity') {
         const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 }
         return severityOrder[a.severity] - severityOrder[b.severity]
-      } else if (sortBy === 'sla') {
-        return new Date(a.slaDueAt).getTime() - new Date(b.slaDueAt).getTime()
+      } else if (sortBy === 'deadline') {
+        return new Date(a.deadlineAt).getTime() - new Date(b.deadlineAt).getTime()
       } else {
         return a.workflowName.localeCompare(b.workflowName)
       }
@@ -336,9 +336,9 @@ export default function TasksPage() {
   }
 
   const roleDisplayNames: Record<string, string> = {
-    validator: 'Validator',
+    validator: 'Authorization Officer',
     compliance: 'Compliance Officer',
-    evidence: 'Evidence Custodian',
+    evidence: 'Document Manager',
     manager: 'Project Manager'
   }
 
@@ -363,8 +363,8 @@ export default function TasksPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="severity">Sort by Severity</SelectItem>
-              <SelectItem value="sla">Sort by SLA</SelectItem>
-              <SelectItem value="workflow">Sort by Workflow</SelectItem>
+              <SelectItem value="deadline">Sort by Deadline</SelectItem>
+              <SelectItem value="process">Sort by Process</SelectItem>
             </SelectContent>
           </Select>
 
@@ -411,7 +411,7 @@ export default function TasksPage() {
           <p className="text-sm text-gray-600">Due Soon (&lt; 4h)</p>
           <p className="text-2xl font-bold text-orange-600">
             {filteredTasks.filter(t => {
-              const diff = new Date(t.slaDueAt).getTime() - new Date().getTime()
+              const diff = new Date(t.deadlineAt).getTime() - new Date().getTime()
               return diff < 4 * 60 * 60 * 1000
             }).length}
           </p>
