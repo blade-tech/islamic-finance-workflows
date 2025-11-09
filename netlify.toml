@@ -2,11 +2,12 @@
 # NETLIFY CONFIGURATION - ZERO-CONFIG NEXT.JS DEPLOYMENT
 # ============================================================================
 # Islamic Finance Workflows - Next.js 14 App Router Demo
-# Netlify auto-detects Next.js and uses OpenNext adapter - no configuration needed
-# Last updated: 2025-11-08 - Clean rebuild after removing .netlify directory
+# Netlify auto-detects Next.js and uses Essential Next.js plugin
+# DO NOT specify publish directory - Netlify handles it automatically
 
 [build]
   command = "npm run build"
+  # Note: No publish directory needed - Netlify's Next.js plugin handles deployment
 
-  [build.environment]
-    NODE_VERSION = "20"
+[build.environment]
+  NODE_VERSION = "20"
