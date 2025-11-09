@@ -22,7 +22,8 @@ import {
   FileSignature,
   LineChart,
   Sparkles,
-  ArrowRight
+  ArrowRight,
+  Brain
 } from 'lucide-react'
 import { useIjarahStore } from '@/lib/qatar-ijarah/ijarah-store'
 import { getControlStats } from '@/lib/qatar-ijarah/ijarah-controls'
@@ -108,6 +109,17 @@ const scenes = [
     url: '/qatar-ijarah/grc-dashboard',
     color: 'bg-teal-50 border-teal-200',
     iconColor: 'text-teal-600'
+  },
+  {
+    id: 9,
+    sceneId: 'ai-control-center',
+    name: 'AI Control Center ⚡',
+    icon: Brain,
+    description: '3 Agentic Pods working together - 95% time savings with HITL',
+    url: '/qatar-ijarah/ai-control-center',
+    color: 'bg-purple-100 border-purple-300',
+    iconColor: 'text-purple-700',
+    featured: true
   }
 ]
 
@@ -146,7 +158,7 @@ export default function QatarIjarahLanding() {
           <p className="text-xl text-white/90 mb-6 max-w-3xl">
             Complete GRC automation for Ijārah off-plan construction financing.
             <br />
-            <strong>15 controls</strong> • <strong>3 regulators</strong> (QCB + QFCRA + AAOIFI) • <strong>8 scenes</strong> • <strong>100% automated</strong>
+            <strong>15 controls</strong> • <strong>3 regulators</strong> (QCB + QFCRA + AAOIFI) • <strong>9 scenes</strong> • <strong>3 AI pods</strong> • <strong>100% automated</strong>
           </p>
 
           <div className="flex gap-4">
@@ -158,9 +170,9 @@ export default function QatarIjarahLanding() {
               </Link>
             </Button>
             <Button size="lg" variant="outline" className="border-white/30 text-white hover:bg-white/10" asChild>
-              <Link href="/qatar-ijarah/project-setup">
-                <Building2 className="w-5 h-5 mr-2" />
-                Full 8-Scene Demo
+              <Link href="/qatar-ijarah/ai-control-center">
+                <Brain className="w-5 h-5 mr-2" />
+                AI Control Center ⚡
               </Link>
             </Button>
           </div>
