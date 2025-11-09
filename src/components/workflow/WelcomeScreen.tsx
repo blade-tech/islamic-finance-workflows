@@ -1,19 +1,19 @@
 'use client'
 
 /**
- * WELCOME SCREEN - 5-STAGE WORKFLOW EXPLANATION
+ * WELCOME SCREEN - 5-STAGE PROCESS EXPLANATION
  * =============================================
  * Educational landing page explaining ZeroH's 5-stage process.
  *
  * PURPOSE:
  * - Introduce users to the platform's capabilities
- * - Explain the end-to-end workflow visually
+ * - Explain the complete process visually
  * - Build confidence before starting
  *
  * 5 STAGES:
  * 1. Policy Intent - Define Islamic finance requirements
- * 2. Digitization - AI extracts workflows from documents
- * 3. Workflow Execution - AI + human collaboration
+ * 2. Digitization - AI extracts processes from documents
+ * 3. Process Execution - AI + human collaboration
  * 4. Verifiable Proofs - Guardian issues VP/VC and mints NFT
  * 5. Tokenization - Optional: Create tradeable tokens
  */
@@ -56,17 +56,17 @@ export default function WelcomeScreen() {
     {
       icon: Cpu,
       title: 'Digitization',
-      description: 'AI extracts workflows from documents',
-      details: 'Guardian methodology engine creates human and data workflows from policy documents',
+      description: 'AI extracts processes from documents',
+      details: 'Guardian methodology engine creates human and data processes from policy documents',
       gradient: 'from-blue-500 to-blue-600',
       iconBg: 'bg-blue-100',
       iconColor: 'text-blue-600'
     },
     {
       icon: Workflow,
-      title: 'Workflow Execution',
+      title: 'Process Execution',
       description: 'AI + human collaboration with checkpoints',
-      details: 'Execute workflows with multi-stakeholder collaboration, task tracking, and granular status monitoring',
+      details: 'Execute processes with multi-stakeholder collaboration, task tracking, and granular status monitoring',
       gradient: 'from-indigo-500 to-indigo-600',
       iconBg: 'bg-indigo-100',
       iconColor: 'text-indigo-600'

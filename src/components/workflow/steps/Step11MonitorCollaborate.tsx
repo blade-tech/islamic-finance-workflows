@@ -96,7 +96,7 @@ export function Step11MonitorCollaborate() {
           Deal Successfully Created
         </AlertTitle>
         <AlertDescription className="text-green-700">
-          Your workflow configuration has been deployed to Hedera Guardian and a new deal has been created for lifecycle management.
+          Your process configuration has been deployed to Hedera Guardian and a new deal has been created for lifecycle management.
           {dealId && (
             <div className="mt-2 font-mono text-sm">
               Deal ID: <span className="font-semibold">{dealId}</span>
@@ -197,7 +197,7 @@ export function Step11MonitorCollaborate() {
         <Info className="h-4 w-4" />
         <AlertTitle>Lifecycle Management Integration</AlertTitle>
         <AlertDescription>
-          This workflow has created a deal that connects to the compliance dashboard. You can return
+          This workflow has created a deal that connects to the compliance overview. You can return
           to the dashboard at any time to monitor progress, update deal status, or access lifecycle features.
         </AlertDescription>
       </Alert>

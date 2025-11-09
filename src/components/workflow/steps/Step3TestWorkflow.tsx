@@ -39,7 +39,7 @@ import {
   FileText
 } from 'lucide-react'
 
-// Mock workflow steps for Sukuk issuance (12 steps based on GUARDIAN_REDESIGN_PLAN.md)
+// Mock process steps for Sukuk issuance (12 steps based on GUARDIAN_REDESIGN_PLAN.md)
 const MOCK_WORKFLOW_STEPS = [
   { id: 1, name: 'Issuer submits application', duration: 2000 },
   { id: 2, name: 'Shariah board review', duration: 5000 },
@@ -192,7 +192,7 @@ export function Step3TestWorkflow() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold">Test Workflow</h2>
+        <h2 className="text-2xl font-bold">Test Process</h2>
         <p className="text-muted-foreground mt-1">
           Run a simulation to verify your workflow before launching on Hedera Blockchain
         </p>
@@ -270,7 +270,7 @@ export function Step3TestWorkflow() {
           <CardHeader>
             <CardTitle>Test Progress</CardTitle>
             <CardDescription>
-              Real-time execution of workflow steps
+              Real-time execution of process steps
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -359,7 +359,7 @@ export function Step3TestWorkflow() {
           <CardContent>
             <div className="bg-muted p-4 rounded-lg font-mono text-xs space-y-1 max-h-80 overflow-y-auto">
               <div className="text-muted-foreground">[00:00:00] Test run initialized</div>
-              <div className="text-muted-foreground">[00:00:00] Loading workflow configuration...</div>
+              <div className="text-muted-foreground">[00:00:00] Loading process configuration...</div>
               <div className="text-muted-foreground">[00:00:01] Configuration loaded successfully</div>
               {steps.map((step, idx) => {
                 if (step.status === 'pending') return null

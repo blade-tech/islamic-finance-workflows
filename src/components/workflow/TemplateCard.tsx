@@ -6,8 +6,8 @@
  * Displays a single Islamic finance template in a card format.
  *
  * USER-FACING TERMINOLOGY:
- * - "Template" (not "methodology")
- * - "Workflow steps" (not "policy steps")
+ * - "Process Template" (not "methodology")
+ * - "Process steps" (not "policy steps")
  * - Standards (AAOIFI, IIFM) mentioned directly
  */
 
@@ -70,11 +70,11 @@ export function TemplateCard({ template, selected, onClick, showStats = true }: 
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <FileCheck className="h-3 w-3" />
-              <span>{template.schemaCount} data schemas</span>
+              <span>{template.schemaCount} data formats</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Clock className="h-3 w-3" />
-              <span>{template.policySteps} workflow steps</span>
+              <span>{template.policySteps} process steps</span>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Users className="h-3 w-3" />

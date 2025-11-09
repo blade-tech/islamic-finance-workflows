@@ -3,7 +3,7 @@
 /**
  * WORKFLOW CONTAINER
  * ==================
- * Main workflow orchestrator for GRC-aligned Islamic finance deal configuration.
+ * Main process orchestrator for Compliance-aligned Islamic finance deal configuration.
  *
  * 11 WORKFLOW STEPS (V2 Jurisdiction-First Approach → Guardian Policy Execution):
  * 1.  Connect Sources              - Check backend services, connect to Graphiti
@@ -14,7 +14,7 @@
  * 6.  Sustainability & Impact (V2) - Optional ESG/sustainability framework
  * 7.  Configure Details            - Fill workflow parameters + optional document uploads
  * 8.  Review Policy Structure      - View Guardian policy (schemas, steps, roles) generated from config
- * 9.  Test Workflow                - Run Guardian dry run simulation (sandbox, not blockchain)
+ * 9.  Test Process                - Run Guardian dry run simulation (sandbox, not blockchain)
  * 10. Live Execution               - Deploy to Guardian & execute on Hedera Blockchain
  * 11. Monitor & Collaborate        - Track execution, collaborate with stakeholders
  *
@@ -33,7 +33,7 @@
  *
  * UX PATTERN:
  * - Human-in-the-loop (AI works → human guides)
- * - GRC-aligned compliance-first workflow
+ * - Compliance-aligned process
  * - Self-documenting steps with inline control activation previews
  * - Sandbox testing before production execution
  * - Real-time oversight and interruption capability
@@ -77,7 +77,7 @@ const STEPS = [
   { index: 5, title: 'Sustainability & Impact', component: Step6SustainabilityV2 },
   { index: 6, title: 'Configure Details', component: Step7ConfigureDetails },
   { index: 7, title: 'Review Policy Structure', component: Step8ReviewPolicyStructure },
-  { index: 8, title: 'Test Workflow', component: Step3TestWorkflow },
+  { index: 8, title: 'Test Process', component: Step3TestWorkflow },
   { index: 9, title: 'Live Execution', component: Step10LiveExecution },
   { index: 10, title: 'Monitor & Collaborate', component: Step11MonitorCollaborate },
 ]
@@ -171,7 +171,7 @@ export function WorkflowContainer() {
   if (!execution) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-muted-foreground">Initializing workflow...</p>
+        <p className="text-muted-foreground">Starting process...</p>
       </div>
     )
   }
@@ -206,7 +206,7 @@ export function WorkflowContainer() {
         return true // STRICT: validate form completion
       case 8: // Step 8: Review Policy Structure - allow proceed
         return true
-      case 9: // Step 9: Test Workflow - allow proceed
+      case 9: // Step 9: Test Process - allow proceed
         return true
       case 10: // Step 10: Live Execution - allow proceed to monitor
         return true
@@ -304,7 +304,7 @@ export function WorkflowContainer() {
                           }
                           ${isSkipped ? 'opacity-40 line-through' : ''}
                         `}
-                        title={isSkipped ? `Skipped for ${execution.workflowMode} mode` : undefined}
+                        title={isSkipped ? `Skipped for this process type` : undefined}
                       >
                         {step.index + 1}. {step.title}
                         {isSkipped && (

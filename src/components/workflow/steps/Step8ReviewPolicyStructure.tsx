@@ -174,7 +174,7 @@ export function Step8ReviewPolicyStructure() {
 
   const calculatePolicySteps = (): number => {
     if (!execution) return 0
-    let steps = 8 // Base workflow steps
+    let steps = 8 // Base process steps
     if (execution.isSecuritized) steps += 2
     if (execution.selectedTakaful?.enabled) steps += 2
     if (execution.selectedImpacts && execution.selectedImpacts.length > 0) {
@@ -239,7 +239,7 @@ export function Step8ReviewPolicyStructure() {
         <AlertTitle>Workflow Visualization</AlertTitle>
         <AlertDescription>
           This shows the BPMN workflow that will execute on Hedera Blockchain.
-          Click on workflow steps to view details, roles, and data requirements.
+          Click on process steps to view details, roles, and data requirements.
         </AlertDescription>
       </Alert>
 
@@ -489,8 +489,8 @@ export function Step8ReviewPolicyStructure() {
                           Real Guardian integration will show:
                         </p>
                         <ul className="text-xs space-y-1 mt-2 list-disc list-inside">
-                          <li>Input data schemas</li>
-                          <li>Output data schemas</li>
+                          <li>Input data formats</li>
+                          <li>Output data formats</li>
                           <li>Compliance checkpoints</li>
                           <li>Estimated duration</li>
                           <li>Cost estimation</li>

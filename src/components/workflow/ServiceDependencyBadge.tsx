@@ -1,7 +1,7 @@
 /**
  * SERVICE DEPENDENCY BADGE
  * ========================
- * Shows which backend services a feature requires.
+ * Shows which system services a feature requires.
  * Displays real-time status indicators next to each service.
  *
  * USAGE:
@@ -17,7 +17,7 @@ import { useWorkflowStore } from '@/lib/store'
 import { ServiceStatus, type ServiceName } from '@/lib/service-types'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
-// Special tag types (not backend services)
+// Special tag types (not system services)
 export type SpecialTag = 'R&D Phase' | 'Unknown'
 
 interface ServiceDependencyBadgeProps {

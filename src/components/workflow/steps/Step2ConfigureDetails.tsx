@@ -1145,7 +1145,7 @@ export function Step2ConfigureDetails() {
         <CardHeader>
           <CardTitle className="text-base">Basic Information</CardTitle>
           <CardDescription className="text-sm">
-            {currentFormConfig.name} - Core workflow parameters
+            {currentFormConfig.name} - Core process parameters
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

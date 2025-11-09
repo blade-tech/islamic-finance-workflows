@@ -1,7 +1,7 @@
 /**
  * SERVICE STATUS BUTTON
  * ======================
- * Floating button showing aggregated backend service status.
+ * Floating button showing aggregated system service status.
  *
  * WHAT THIS DOES:
  * - Shows a compact badge with overall service health
@@ -47,7 +47,7 @@ export function ServiceStatusButton() {
       <button
         onClick={() => setIsMonitorOpen(true)}
         className="fixed bottom-6 right-6 z-40 group"
-        aria-label="Open backend services monitor"
+        aria-label="Open system services monitor"
       >
         <div className="flex items-center gap-2 bg-background border border-border rounded-full shadow-lg px-4 py-2.5 hover:shadow-xl transition-all hover:scale-105">
           {/* Status Icon */}

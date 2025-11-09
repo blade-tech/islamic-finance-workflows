@@ -1,10 +1,10 @@
 /**
  * BACKEND SERVICE MONITOR
  * =======================
- * Comprehensive panel showing backend service status and configuration.
+ * Comprehensive panel showing system service status and configuration.
  *
  * WHAT THIS SHOWS:
- * - Real-time status of all 5 backend services
+ * - Real-time status of all 5 system services
  * - Individual MCP server status within MCP Proxy
  * - Service endpoints and what they're used for
  * - Backend URL configuration
@@ -159,7 +159,7 @@ export function BackendServiceMonitor({
             </div>
           </div>
           <CardDescription>
-            Monitor real-time connection status to backend services.
+            Monitor real-time connection status to system services.
             {servicesStatus?.lastGlobalCheck && (
               <span className="block mt-1 text-xs text-muted-foreground">
                 Last checked:{' '}
@@ -329,7 +329,7 @@ export function BackendServiceMonitor({
                         For Backend Developers
                       </p>
                       <p className="text-blue-800 dark:text-blue-200">
-                        This panel shows what backend services the frontend needs. When you
+                        This panel shows what system services the frontend needs. When you
                         implement a service, it will automatically turn green. The frontend
                         works in mock mode when services are unavailable.
                       </p>

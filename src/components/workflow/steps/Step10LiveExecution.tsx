@@ -537,7 +537,7 @@ export function Step10LiveExecution() {
               <AlertDescription className="space-y-2">
                 <p>
                   Once deployed to Hedera Blockchain, the policy becomes <strong>immutable</strong>.
-                  All workflow executions and participant signatures will be permanently recorded.
+                  All process executions and participant signatures will be permanently recorded.
                 </p>
                 <ul className="list-disc list-inside text-sm mt-2 space-y-1">
                   <li>Policy structure cannot be modified after deployment</li>

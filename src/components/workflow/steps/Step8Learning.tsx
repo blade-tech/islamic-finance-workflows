@@ -25,7 +25,7 @@ export function Step8Learning() {
         <Info className="h-4 w-4" />
         <AlertTitle>What's Happening in Step 8</AlertTitle>
         <AlertDescription>
-          Review extracted learnings that convert your open code notes to axial code improvements. These will enhance future workflow executions.
+          Review extracted learnings that convert your open code notes to axial code improvements. These will enhance future process executions.
         </AlertDescription>
       </Alert>
 
