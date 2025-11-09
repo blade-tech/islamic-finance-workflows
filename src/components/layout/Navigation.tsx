@@ -38,7 +38,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet, Shield } from 'lucide-react'
+import { LayoutDashboard, Home, Users, Bell, Sparkles, Wallet, Shield, Lock } from 'lucide-react'
 
 export function Navigation() {
   const pathname = usePathname()
@@ -49,6 +49,7 @@ export function Navigation() {
   const isDashboardActive = pathname.startsWith('/ai-native') || pathname.startsWith('/dashboard')
   const isDigitalAssetsActive = pathname.startsWith('/digital-assets')
   const isGRCActive = pathname.startsWith('/obligations') || pathname.startsWith('/controls') || pathname.startsWith('/ssb') || pathname.startsWith('/sncr') || pathname.startsWith('/research')
+  const isQatarIjarahActive = pathname.startsWith('/qatar-ijarah')
 
   // Mock unread count (will be replaced with real data)
   const unreadNotifications = 0
@@ -115,6 +116,20 @@ export function Navigation() {
             <Link href="/obligations">
               <Shield className="h-4 w-4 mr-2" />
               <span className="hidden sm:inline">GRC</span>
+            </Link>
+          </Button>
+
+          {/* Qatar Ijārah Demo - Highlighted */}
+          <Button
+            variant={isQatarIjarahActive ? 'default' : 'outline'}
+            size="sm"
+            className={isQatarIjarahActive ? 'bg-green-600 hover:bg-green-700' : 'border-green-600 text-green-600 hover:bg-green-50'}
+            asChild
+          >
+            <Link href="/qatar-ijarah">
+              <Lock className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Qatar Ijārah</span>
+              <Badge className="ml-2 bg-yellow-500 text-yellow-900 text-xs px-1.5 py-0">DEMO</Badge>
             </Link>
           </Button>
         </div>
