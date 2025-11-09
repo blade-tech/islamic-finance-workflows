@@ -223,6 +223,35 @@ The application will be available at **http://localhost:3040**
 7. **Explore Digital Assets** - See 6 auto-seeded deals with Guardian certificates and ATS tokens
 8. **View Deal Details** - Individual deal compliance tracking and monitoring
 
+### Qatar Ijārah Demo (Recommended Starting Point)
+
+**URL**: http://localhost:3040/qatar-ijarah
+
+Explore **9 interactive scenes** demonstrating Qatar Ijārah off-plan construction financing with **3 AI-powered agentic pods**:
+
+**Key Scenes:**
+- **Scene 5 (Rent Gating)** - ⭐ SHOWSTOPPER with 2 AI pods:
+  - Upload 4 evidence documents → Pod #1 processes with OCR
+  - Click "Run AI Validation" → Pod #3 validates preconditions
+  - 91% time savings (5.5 min → 30 sec)
+
+- **Scene 8 (GRC Dashboard)** - 1 AI pod:
+  - Click "Run Control Tests" → Pod #2 tests all 15 controls
+  - See pass/fail findings with test logic
+  - 99.8% time savings (40 min → 4 sec)
+
+- **Scene 9 (AI Control Center)** - Flagship demo:
+  - Watch all 3 pods work together in automated sequence
+  - 95% time savings with 100% human oversight (HITL)
+  - Before/After metrics showing dramatic efficiency gains
+
+**What You'll See:**
+- HITL pattern (Human-In-The-Loop) - pods propose, humans approve
+- Real-time pod execution with thinking animation
+- Before/After metrics comparing manual vs AI-assisted workflows
+- Detailed control testing with pass/fail status
+- Evidence validation with OCR and hash verification
+
 ### Exploring Digital Assets
 
 **URL**: http://localhost:3040/digital-assets
@@ -521,20 +550,93 @@ kill <process_id>
 - 5 mock deals with full compliance data (deal-001 through deal-005)
 - Color-coded compliance status and progress tracking
 
-### Phase 6: Real Guardian Integration 🔄 IN PROGRESS
+### Phase 6: Qatar Ijārah Demo with Agentic Pods ✅ COMPLETE
+**Production-ready demo for Qatar Ijārah off-plan construction financing**
+
+**9 Interactive Scenes:**
+1. **Project Setup** - Create deal, upload approvals, generate Shariah Policy Manual
+2. **Escrow Wiring** - Connect escrow, validate deposits, per-unit sub-ledgers
+3. **Construction Progress** - Upload reports, gate disbursements
+4. **Contract Integrity** - Validate tri-split contracts (Istisnā', Wa'd, Ijārah)
+5. **Rent Gating ⭐ SHOWSTOPPER** - 2 AI Pods (Evidence Intake + Gatekeeping) • 91% time savings
+6. **Retention Tracker** - 10% retention locked (QCB Circular 2/2025)
+7. **Late Payment** - Block late fees, route to charity, SSB oversight
+8. **GRC Dashboard** - 1 AI Pod (CCM Monitoring) • 99.8% time savings • 7 KPIs
+9. **AI Control Center ⚡** - 3 pods working together • 95% time savings • HITL pattern
+
+**3 Agentic Pods Integrated:**
+- **Pod #1: Evidence Intake** (Scene 5) - OCR + hash validation • 8.5 min saved per document • 98% accuracy
+- **Pod #2: CCM Monitoring** (Scene 8) - Tests all 15 controls • 40 min → 4 sec (99.8% savings)
+- **Pod #3: Gatekeeping** (Scene 5) - Precondition validation • 5.5 min → 30 sec (91% savings)
+
+**Complete Pod Infrastructure:**
+- Type system for 11 pods (6 event-driven, 5 scheduled)
+- Reusable UI components (PodCard, BeforeAfterMetrics, ThinkingAnimation)
+- HITL-first pattern (L1 Autonomy: propose-only)
+- KISS 4-step workflow (Intake → Evaluate → Propose → HITL)
+- Comprehensive documentation (AGENTIC_PODS_ARCHITECTURE.md)
+
+**15 Controls Demonstrated:**
+- 6 Shariah controls (AAOIFI SS-9, FAS-28)
+- 6 Regulatory controls (QCB, QFCRA)
+- 3 Risk controls
+- All controls passed except IJR-A3 (late payment demo)
+
+### Phase 7: Payment Evidence Token (PET) Integration 🔄 IN PROGRESS
+**QFC Digital Asset Regulations 2024 (DAR) compliant tokenization**
+
+**Track A: Receipt-Only PET (Non-Transferable)**
+- HTS NFT per qualifying payment (non-transferable proof-of-payment)
+- Hedera Guardian integration for Certificates of Validation (CoV-VC)
+- HCS anchoring for immutable audit trail
+- Links to off-chain Rights Register (system of record)
+- Avoids Investment Token Rules (TOKN) - not a rights-bearing token
+
+**New Pods (Event-Driven):**
+- **Pod #7: HCS Anchor** (auto) - Posts CoV-VC + evidence hashes to Hedera Consensus Service
+- **Pod #8: PET Mint Decision** (HITL) - Compliance approves permitted-token status
+- **Pod #9: HTS Mint & Deliver** (auto) - Creates NFT, associates, grants KYC, transfers
+
+**Integration Points:**
+- **Scene 2 (Escrow Wiring)** - PET workflow when investor payments arrive
+- **Qatar Ijārah Digital Assets Page** - PET registry, reconciliation, kill-switch controls
+
+**Regulatory Compliance:**
+- DAR Article 12 (generation steps: CoV → request → mint)
+- DAR Article 19 (validation services)
+- DAR Article 20 (token generation)
+- TSP Guidelines (crypto/key mgmt, wallet controls, reconciliation)
+- QFC Data Protection Regulations (PII off-chain)
+
+**HTS Token Controls:**
+- KYC key (grant only to owner account)
+- Freeze default = true (non-transferable)
+- Pause key (global kill-switch)
+- Wipe key (reversal path)
+- No custom fees (avoid "means of payment" behavior)
+
+**Workflow (2 HITL Gates):**
+1. Payment Received → Build Evidence Bundle
+2. **[HITL]** Validator approves → Issue CoV-VC
+3. Anchor to HCS → Store hash on-chain
+4. **[HITL]** Compliance approves mint config
+5. Mint PET (HTS NFT) → Deliver to investor wallet
+6. Reconciliation: payments ↔ PETs ↔ contract ledger
+
+### Phase 8: Real Guardian Integration 📋 PLANNED
 - Live Hedera Guardian connection
 - Real policy deployment to testnet
 - NFT certificate minting (HTS)
 - Consensus service audit trail (HCS)
 - IPFS document storage
 
-### Phase 6: Asset Tokenization Studio 📋 PLANNED
+### Phase 9: Asset Tokenization Studio 📋 PLANNED
 - Alternative Token System (ATS) integration
 - Fractional ownership tokenization
 - Secondary market connectivity
 - Investor portal
 
-### Phase 7: Advanced Features 📋 PLANNED
+### Phase 10: Advanced Features 📋 PLANNED
 - Multi-party collaboration workflows
 - Real-time compliance monitoring
 - Advanced analytics dashboard
@@ -572,7 +674,7 @@ For issues and questions:
 
 ---
 
-**Current Phase**: Phase 4 Complete - 5-Pillar Compliance Framework & AI-Native Dashboard
-**Last Updated**: November 8, 2025
-**Version**: 1.4.0
-**Demo Status**: Fully functional with 5-pillar compliance tracking across 5 deals
+**Current Phase**: Phase 7 In Progress - Payment Evidence Token (PET) Integration
+**Last Updated**: November 9, 2025
+**Version**: 1.7.0
+**Demo Status**: Fully functional with 9 Qatar Ijārah scenes + 3 AI pods + PET integration (in progress)
