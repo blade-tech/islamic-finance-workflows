@@ -20,7 +20,7 @@ export interface QatarIjarahControl {
 
   // Execution
   trigger: string
-  frequency: 'event-driven' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annual'
+  frequency: 'event-driven' | 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annual' | 'ongoing'
   requiredEvidence: string[]
   owner: string
 
