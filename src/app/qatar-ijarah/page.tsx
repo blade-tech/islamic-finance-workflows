@@ -177,6 +177,13 @@ export default function QatarIjarahLanding() {
                 AI Control Center ⚡
               </Link>
             </Button>
+            <Button size="lg" variant="outline" className="border-yellow-400 bg-yellow-400/20 text-white hover:bg-yellow-400/30" asChild>
+              <Link href="/qatar-ijarah-v2">
+                <Sparkles className="w-5 h-5 mr-2" />
+                Try V2: Task-First UX
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
           </div>
         </div>
 
@@ -360,6 +367,85 @@ export default function QatarIjarahLanding() {
           })}
         </div>
       </div>
+
+      {/* V1 vs V2 UX Comparison */}
+      <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-300 ring-2 ring-yellow-400">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Badge className="bg-yellow-600">NEW</Badge>
+                <CardTitle>V2: Task-First UX Now Available</CardTitle>
+              </div>
+              <CardDescription>
+                Same demo, two different interaction models - compare and choose
+              </CardDescription>
+            </div>
+            <Button className="bg-yellow-600 hover:bg-yellow-700" asChild>
+              <Link href="/qatar-ijarah-v2">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Try V2 Now
+              </Link>
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold mb-3 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                V1: Scene-Based UX (Current Page)
+              </h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">✓</span>
+                  <span>Explore 9 interactive scenes</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">✓</span>
+                  <span>See full context and dashboards</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">✓</span>
+                  <span>Best for showcasing capabilities</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">✓</span>
+                  <span>Shows "after state" (results)</span>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-yellow-600" />
+                V2: Task-First UX (Task Inbox)
+              </h3>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-600 mt-0.5">✓</span>
+                  <span><strong>My Tasks</strong> - What do I need to do NOW?</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-600 mt-0.5">✓</span>
+                  <span><strong>Workflow Runs</strong> - Track execution progress</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-600 mt-0.5">✓</span>
+                  <span><strong>Big Picture Map</strong> - High-level metrics</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-600 mt-0.5">✓</span>
+                  <span>Progressive disclosure + AI reasoning visible</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-yellow-600 mt-0.5">✓</span>
+                  <span>Role-based filtering (Validator, Compliance, etc.)</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Demo vs Main App */}
       <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
