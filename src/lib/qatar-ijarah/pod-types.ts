@@ -30,6 +30,10 @@ export type PodId =
   | 'audit-binder'
   | 'rcsa-health'
   | 'training-attestation'
+  // PET (Payment Evidence Token) Pods
+  | 'hcs-anchor'
+  | 'pet-mint-decision'
+  | 'hts-mint-deliver'
 
 export type PodStatus =
   | 'idle'
@@ -601,5 +605,226 @@ export const POD_REGISTRY: Record<PodId, PodDefinition> = {
     controls_covered: [],
     tools_available: ['pattern-matcher', 'module-selector', 'assignment-tracker'],
     side_effects: ['assign_training', 'record_attestation']
+  },
+
+  // PET (Payment Evidence Token) Pods - QFC DAR 2024 Compliant
+  'hcs-anchor': {
+    id: 'hcs-anchor',
+    name: 'HCS Anchor Pod',
+    category: 'event-driven',
+    autonomy_level: 'L0', // Fully automated
+    description: 'Posts CoV-VC and evidence hashes to Hedera Consensus Service for immutable audit trail',
+    trigger: {
+      type: 'event',
+      event_types: ['cov-vc.issued', 'evidence.validated']
+    },
+    approvers: [], // No approval needed - deterministic anchoring
+    default_on_missing: 'deny',
+    control_pack_required: false,
+    controls_covered: ['IJR-C14'], // Audit Trail Control
+    tools_available: ['hcs-submit', 'hash-calculator', 'sequence-tracker'],
+    side_effects: ['create_hcs_receipt', 'update_evidence_bundle']
+  },
+
+  'pet-mint-decision': {
+    id: 'pet-mint-decision',
+    name: 'PET Mint Decision Pod',
+    category: 'event-driven',
+    autonomy_level: 'L1',
+    description: 'Validates permitted-token status and mint config per QFC DAR Article 9 and 12',
+    trigger: {
+      type: 'event',
+      event_types: ['hcs.anchored', 'evidence.complete']
+    },
+    approvers: ['Compliance Officer', 'Token Generator'],
+    default_on_missing: 'deny',
+    control_pack_required: true,
+    controls_covered: ['IJR-C14', 'IJR-C15'],
+    tools_available: ['token-config-validator', 'dar-checker', 'kyc-validator'],
+    side_effects: ['create_mint_approval']
+  },
+
+  'hts-mint-deliver': {
+    id: 'hts-mint-deliver',
+    name: 'HTS Mint & Deliver Pod',
+    category: 'event-driven',
+    autonomy_level: 'L0', // Fully automated after approval
+    description: 'Mints HTS NFT (PET), associates account, grants KYC, transfers to investor',
+    trigger: {
+      type: 'event',
+      event_types: ['mint.approved']
+    },
+    approvers: [], // Already approved by previous pod
+    default_on_missing: 'deny',
+    control_pack_required: false,
+    controls_covered: ['IJR-C14'],
+    tools_available: ['hts-create-nft', 'hts-associate', 'hts-grant-kyc', 'hts-transfer'],
+    side_effects: ['create_pet_token', 'update_rights_register', 'notify_investor']
   }
+}
+
+// ============================================================================
+// PET (PAYMENT EVIDENCE TOKEN) TYPES - QFC DAR 2024 COMPLIANT
+// ============================================================================
+
+/**
+ * HCS Anchor Pod Output
+ * Posts CoV-VC + evidence hashes to Hedera Consensus Service
+ */
+export interface HCSAnchorPodOutput extends PodOutput {
+  hcs_receipt?: {
+    topic_id: string           // e.g., "0.0.12345"
+    sequence_number: number     // e.g., 987654
+    consensus_timestamp: string // ISO 8601
+    running_hash: string        // HCS running hash for verification
+    message_hash: string        // Hash of submitted message
+  }
+}
+
+/**
+ * PET Mint Decision Pod Output
+ * Compliance approval for minting HTS NFT per QFC DAR Article 9 and 12
+ */
+export interface PETMintDecisionPodOutput extends PodOutput {
+  mint_config?: {
+    token_type: 'PET-Receipt' | 'PET-Rights'  // Track A or Track B
+    kyc_required: boolean                      // Always true
+    freeze_default: boolean                    // Always true (non-transferable)
+    pause_enabled: boolean                     // Always true (kill-switch)
+    wipe_enabled: boolean                      // Always true (reversal path)
+    transfer_restrictions: 'none' | 'whitelist' | 'kyc_only'
+    dar_article_9_compliant: boolean           // Not "means of payment"
+    dar_article_12_compliant: boolean          // CoV → request → mint steps followed
+  }
+  validation_checklist?: {
+    cov_vc_valid: boolean
+    evidence_complete: boolean
+    not_means_of_payment: boolean
+    permitted_token_status: boolean
+    investor_kyc_complete: boolean
+  }
+}
+
+/**
+ * HTS Mint & Deliver Pod Output
+ * Mints HTS NFT and delivers to investor wallet
+ */
+export interface HTSMintDeliverPodOutput extends PodOutput {
+  pet_token?: {
+    token_id: string           // Hedera token ID (e.g., "0.0.5555555")
+    serial_number: number       // NFT serial (e.g., 1, 2, 3...)
+    minted_at: string          // ISO 8601
+    delivered_to: string       // Hedera account ID (e.g., "0.0.123456")
+    hashscan_url: string       // Link to HashScan explorer
+
+    // Metadata (matches spec exactly)
+    metadata: {
+      version: '1.0'
+      type: 'PET-Receipt' | 'PET-Rights'
+      hcsTopic: string
+      hcsSequence: number
+      covVcCid: string                      // IPFS CID
+      evidenceCids: string[]                // IPFS CIDs
+      contractId: string
+      milestoneId: string
+      amount: string
+      currency: string
+      payerDID: string
+      validatorDID: string
+      rightsRegisterRef: string             // Track A only
+      issuedAt: string
+    }
+  }
+  rights_register_updated?: boolean
+}
+
+/**
+ * Payment Evidence Bundle (input to validation pod)
+ */
+export interface PaymentEvidenceBundle {
+  payment_id: string
+  contract_id: string
+  milestone_id: string
+  amount: string
+  currency: string
+  value_date: string
+  payer_did: string
+  payee_did: string
+  bank_ref: string
+
+  // Evidence artifacts
+  evidence: Array<{
+    type: 'BankProof' | 'ERPEntry' | 'ContractRef' | 'MilestoneProof'
+    filename: string
+    hash: string
+    uploaded_at: string
+  }>
+}
+
+/**
+ * Certificate of Validation VC (W3C VC v2.0)
+ */
+export interface CoVVC {
+  '@context': string[]
+  type: string[]
+  issuer: string           // Validator DID
+  credentialSubject: {
+    owner: string          // Payer DID
+    right: {
+      type: 'ContractualPerformanceCredit'
+      contractId: string
+      milestoneId: string
+      amount: string
+      currency: string
+    }
+  }
+  evidence: Array<{
+    type: string
+    hash: string
+  }>
+  issuanceDate: string
+  proof: {
+    type: string
+    created: string
+    verificationMethod: string
+    proofPurpose: string
+    jws?: string           // Signature
+  }
+}
+
+/**
+ * Mock PET for display
+ */
+export interface MockPET {
+  petId: string
+  type: 'PET-Receipt'      // Track A only for now
+  paymentId: string
+  contractId: string
+  milestoneId: string
+  amount: string
+  currency: string
+  payerDID: string
+  validatorDID: string
+
+  // HCS Anchor
+  hcsTopic: string
+  hcsSequence: number
+  consensusTimestamp: string
+
+  // CoV-VC
+  covVcCid: string
+  evidenceCids: string[]
+
+  // HTS Token
+  tokenId: string
+  serialNumber: number
+  mintedAt: string
+  deliveredTo: string
+  hashscanUrl: string
+
+  // Rights Register
+  rightsRegisterRef: string
+
+  // Status
+  status: 'minted' | 'pending' | 'failed'
 }
