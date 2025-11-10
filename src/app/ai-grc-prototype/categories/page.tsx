@@ -1,10 +1,21 @@
 'use client'
 
 /**
- * AI-NATIVE GRC UX PROTOTYPE - CATEGORIES PAGE
- * =============================================
- * Shows 5 Mudarabah-specific control categories with 8 controls total.
- * Controls are organized by AAOIFI SS-13 sections.
+ * AI-NATIVE GRC UX PROTOTYPE - VANTA-STYLE CATEGORIES PAGE
+ * =========================================================
+ * Three-panel layout inspired by Vanta's compliance dashboard structure
+ * while maintaining Islamic GRC's colorful, engaging visual design.
+ *
+ * LAYOUT STRUCTURE:
+ * - Left Sidebar: Category navigation with search and filters
+ * - Main Content: Controls list with completion metrics and expandable rows
+ * - Right Sidebar: Audit timeline and compliance metrics
+ *
+ * DESIGN PHILOSOPHY:
+ * - Vanta's clean organization + Islamic Finance's visual richness
+ * - Collapsed/expandable categories for better information hierarchy
+ * - Aggregate completion metrics at the top
+ * - Tab navigation for different views
  *
  * CATEGORIES:
  * 1. Capital Verification (1 control)
@@ -19,6 +30,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Input } from '@/components/ui/input'
 import {
   Accordion,
   AccordionContent,
@@ -31,9 +43,15 @@ import {
   ArrowRight,
   Bot,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   DollarSign,
+  FileText,
   FileX,
   Lock,
+  MoreHorizontal,
+  Plus,
+  Search,
   Shield,
   Sparkles,
   TrendingUp
@@ -46,7 +64,16 @@ import {
 
 export default function AIGRCCategoriesPage() {
   const router = useRouter()
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(['cat-capital'])
+  const [activeTab, setActiveTab] = useState<'overview' | 'controls' | 'updates'>('controls')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['cat-capital', 'cat-profit'])
+
+  // Calculate completion metrics
+  const totalControls = mudarabahControls.length
+  const passingControls = 7 // Mock: 7 out of 8 passing (one hard gate needs attention)
+  const completionPercentage = Math.round((passingControls / totalControls) * 100)
+  const hardGateControls = mudarabahControls.filter(c => c.isHardGate)
 
   const getIconForCategory = (iconName: string) => {
     const icons: Record<string, any> = {
@@ -60,32 +87,74 @@ export default function AIGRCCategoriesPage() {
   }
 
   const getColorClasses = (color: string) => {
-    const colors: Record<string, { border: string; bg: string; text: string; icon: string }> = {
-      blue: { border: 'border-blue-300', bg: 'bg-blue-50', text: 'text-blue-900', icon: 'text-blue-600' },
-      green: { border: 'border-green-300', bg: 'bg-green-50', text: 'text-green-900', icon: 'text-green-600' },
-      purple: { border: 'border-purple-300', bg: 'bg-purple-50', text: 'text-purple-900', icon: 'text-purple-600' },
-      orange: { border: 'border-orange-300', bg: 'bg-orange-50', text: 'text-orange-900', icon: 'text-orange-600' },
-      red: { border: 'border-red-300', bg: 'bg-red-50', text: 'text-red-900', icon: 'text-red-600' }
+    const colors: Record<string, { border: string; bg: string; text: string; icon: string; badge: string }> = {
+      blue: {
+        border: 'border-blue-300',
+        bg: 'bg-blue-50',
+        text: 'text-blue-900',
+        icon: 'text-blue-600',
+        badge: 'bg-blue-100 text-blue-700 border-blue-300'
+      },
+      green: {
+        border: 'border-green-300',
+        bg: 'bg-green-50',
+        text: 'text-green-900',
+        icon: 'text-green-600',
+        badge: 'bg-green-100 text-green-700 border-green-300'
+      },
+      purple: {
+        border: 'border-purple-300',
+        bg: 'bg-purple-50',
+        text: 'text-purple-900',
+        icon: 'text-purple-600',
+        badge: 'bg-purple-100 text-purple-700 border-purple-300'
+      },
+      orange: {
+        border: 'border-orange-300',
+        bg: 'bg-orange-50',
+        text: 'text-orange-900',
+        icon: 'text-orange-600',
+        badge: 'bg-orange-100 text-orange-700 border-orange-300'
+      },
+      red: {
+        border: 'border-red-300',
+        bg: 'bg-red-50',
+        text: 'text-red-900',
+        icon: 'text-red-600',
+        badge: 'bg-red-100 text-red-700 border-red-300'
+      }
     }
     return colors[color] || colors.blue
   }
 
+  const toggleCategory = (categoryId: string) => {
+    setExpandedCategories(prev =>
+      prev.includes(categoryId)
+        ? prev.filter(id => id !== categoryId)
+        : [...prev, categoryId]
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
-      {/* Header */}
-      <div className="bg-white border-b shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="flex items-center gap-3 mb-2">
-                <Bot className="h-8 w-8 text-purple-600" />
-                <h1 className="text-3xl font-bold text-gray-900">Mudarabah Compliance Categories</h1>
-              </div>
-              <p className="text-gray-600 text-sm">
-                8 controls from AAOIFI SS-13 across 5 categories • 1 hard gate
-              </p>
-            </div>
+      {/* Top Header with Navigation */}
+      <div className="bg-white border-b shadow-sm sticky top-0 z-10">
+        <div className="px-6 py-4">
+          {/* Top Bar */}
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
+              <Bot className="h-8 w-8 text-purple-600" />
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Mudarabah Compliance</h1>
+                <p className="text-sm text-gray-600">AAOIFI SS-13 • Qatar (QCB + QFCRA)</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-purple-50 border border-purple-200 rounded-lg">
+                <Sparkles className="h-4 w-4 text-purple-600" />
+                <span className="text-sm font-medium text-purple-700">Phase 2: Requirements</span>
+              </div>
               <Button
                 variant="outline"
                 onClick={() => router.push('/ai-grc-prototype')}
@@ -93,203 +162,394 @@ export default function AIGRCCategoriesPage() {
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back
               </Button>
-              <Badge className="bg-purple-600 text-sm px-3 py-1">
-                <Sparkles className="h-4 w-4 mr-1" />
-                Phase 2: Requirements
-              </Badge>
+              <Button variant="outline">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+              <Button className="bg-purple-600 hover:bg-purple-700">
+                <Plus className="h-4 w-4 mr-2" />
+                Create Control
+              </Button>
             </div>
+          </div>
+
+          {/* Tab Navigation */}
+          <div className="flex items-center gap-6 border-b -mb-4">
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === 'overview'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Overview
+            </button>
+            <button
+              onClick={() => setActiveTab('controls')}
+              className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === 'controls'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Controls
+            </button>
+            <button
+              onClick={() => setActiveTab('updates')}
+              className={`pb-4 px-2 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === 'updates'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Updates
+              <Badge className="ml-2 bg-purple-100 text-purple-700 text-xs">2</Badge>
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Configuration Summary */}
-        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-indigo-50">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-lg font-semibold text-purple-900 mb-2">Configuration</h3>
-                <div className="flex items-center gap-4 text-sm text-purple-700">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>Qatar (QCB + QFCRA)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>Mudarabah (Profit-Sharing)</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>AAOIFI SS-13</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <span>Green Sukuk</span>
-                  </div>
-                </div>
-              </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold text-purple-900">8</p>
-                <p className="text-xs text-purple-700">Controls</p>
+      {/* Three-Panel Layout */}
+      <div className="flex h-[calc(100vh-180px)]">
+        {/* LEFT SIDEBAR - Category Navigation */}
+        <div className="w-64 border-r bg-white overflow-y-auto">
+          <div className="p-4 space-y-4">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+              <Input
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 text-sm"
+              />
+            </div>
+
+            {/* Filter Header */}
+            <div className="pt-2">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                Requirement Categories
+              </h3>
+
+              {/* Category List */}
+              <div className="space-y-1">
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                    selectedCategory === null
+                      ? 'bg-purple-50 text-purple-700 font-medium'
+                      : 'text-gray-700 hover:bg-gray-50'
+                  }`}
+                >
+                  All Categories ({mudarabahCategories.length})
+                </button>
+
+                {mudarabahCategories.map((category) => {
+                  const colors = getColorClasses(category.color)
+                  const IconComponent = getIconForCategory(category.icon)
+
+                  return (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedCategory(category.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
+                        selectedCategory === category.id
+                          ? `${colors.bg} ${colors.text} font-medium`
+                          : 'text-gray-700 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <IconComponent className={`h-4 w-4 ${colors.icon}`} />
+                          <span className="truncate">{category.name}</span>
+                        </div>
+                        <span className="text-xs text-gray-500">{category.controlCount}</span>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Categories */}
-        <div className="space-y-6">
-          {mudarabahCategories.map((category, index) => {
-            const controls = getControlsByCategory(category.id)
-            const colors = getColorClasses(category.color)
-            const IconComponent = getIconForCategory(category.icon)
-
-            return (
-              <Card key={category.id} className={`border-2 ${colors.border}`}>
-                <CardHeader className={`${colors.bg}`}>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-full ${colors.bg} flex items-center justify-center border-2 ${colors.border}`}>
-                        <IconComponent className={`h-6 w-6 ${colors.icon}`} />
-                      </div>
-                      <div>
-                        <CardTitle className={`text-xl ${colors.text}`}>
-                          {index + 1}. {category.name}
-                        </CardTitle>
-                        <CardDescription className="text-sm mt-1">
-                          {category.description}
-                        </CardDescription>
-                      </div>
-                    </div>
-                    <Badge className={`${colors.bg} ${colors.text} border ${colors.border}`}>
-                      {category.controlCount} {category.controlCount === 1 ? 'control' : 'controls'}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-6">
-                  {/* Controls List */}
-                  <div className="space-y-3">
-                    {controls.map((control) => (
-                      <Card
-                        key={control.id}
-                        className={`cursor-pointer transition-all hover:shadow-md ${
-                          control.isHardGate ? 'border-2 border-red-400 bg-red-50' : 'border border-gray-200'
-                        }`}
-                        onClick={() => router.push(`/ai-grc-prototype/control/${control.id}`)}
-                      >
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <h4 className="font-semibold text-gray-900">{control.name}</h4>
-                                {control.isHardGate && (
-                                  <Badge className="bg-red-600 text-xs">
-                                    <Lock className="h-3 w-3 mr-1" />
-                                    HARD GATE
-                                  </Badge>
-                                )}
-                              </div>
-                              <p className="text-sm text-gray-600 mb-3">{control.description}</p>
-                              <div className="flex items-center gap-4 text-xs text-gray-500">
-                                <div className="flex items-center gap-1">
-                                  <Shield className="h-3 w-3" />
-                                  <span>{control.aaoifiSection}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <Badge variant="outline" className="text-xs">
-                                    {control.frequency}
-                                  </Badge>
-                                </div>
-                              </div>
-                            </div>
-                            <ArrowRight className="h-5 w-5 text-gray-400 ml-4 flex-shrink-0" />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )
-          })}
+          </div>
         </div>
 
-        {/* Hard Gates Summary */}
-        <Card className="mt-8 border-2 border-red-300 bg-gradient-to-r from-red-50 to-orange-50">
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Lock className="h-6 w-6 text-red-600" />
-              <CardTitle className="text-red-900">Hard Gates</CardTitle>
-            </div>
-            <CardDescription className="text-red-700">
-              These controls BLOCK workflow progression if they fail
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {mudarabahControls
-                .filter(c => c.isHardGate)
-                .map(control => (
-                  <Card
-                    key={control.id}
-                    className="border-2 border-red-300 cursor-pointer hover:shadow-md"
-                    onClick={() => router.push(`/ai-grc-prototype/control/${control.id}`)}
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h4 className="font-semibold text-red-900 mb-1">{control.name}</h4>
-                          <p className="text-sm text-red-700">{control.aaoifiSection}</p>
-                        </div>
-                        <ArrowRight className="h-5 w-5 text-red-600" />
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-            </div>
-          </CardContent>
-        </Card>
+        {/* MAIN CONTENT - Controls List */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-6 space-y-6">
+            {/* Completion Metrics */}
+            <Card className="border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-sm font-semibold text-purple-900 mb-1">Controls</h3>
+                    <div className="flex items-baseline gap-2 mb-3">
+                      <span className="text-4xl font-bold text-purple-900">{completionPercentage}%</span>
+                      <span className="text-sm text-purple-700">of controls have passing evidence</span>
+                    </div>
 
-        {/* Key Insights */}
-        <Card className="mt-8 border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-cyan-50">
-          <CardHeader>
-            <CardTitle className="text-blue-900">Key Insights</CardTitle>
-            <CardDescription className="text-blue-700">
-              What makes this contract-driven compliance different
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-blue-900">Contract-Specific</p>
-                  <p className="text-blue-700 text-xs">Controls from AAOIFI SS-13 Mudarabah, not generic GRC templates</p>
+                    {/* Progress Bars */}
+                    <div className="space-y-3">
+                      {/* Automated Tests Progress */}
+                      <div>
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="text-purple-700 font-medium">Automated tests</span>
+                          <span className="text-purple-600">{passingControls}/{totalControls} • {completionPercentage}%</span>
+                        </div>
+                        <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all"
+                            style={{ width: `${completionPercentage}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Documents Progress */}
+                      <div>
+                        <div className="flex items-center justify-between text-xs mb-1">
+                          <span className="text-purple-700 font-medium">Documents</span>
+                          <span className="text-purple-600">6/8 • 75%</span>
+                        </div>
+                        <div className="h-2 bg-purple-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all"
+                            style={{ width: '75%' }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Control Count */}
+                  <div className="text-center ml-8">
+                    <div className="text-5xl font-bold text-purple-900">{passingControls}</div>
+                    <div className="text-sm text-purple-700 font-medium">/ {totalControls} total</div>
+                  </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Controls by Category - Collapsed/Expandable */}
+            <div className="space-y-3">
+              {mudarabahCategories
+                .filter(cat => !selectedCategory || cat.id === selectedCategory)
+                .map((category, index) => {
+                  const controls = getControlsByCategory(category.id)
+                  const colors = getColorClasses(category.color)
+                  const IconComponent = getIconForCategory(category.icon)
+                  const isExpanded = expandedCategories.includes(category.id)
+
+                  // Mock control status
+                  const passingCount = category.id === 'cat-profit' ? 1 : controls.length
+                  const statusText = `${passingCount}/${controls.length} controls OK`
+
+                  return (
+                    <Card key={category.id} className="border-2 transition-shadow hover:shadow-md">
+                      {/* Category Header - Collapsible */}
+                      <div
+                        onClick={() => toggleCategory(category.id)}
+                        className="cursor-pointer"
+                      >
+                        <CardHeader className={`${colors.bg} border-b ${colors.border}`}>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3 flex-1">
+                              <div className={`w-10 h-10 rounded-lg ${colors.bg} flex items-center justify-center border-2 ${colors.border}`}>
+                                <IconComponent className={`h-5 w-5 ${colors.icon}`} />
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2">
+                                  <CardTitle className={`text-base ${colors.text}`}>
+                                    {category.name}
+                                  </CardTitle>
+                                  <Badge className={`${colors.badge} border text-xs`}>
+                                    {statusText}
+                                  </Badge>
+                                </div>
+                                <CardDescription className="text-xs mt-0.5">
+                                  {category.description}
+                                </CardDescription>
+                              </div>
+                            </div>
+
+                            {isExpanded ? (
+                              <ChevronDown className={`h-5 w-5 ${colors.icon}`} />
+                            ) : (
+                              <ChevronRight className={`h-5 w-5 ${colors.icon}`} />
+                            )}
+                          </div>
+                        </CardHeader>
+                      </div>
+
+                      {/* Expanded Controls List */}
+                      {isExpanded && (
+                        <CardContent className="pt-4">
+                          <div className="space-y-2">
+                            {controls.map((control) => (
+                              <Card
+                                key={control.id}
+                                className={`cursor-pointer transition-all hover:shadow-md ${
+                                  control.isHardGate ? 'border-2 border-red-400 bg-red-50' : 'border border-gray-200'
+                                }`}
+                                onClick={() => router.push(`/ai-grc-prototype/control/${control.id}`)}
+                              >
+                                <CardContent className="p-4">
+                                  <div className="flex items-start justify-between">
+                                    <div className="flex-1">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <h4 className="font-semibold text-gray-900 text-sm">{control.name}</h4>
+                                        {control.isHardGate && (
+                                          <Badge className="bg-red-600 text-white text-xs">
+                                            <Lock className="h-3 w-3 mr-1" />
+                                            HARD GATE
+                                          </Badge>
+                                        )}
+                                      </div>
+                                      <p className="text-xs text-gray-600 mb-2 line-clamp-2">{control.description}</p>
+                                      <div className="flex items-center gap-4 text-xs text-gray-500">
+                                        <div className="flex items-center gap-1">
+                                          <Shield className="h-3 w-3" />
+                                          <span>{control.aaoifiSection}</span>
+                                        </div>
+                                        <Badge variant="outline" className="text-xs">
+                                          {control.frequency}
+                                        </Badge>
+                                      </div>
+                                    </div>
+                                    <ArrowRight className="h-5 w-5 text-gray-400 ml-4 flex-shrink-0" />
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </CardContent>
+                      )}
+                    </Card>
+                  )
+                })}
+            </div>
+          </div>
+        </div>
+
+        {/* RIGHT SIDEBAR - Audit Timeline & Metrics */}
+        <div className="w-80 border-l bg-white overflow-y-auto">
+          <div className="p-4 space-y-6">
+            {/* Audit Timeline */}
+            <div>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-semibold text-gray-900">Audit Timeline</h3>
+                <Button variant="ghost" size="sm" className="text-xs text-purple-600">
+                  View audits
+                </Button>
               </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-blue-900">Hard Gates</p>
-                  <p className="text-blue-700 text-xs">Capital Maintenance §8/7 blocks profit distribution if capital impaired</p>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
+                <p className="text-sm text-blue-700">
+                  No audit scheduled. Contact your auditor to enter a date.
+                </p>
+              </div>
+
+              {/* Timeline visualization */}
+              <div className="mt-4 relative">
+                <div className="flex justify-between text-xs text-gray-500 mb-2">
+                  <span>Now</span>
+                  <span>Jan</span>
+                  <span>Mar</span>
+                  <span>May</span>
+                  <span>Jul</span>
+                  <span>Sep</span>
                 </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-blue-900">Conflict Resolution</p>
-                  <p className="text-blue-700 text-xs">Shows how QCB vs QFCRA differences are resolved (strictest wins)</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <CheckCircle2 className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-semibold text-blue-900">AI Assistant</p>
-                  <p className="text-blue-700 text-xs">Each task has dedicated AI helper with human approval (HITL)</p>
+                <div className="h-2 bg-gray-100 rounded-full relative">
+                  <div className="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-purple-600 rounded-full" style={{ left: '0%' }} />
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+
+            {/* Hard Gates Alert */}
+            {hardGateControls.length > 0 && (
+              <Card className="border-2 border-red-300 bg-red-50">
+                <CardHeader className="pb-3">
+                  <div className="flex items-center gap-2">
+                    <Lock className="h-5 w-5 text-red-600" />
+                    <CardTitle className="text-sm text-red-900">Hard Gates</CardTitle>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="text-xs text-red-700 mb-3">
+                    These controls BLOCK workflow progression if they fail
+                  </p>
+                  {hardGateControls.map(control => (
+                    <div
+                      key={control.id}
+                      onClick={() => router.push(`/ai-grc-prototype/control/${control.id}`)}
+                      className="bg-white border-2 border-red-300 rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow"
+                    >
+                      <h4 className="text-xs font-semibold text-red-900 mb-1">{control.name}</h4>
+                      <p className="text-xs text-red-700">{control.aaoifiSection}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Configuration Tags */}
+            <Card className="border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm text-purple-900">Configuration</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    <span className="text-purple-700">Qatar (QCB + QFCRA)</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    <span className="text-purple-700">Mudarabah (Profit-Sharing)</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    <span className="text-purple-700">AAOIFI SS-13</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs">
+                    <CheckCircle2 className="h-4 w-4 text-purple-600" />
+                    <span className="text-purple-700">Green Sukuk</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Key Insights */}
+            <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-cyan-50">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm text-blue-900">Key Insights</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-semibold text-blue-900">Contract-Specific</p>
+                      <p className="text-xs text-blue-700">Controls from AAOIFI SS-13 Mudarabah</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-semibold text-blue-900">Hard Gates</p>
+                      <p className="text-xs text-blue-700">Capital Maintenance blocks profit distribution</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-semibold text-blue-900">AI Assistant</p>
+                      <p className="text-xs text-blue-700">Each task has dedicated AI helper (HITL)</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
       </div>
     </div>
   )
