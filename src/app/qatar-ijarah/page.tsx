@@ -163,7 +163,7 @@ export default function QatarIjarahLanding() {
             <strong>15 controls</strong> • <strong>3 regulators</strong> (QCB + QFCRA + AAOIFI) • <strong>9 scenes</strong> • <strong>3 AI assistants</strong>
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <Button size="lg" className="bg-white text-purple-600 hover:bg-white/90" asChild>
               <Link href="/qatar-ijarah/rent-gating">
                 <Lock className="w-5 h-5 mr-2" />
@@ -181,6 +181,13 @@ export default function QatarIjarahLanding() {
               <Link href="/qatar-ijarah-v2">
                 <Sparkles className="w-5 h-5 mr-2" />
                 Try V2: Task View
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
+            <Button size="lg" variant="outline" className="border-purple-400 bg-purple-500/30 text-white hover:bg-purple-500/40" asChild>
+              <Link href="/ai-grc-prototype">
+                <Brain className="w-5 h-5 mr-2" />
+                🤖 AI GRC Prototype
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
