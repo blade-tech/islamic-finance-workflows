@@ -16,6 +16,8 @@ import type {
   WorkflowStep,
   Task,
   TaskPriority,
+  TaskStatus,
+  TaskEvidence,
 } from '@/lib/types/grc-demo-types'
 
 // ============================================================================
@@ -34,8 +36,21 @@ export function generateTasksFromWorkflows(workflows: Workflow[]): Task[] {
       // Determine priority based on hard gates and constraints
       const priority = determinePriority(step)
 
-      // Determine initial status (first task is pending, rest are not-started)
-      const status = index === 0 ? 'pending' : 'not-started'
+      // Determine initial status (first task is in-progress, rest are not-started)
+      const status: TaskStatus = index === 0 ? 'in-progress' : 'not-started'
+
+      // Convert RequiredEvidence to TaskEvidence format
+      const taskEvidence: TaskEvidence[] = step.requiredEvidence.map((evidence) => ({
+        type: evidence.type,
+        description: evidence.description,
+        isRequired: evidence.isRequired,
+        uploadedFiles: [],
+      }))
+
+      // Extract policy references from constraints
+      const policyReference = step.policyConstraints
+        .map((c) => c.source)
+        .join(', ') || 'N/A'
 
       // Create task from step
       const task: Task = {
@@ -50,13 +65,12 @@ export function generateTasksFromWorkflows(workflows: Workflow[]): Task[] {
         priority,
         dueDate: dueDate.toISOString(),
         createdAt: now.toISOString(),
-        requiredEvidence: step.requiredEvidence,
-        policyConstraints: step.policyConstraints,
-        dependencies: step.startAfter || [],
-        estimatedDurationDays: step.durationDays,
-        isHardGate: step.isHardGate,
-        approvalRequired: step.requiresApproval,
-        approvalRole: step.approvalRole,
+        requiredEvidence: taskEvidence,
+        requiresApproval: step.requiresApproval,
+        approvalStatus: step.requiresApproval ? 'pending' : undefined,
+        approver: step.approvalRole,
+        policyReference,
+        calendarExported: false,
       }
 
       tasks.push(task)
@@ -109,8 +123,8 @@ function determinePriority(step: WorkflowStep): TaskPriority {
     return 'high'
   }
 
-  // Default to normal priority
-  return 'normal'
+  // Default to medium priority
+  return 'medium'
 }
 
 // ============================================================================
@@ -135,31 +149,13 @@ function addBusinessDays(date: Date, days: number): Date {
 }
 
 // ============================================================================
-// HELPER: Update Task Dependencies
+// HELPER: Update Task Dependencies (Not used - Task type doesn't have dependencies)
 // ============================================================================
 
 export function updateTaskDependencies(tasks: Task[]): Task[] {
-  // Build a map of stepId → taskId
-  const stepToTaskMap = new Map<string, string>()
-  tasks.forEach((task) => {
-    stepToTaskMap.set(task.stepId, task.id)
-  })
-
-  // Update dependencies to use taskIds instead of stepIds
-  return tasks.map((task) => {
-    if (!task.dependencies || task.dependencies.length === 0) {
-      return task
-    }
-
-    const taskDependencies = task.dependencies
-      .map((stepId) => stepToTaskMap.get(stepId))
-      .filter((id): id is string => id !== undefined)
-
-    return {
-      ...task,
-      dependencies: taskDependencies,
-    }
-  })
+  // Task type doesn't have dependencies field, return as-is
+  // Dependencies are tracked via workflow step relationships
+  return tasks
 }
 
 // ============================================================================
@@ -169,18 +165,15 @@ export function updateTaskDependencies(tasks: Task[]): Task[] {
 export function getTaskStatistics(tasks: Task[]) {
   return {
     total: tasks.length,
-    pending: tasks.filter((t) => t.status === 'pending').length,
+    notStarted: tasks.filter((t) => t.status === 'not-started').length,
     inProgress: tasks.filter((t) => t.status === 'in-progress').length,
+    waitingApproval: tasks.filter((t) => t.status === 'waiting-approval').length,
     completed: tasks.filter((t) => t.status === 'completed').length,
     blocked: tasks.filter((t) => t.status === 'blocked').length,
     critical: tasks.filter((t) => t.priority === 'critical').length,
     high: tasks.filter((t) => t.priority === 'high').length,
-    normal: tasks.filter((t) => t.priority === 'normal').length,
-    hardGates: tasks.filter((t) => t.isHardGate).length,
-    requiresApproval: tasks.filter((t) => t.approvalRequired).length,
-    totalEstimatedDays: tasks.reduce(
-      (sum, t) => sum + (t.estimatedDurationDays || 0),
-      0
-    ),
+    medium: tasks.filter((t) => t.priority === 'medium').length,
+    low: tasks.filter((t) => t.priority === 'low').length,
+    requiresApproval: tasks.filter((t) => t.requiresApproval).length,
   }
 }
