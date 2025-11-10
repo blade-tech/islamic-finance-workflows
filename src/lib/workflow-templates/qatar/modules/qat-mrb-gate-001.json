@@ -1,0 +1,173 @@
+{
+  "id": "qat-mrb-gate-001",
+  "name": "Murabaha: Cost Disclosure (Hard Gate)",
+  "nameArabic": "المرابحة: الإفصاح عن التكلفة",
+  "category": "contract-gates",
+  "policySource": "AAOIFI FAS-28 §3",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["murabaha"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 1,
+  "description": "HARD GATE: Full transparency requirement - institution must disclose actual acquisition cost and profit markup separately to customer before Murabaha sale",
+  "steps": [
+    {
+      "id": "qat-mrb-gate-001-step-1",
+      "order": 1,
+      "title": "Prepare Cost Breakdown Statement",
+      "description": "Document actual acquisition cost of commodity/asset with supporting purchase invoices",
+      "assignedRole": "Finance Officer",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Purchase Invoice",
+          "description": "Original supplier invoice showing acquisition cost paid by institution",
+          "isRequired": true
+        },
+        {
+          "type": "Bank Transfer Confirmation",
+          "description": "Proof of payment to supplier for asset acquisition",
+          "isRequired": true
+        },
+        {
+          "type": "Additional Costs Documentation",
+          "description": "Any additional costs incurred (shipping, customs, storage) that are part of total cost",
+          "isRequired": false
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §3",
+          "constraint": "All costs forming the acquisition price must be documented and disclosed",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-mrb-gate-001-step-2",
+      "order": 2,
+      "title": "Calculate and Document Profit Markup",
+      "description": "Calculate profit margin/markup according to institution's pricing policy and document separately from cost",
+      "assignedRole": "Pricing Committee",
+      "durationDays": 1,
+      "startAfter": ["qat-mrb-gate-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Profit Margin Calculation",
+          "description": "Documented calculation showing profit percentage or amount added to cost",
+          "isRequired": true
+        },
+        {
+          "type": "Pricing Policy Reference",
+          "description": "Reference to institution's approved pricing policy justifying the markup",
+          "isRequired": true
+        },
+        {
+          "type": "Cost-Plus Statement",
+          "description": "Clear breakdown: [Cost] + [Profit Markup] = [Total Murabaha Price]",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §3",
+          "constraint": "Profit markup must be clearly separated from cost and cannot be hidden or bundled",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Pricing Committee",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mrb-gate-001-step-3",
+      "order": 3,
+      "title": "Disclose Cost and Profit to Customer",
+      "description": "Provide customer with full disclosure document showing: (1) Acquisition cost, (2) Profit markup, (3) Total Murabaha sale price",
+      "assignedRole": "Relationship Manager",
+      "durationDays": 1,
+      "startAfter": ["qat-mrb-gate-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "Cost Disclosure Document (Signed by Customer)",
+          "description": "Written disclosure showing cost breakdown, signed by customer acknowledging receipt",
+          "isRequired": true
+        },
+        {
+          "type": "Customer Acknowledgment",
+          "description": "Customer's written confirmation that they understand the cost, profit, and total price",
+          "isRequired": true
+        },
+        {
+          "type": "Disclosure Delivery Proof",
+          "description": "Proof that disclosure was provided before Murabaha sale contract was signed",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §3",
+          "constraint": "CRITICAL: Disclosure must occur BEFORE customer signs Murabaha sale contract",
+          "cannotModify": true
+        },
+        {
+          "source": "Consumer Protection Law",
+          "constraint": "Customer has right to full transparency on pricing components",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mrb-gate-001-step-4",
+      "order": 4,
+      "title": "Shariah Compliance Verification",
+      "description": "SCO verifies that cost disclosure requirement was met before Murabaha sale",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-mrb-gate-001-step-3"],
+      "requiredEvidence": [
+        {
+          "type": "Compliance Verification Report",
+          "description": "SCO confirmation that disclosure occurred before sale contract",
+          "isRequired": true
+        },
+        {
+          "type": "Timeline Evidence",
+          "description": "Timestamps showing: (1) Disclosure date < (2) Contract signing date",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-9",
+          "constraint": "Shariah Compliance Function must verify transparency requirement was met",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: Without full cost disclosure before sale, the Murabaha transaction violates AAOIFI FAS-28 §3 transparency requirements. This is a Shariah non-compliance risk (SNCR)."
+}

@@ -1,0 +1,170 @@
+{
+  "id": "qat-ssb-001",
+  "name": "Shariah Supervisory Board (SSB) Approval",
+  "nameArabic": "موافقة هيئة الرقابة الشرعية",
+  "category": "shariah-governance",
+  "policySource": "AAOIFI GS-1, QCB Shariah Governance Guidelines",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["ijarah", "murabaha", "mudaraba", "sukuk", "funds", "takaful", "musharaka"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 14,
+  "description": "Obtain Shariah Supervisory Board approval for new Islamic finance product structure and documentation",
+  "steps": [
+    {
+      "id": "qat-ssb-001-step-1",
+      "order": 1,
+      "title": "Prepare Product Proposal for SSB Review",
+      "description": "Compile comprehensive product documentation including structure, contracts, fatwa basis, and Shariah compliance analysis",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 3,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Product Structure Document",
+          "description": "Detailed description of product mechanics, cash flows, and Islamic finance contract types used",
+          "isRequired": true
+        },
+        {
+          "type": "Draft Contracts",
+          "description": "All customer-facing and operational contracts in Arabic and English",
+          "isRequired": true
+        },
+        {
+          "type": "Fatwa References",
+          "description": "Supporting fatwas from recognized scholars or Shariah boards for similar structures",
+          "isRequired": false
+        },
+        {
+          "type": "Shariah Compliance Analysis",
+          "description": "Internal analysis of how product meets AAOIFI/IFSB requirements",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-1 §6/1",
+          "constraint": "All new products must be reviewed by SSB before commercial launch",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-ssb-001-step-2",
+      "order": 2,
+      "title": "Submit Proposal to SSB Secretariat",
+      "description": "Formally submit product proposal to SSB secretariat with all supporting documentation",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-ssb-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Submission Letter",
+          "description": "Formal submission letter to SSB chairman requesting review",
+          "isRequired": true
+        },
+        {
+          "type": "Submission Receipt",
+          "description": "Acknowledgment from SSB secretariat with assigned review number",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "Internal Procedure",
+          "constraint": "Minimum 10 business days required for SSB review",
+          "cannotModify": false
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-ssb-001-step-3",
+      "order": 3,
+      "title": "SSB Review and Deliberation",
+      "description": "SSB members review product structure, contracts, and Shariah compliance. May require clarifications or modifications",
+      "assignedRole": "Shariah Supervisory Board",
+      "durationDays": 7,
+      "startAfter": ["qat-ssb-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "SSB Meeting Minutes",
+          "description": "Record of SSB discussion, questions raised, and deliberation points",
+          "isRequired": true
+        },
+        {
+          "type": "Clarification Requests",
+          "description": "Any requests from SSB for additional information or modifications",
+          "isRequired": false
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-5",
+          "constraint": "SSB must be independent - minimum 3 members with no conflicts of interest",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-ssb-001-step-4",
+      "order": 4,
+      "title": "Obtain SSB Resolution (Formal Approval)",
+      "description": "Receive formal SSB resolution approving product structure and contracts. This is a HARD GATE - product cannot proceed without SSB approval",
+      "assignedRole": "Shariah Supervisory Board",
+      "durationDays": 3,
+      "startAfter": ["qat-ssb-001-step-3"],
+      "requiredEvidence": [
+        {
+          "type": "SSB Resolution",
+          "description": "Formal written resolution signed by SSB members approving the product",
+          "isRequired": true
+        },
+        {
+          "type": "Conditions or Restrictions",
+          "description": "Any conditions, restrictions, or monitoring requirements imposed by SSB",
+          "isRequired": false
+        },
+        {
+          "type": "Approved Contracts",
+          "description": "Final version of contracts approved by SSB (marked as 'Shariah-approved')",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-1 §6/3",
+          "constraint": "SSB resolution is legally binding - product cannot launch without approval",
+          "cannotModify": true
+        },
+        {
+          "source": "QCB Regulation",
+          "constraint": "SSB approval must be obtained before any customer transactions",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Supervisory Board",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ]
+}

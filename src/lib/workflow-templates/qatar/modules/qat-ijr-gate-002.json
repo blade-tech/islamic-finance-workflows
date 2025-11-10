@@ -1,0 +1,139 @@
+{
+  "id": "qat-ijr-gate-002",
+  "name": "Ijarah: Delivery Before Rent (Critical Hard Gate)",
+  "nameArabic": "الإجارة: التسليم قبل الإيجار",
+  "category": "contract-gates",
+  "policySource": "AAOIFI SS-9 §4/4, QFCRA IBANK 1.3.12",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["ijarah"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 2,
+  "description": "CRITICAL GATE: Asset must be physically delivered and handed over to lessee before any rental payments can be collected. This is a fundamental Shariah requirement for Ijarah validity.",
+  "steps": [
+    {
+      "id": "qat-ijr-gate-002-step-1",
+      "order": 1,
+      "title": "Schedule Asset Handover",
+      "description": "Coordinate with lessee to schedule formal asset handover ceremony or delivery",
+      "assignedRole": "Operations Manager",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Delivery Schedule",
+          "description": "Agreed date, time, and location for asset handover",
+          "isRequired": true
+        },
+        {
+          "type": "Pre-Delivery Inspection Report",
+          "description": "Asset condition report confirming it is fit for purpose",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI SS-9 §4/4",
+          "constraint": "Asset must be in deliverable condition - any defects must be disclosed",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-ijr-gate-002-step-2",
+      "order": 2,
+      "title": "Physical Asset Delivery and Handover",
+      "description": "Execute formal handover of asset to lessee with signed delivery receipt. Lessee must acknowledge receipt and condition of asset",
+      "assignedRole": "Operations Manager",
+      "durationDays": 1,
+      "startAfter": ["qat-ijr-gate-002-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Delivery Receipt (Signed)",
+          "description": "Physical or electronic delivery receipt signed by lessee acknowledging receipt of asset",
+          "isRequired": true
+        },
+        {
+          "type": "Asset Handover Certificate",
+          "description": "Formal certificate documenting asset details, condition, and handover date/time",
+          "isRequired": true
+        },
+        {
+          "type": "Lessee Acknowledgment",
+          "description": "Written statement from lessee confirming asset is in acceptable condition and fits intended use",
+          "isRequired": true
+        },
+        {
+          "type": "Photographic Evidence",
+          "description": "Photos of asset at time of handover (especially for high-value assets)",
+          "isRequired": false
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI SS-9 §4/4",
+          "constraint": "CRITICAL SHARIAH REQUIREMENT: Asset must be physically delivered before rent collection begins",
+          "cannotModify": true
+        },
+        {
+          "source": "QFCRA IBANK 1.3.12",
+          "constraint": "Regulatory requirement: Delivery must be documented with signed evidence",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-ijr-gate-002-step-3",
+      "order": 3,
+      "title": "Shariah Compliance Verification (Ex-Post)",
+      "description": "Shariah Compliance Officer verifies that delivery occurred before rental payments and all evidence is complete",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-ijr-gate-002-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "Compliance Verification Report",
+          "description": "SCO confirmation that delivery-before-rent requirement was met",
+          "isRequired": true
+        },
+        {
+          "type": "Timeline Analysis",
+          "description": "Analysis showing delivery date precedes first rental payment date",
+          "isRequired": true
+        },
+        {
+          "type": "SNCR Assessment",
+          "description": "Confirmation that no Shariah non-compliance risk (SNCR) was triggered",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-9",
+          "constraint": "Shariah Compliance Function must verify ex-post that transaction complied with Shariah requirements",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: If asset is not delivered before rental payments begin, the Ijarah contract is INVALID per AAOIFI SS-9 §4/4. Any rent collected before delivery is non-Shariah-compliant income requiring purification (charity donation)."
+}

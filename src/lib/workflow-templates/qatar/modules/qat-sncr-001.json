@@ -1,0 +1,206 @@
+{
+  "id": "qat-sncr-001",
+  "name": "SNCR Monitoring and Register Setup",
+  "nameArabic": "مراقبة مخاطر عدم الامتثال الشرعي",
+  "category": "risk-management",
+  "policySource": "IFSB-1 §6.1-6.2, AAOIFI GS-3",
+  "isRequired": true,
+  "isEditable": true,
+  "requiredFor": ["ijarah", "murabaha", "mudaraba", "sukuk", "funds", "takaful", "musharaka"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": false,
+  "estimatedDurationDays": 3,
+  "description": "Set up Shariah Non-Compliance Risk (SNCR) monitoring framework to track, report, and remediate any Shariah breaches",
+  "steps": [
+    {
+      "id": "qat-sncr-001-step-1",
+      "order": 1,
+      "title": "Establish SNCR Register",
+      "description": "Create dedicated register to log all potential and actual Shariah non-compliance incidents",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "SNCR Register Template",
+          "description": "Spreadsheet or system module for logging: incident date, description, severity, root cause, remediation",
+          "isRequired": true
+        },
+        {
+          "type": "SNCR Classification Policy",
+          "description": "Policy defining: (1) What constitutes SNCR, (2) Severity levels (low/medium/high/critical), (3) Escalation thresholds",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "IFSB-1 §6.1",
+          "constraint": "Islamic financial institutions must identify, measure, and monitor SNCR",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-sncr-001-step-2",
+      "order": 2,
+      "title": "Define Product-Specific SNCR Indicators",
+      "description": "Identify key Shariah compliance checkpoints and potential breach scenarios for this product",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 2,
+      "startAfter": ["qat-sncr-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "SNCR Risk Map",
+          "description": "Document listing all potential SNCR scenarios for product (e.g., 'Rent collected before delivery', 'Asset used for prohibited purpose')",
+          "isRequired": true
+        },
+        {
+          "type": "Key Risk Indicators (KRIs)",
+          "description": "Quantitative indicators to monitor (e.g., '# of contracts without SSB approval', '# of late Takaful renewals')",
+          "isRequired": true
+        },
+        {
+          "type": "Monitoring Controls",
+          "description": "How each SNCR indicator will be monitored (frequency, responsible party, escalation)",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "IFSB-1 §6.2",
+          "constraint": "SNCR monitoring must be embedded in operational workflows",
+          "cannotModify": false
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Head of Risk",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-sncr-001-step-3",
+      "order": 3,
+      "title": "Implement SNCR Monitoring Workflow",
+      "description": "Set up automated alerts, periodic reviews, and escalation procedures for SNCR incidents",
+      "assignedRole": "IT / Operations Team",
+      "durationDays": 3,
+      "startAfter": ["qat-sncr-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "System Configuration",
+          "description": "Automated alerts configured in core banking system or workflow platform",
+          "isRequired": false
+        },
+        {
+          "type": "Monitoring Schedule",
+          "description": "Calendar of periodic SNCR reviews (daily, weekly, monthly checks)",
+          "isRequired": true
+        },
+        {
+          "type": "Escalation Procedure",
+          "description": "Step-by-step procedure: Who to notify, When to escalate, SSB notification requirements",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-3",
+          "constraint": "Shariah Review function must conduct regular reviews to detect non-compliance",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-sncr-001-step-4",
+      "order": 4,
+      "title": "Establish Purification Workflow Link",
+      "description": "Link SNCR register to purification workflow so non-compliant income is automatically routed to charity",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-sncr-001-step-3"],
+      "requiredEvidence": [
+        {
+          "type": "Purification SOP",
+          "description": "Standard Operating Procedure for calculating non-compliant income and donating to charity",
+          "isRequired": true
+        },
+        {
+          "type": "Charity Designation",
+          "description": "Pre-approved list of charitable organizations for purification donations",
+          "isRequired": true
+        },
+        {
+          "type": "Workflow Integration",
+          "description": "Documented link: SNCR incident → Income calculation → Charity donation → Receipt logging",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI Shariah Principle",
+          "constraint": "Non-compliant income must be purified by donating to charity - cannot be retained",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Supervisory Board",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-sncr-001-step-5",
+      "order": 5,
+      "title": "SSB Reporting Framework",
+      "description": "Establish reporting cadence and format for SNCR incidents to Shariah Supervisory Board",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-sncr-001-step-4"],
+      "requiredEvidence": [
+        {
+          "type": "SNCR Report Template",
+          "description": "Standardized report format for SSB: incident summary, root cause, remediation, lessons learned",
+          "isRequired": true
+        },
+        {
+          "type": "Reporting Schedule",
+          "description": "Frequency of SNCR reporting to SSB (e.g., immediate for critical, quarterly for low severity)",
+          "isRequired": true
+        },
+        {
+          "type": "SSB Acknowledgment",
+          "description": "SSB confirmation that reporting framework is adequate",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-1",
+          "constraint": "SSB must be promptly informed of all Shariah non-compliance incidents",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Supervisory Board",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "monitoringNote": "SNCR monitoring is continuous throughout product lifecycle. This module establishes the framework; actual monitoring occurs in operational workflows."
+}

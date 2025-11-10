@@ -1,0 +1,173 @@
+{
+  "id": "qat-mdr-gate-002",
+  "name": "Mudaraba: Profit-Sharing Ratio (Hard Gate)",
+  "nameArabic": "المضاربة: نسبة تقاسم الأرباح",
+  "category": "contract-gates",
+  "policySource": "AAOIFI FAS-3 §3",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["mudaraba"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 2,
+  "description": "HARD GATE: Profit-sharing ratio must be determined as a percentage of profit (not fixed amount) and agreed upfront. Cannot be 100% to one party.",
+  "steps": [
+    {
+      "id": "qat-mdr-gate-002-step-1",
+      "order": 1,
+      "title": "Determine Profit-Sharing Ratio",
+      "description": "Negotiate and determine profit-sharing percentage between Rab al-Mal (capital provider) and Mudarib (entrepreneur/manager)",
+      "assignedRole": "Structuring Team",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Profit-Sharing Proposal",
+          "description": "Proposed ratio (e.g., 60% Rab al-Mal, 40% Mudarib)",
+          "isRequired": true
+        },
+        {
+          "type": "Benchmarking Analysis",
+          "description": "Market comparison of profit-sharing ratios for similar Mudaraba structures",
+          "isRequired": false
+        },
+        {
+          "type": "Justification Memo",
+          "description": "Rationale for proposed ratio based on risk, effort, and market practice",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §3",
+          "constraint": "Profit-sharing must be expressed as PERCENTAGE of profit, not fixed amount",
+          "cannotModify": true
+        },
+        {
+          "source": "AAOIFI FAS-3 §3",
+          "constraint": "CRITICAL: Neither party can receive 100% of profits - both must share",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-mdr-gate-002-step-2",
+      "order": 2,
+      "title": "Validate Shariah Compliance of Ratio",
+      "description": "Shariah Compliance Officer verifies that profit-sharing ratio complies with FAS-3 requirements",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-mdr-gate-002-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Shariah Compliance Checklist",
+          "description": "SCO verification that ratio is percentage-based and shared by both parties",
+          "isRequired": true
+        },
+        {
+          "type": "Validation Report",
+          "description": "Confirmation that ratio structure meets AAOIFI FAS-3 §3 requirements",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §3",
+          "constraint": "Profit-sharing ratio must be clearly stated in Mudaraba agreement",
+          "cannotModify": true
+        },
+        {
+          "source": "Shariah Principle",
+          "constraint": "Fixed guaranteed return to Rab al-Mal is PROHIBITED - violates Mudaraba essence",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mdr-gate-002-step-3",
+      "order": 3,
+      "title": "Document in Mudaraba Agreement",
+      "description": "Clearly document profit-sharing ratio in Mudaraba contract with explicit percentage allocation",
+      "assignedRole": "Legal / Contracts Team",
+      "durationDays": 1,
+      "startAfter": ["qat-mdr-gate-002-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "Mudaraba Agreement (Draft)",
+          "description": "Contract explicitly stating: 'Profits shall be distributed as follows: X% to Rab al-Mal, Y% to Mudarib'",
+          "isRequired": true
+        },
+        {
+          "type": "Profit Distribution Schedule (Sample)",
+          "description": "Example calculation showing how profit-sharing ratio applies in practice",
+          "isRequired": true
+        },
+        {
+          "type": "SSB-Approved Contract Template",
+          "description": "Confirmation that contract template was previously approved by Shariah Board",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §3",
+          "constraint": "Profit-sharing ratio must be documented in writing before Mudaraba commences",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Legal Counsel",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mdr-gate-002-step-4",
+      "order": 4,
+      "title": "Both Parties Sign Mudaraba Agreement",
+      "description": "Rab al-Mal and Mudarib sign agreement confirming acceptance of profit-sharing ratio",
+      "assignedRole": "Authorized Signatories",
+      "durationDays": 1,
+      "startAfter": ["qat-mdr-gate-002-step-3"],
+      "requiredEvidence": [
+        {
+          "type": "Signed Mudaraba Agreement",
+          "description": "Fully executed agreement with signatures from both Rab al-Mal and Mudarib",
+          "isRequired": true
+        },
+        {
+          "type": "Acknowledgment of Ratio",
+          "description": "Both parties acknowledge understanding and acceptance of profit-sharing percentage",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §3",
+          "constraint": "Agreement must be signed before Mudaraba business operations begin",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: If profit-sharing ratio is (1) not percentage-based, (2) gives 100% to one party, or (3) guarantees fixed return, the Mudaraba is INVALID per AAOIFI FAS-3 §3. This would be riba (interest) if fixed return is guaranteed."
+}
