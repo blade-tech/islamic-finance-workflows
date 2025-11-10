@@ -97,14 +97,57 @@ export default function BigPictureMapPage() {
     }
   ]
 
+  // Islamic GRC Risk Categories (IFSB-1, IFSB-10)
+  const islamicRisks = [
+    {
+      id: 'sncr',
+      name: 'Shariah Breach Risk',
+      acronym: 'SNCR',
+      level: 'Low',
+      color: 'green',
+      description: 'Risk of Shariah non-compliance requiring purification',
+      incidents: 0,
+      purificationAmount: 'QAR 0',
+      standard: 'IFSB-1 §6.1-6.2'
+    },
+    {
+      id: 'dcr',
+      name: 'Profit Smoothing Risk',
+      acronym: 'DCR',
+      level: 'Low',
+      color: 'green',
+      description: 'Risk requiring PER/IRR reserve usage',
+      perBalance: 'QAR 1.2M',
+      irrBalance: 'QAR 800K',
+      standard: 'IFSB-1 §7.1-7.2'
+    },
+    {
+      id: 'ror',
+      name: 'Profit Rate Risk',
+      acronym: 'RoR',
+      level: 'Medium',
+      color: 'yellow',
+      description: 'Investment Account Holder profit distribution fairness',
+      variance: '1.2%',
+      threshold: '2%',
+      standard: 'IFSB-10 (Shariah Governance)'
+    }
+  ]
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900">Big Picture Map</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Overview Dashboard</h2>
         <p className="text-sm text-gray-600 mt-1">
-          High-level view of workflow health, bottlenecks, and performance
+          Real-time monitoring of compliance health, Islamic risk categories, and workflow performance
         </p>
+        <div className="flex items-center gap-2 mt-2">
+          <Badge variant="outline" className="text-xs">ISO 37301 (Compliance)</Badge>
+          <Badge variant="outline" className="text-xs">ISO 31000 (Risk)</Badge>
+          <Badge variant="outline" className="text-xs">AAOIFI SS-9 (Ijarah)</Badge>
+          <Badge variant="outline" className="text-xs">QFC DAR 2024</Badge>
+        </div>
       </div>
 
       {/* Top 4 Tiles */}
@@ -164,6 +207,97 @@ export default function BigPictureMapPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Islamic GRC Risk Categories */}
+      <Card className="border-2 border-purple-200">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center">
+                <Target className="h-5 w-5 mr-2 text-purple-600" />
+                Islamic Risk Categories (IFSB-1, IFSB-10)
+              </CardTitle>
+              <p className="text-sm text-gray-600 mt-1">
+                Real-time monitoring of Shariah-specific risk categories
+              </p>
+            </div>
+            <Badge className="bg-green-600">All Within Policy</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4">
+            {islamicRisks.map((risk) => (
+              <Card key={risk.id} className={`border-2 border-${risk.color}-200 bg-${risk.color}-50`}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle className="text-sm font-medium text-gray-900">
+                        {risk.name}
+                      </CardTitle>
+                      <Badge variant="outline" className="text-xs mt-1">{risk.acronym}</Badge>
+                    </div>
+                    <Badge className={`bg-${risk.color}-600 text-white`}>
+                      {risk.level}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-gray-600 mb-3">{risk.description}</p>
+                  <div className="space-y-1 text-xs">
+                    {risk.id === 'sncr' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Incidents (This Quarter):</span>
+                          <span className="font-semibold text-green-700">{risk.incidents}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Purification Amount:</span>
+                          <span className="font-semibold text-gray-900">{risk.purificationAmount}</span>
+                        </div>
+                      </>
+                    )}
+                    {risk.id === 'dcr' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">PER Balance:</span>
+                          <span className="font-semibold text-gray-900">{risk.perBalance}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">IRR Balance:</span>
+                          <span className="font-semibold text-gray-900">{risk.irrBalance}</span>
+                        </div>
+                      </>
+                    )}
+                    {risk.id === 'ror' && (
+                      <>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Profit Variance:</span>
+                          <span className="font-semibold text-yellow-700">{risk.variance}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Policy Threshold:</span>
+                          <span className="font-semibold text-gray-900">{risk.threshold}</span>
+                        </div>
+                      </>
+                    )}
+                    <div className="mt-2 pt-2 border-t">
+                      <span className="text-gray-500">Standard: </span>
+                      <span className="font-medium text-gray-700">{risk.standard}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-xs text-gray-700">
+              <strong>SNCR (Shariah Breach Risk):</strong> Risk of Shariah non-compliance requiring purification (donating non-compliant income to charity).
+              <strong className="ml-2">DCR (Profit Smoothing Risk):</strong> Risk requiring use of Profit Equalization Reserve (PER) or Investment Risk Reserve (IRR) to smooth returns for Investment Account Holders.
+              <strong className="ml-2">RoR (Profit Rate Risk):</strong> Risk of unfair profit distribution to Investment Account Holders.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Two-Column Layout */}
       <div className="grid grid-cols-2 gap-6">

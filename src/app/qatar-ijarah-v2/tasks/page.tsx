@@ -56,8 +56,8 @@ function generatePaymentCertificateWorkflowTasks(): Task[] {
       severity: 'high',
       deadlineAt: fourHoursFromNow,
       primaryAction: 'APPROVE_REJECT',
-      why: 'Confirm payment ownership and issue Validation Certificate per QFC Digital Asset Regulations Article 19 (Validation Services). The Validation Certificate proves the investor owns the contractual right to receive a Payment Certificate.',
-      policyClause: 'QFC Digital Asset Regulations 2024, Article 12(2): "The owner must receive a certificate of validation confirming their ownership of the contractual right before a token generation request can be made." Article 19: "Validation services must verify evidence and issue certificates in accordance with Token Issuer Guidelines."',
+      why: 'Confirm payment ownership and issue Validation Certificate per QFC Digital Asset Regulations Article 19 (Validation Services). The Validation Certificate proves the investor owns the contractual right to receive a Payment Certificate under an Islamic Lease (Ijarah) contract.',
+      policyClause: 'QFC Digital Asset Regulations 2024, Article 12(2) & Article 19 • AAOIFI SS-9 (Ijarah) §4/4: Rental payments commence after lessee receives asset • ISO 37301 (Compliance Management Systems): Evidence-based validation of contractual obligations',
       aiReasoning: [
         'Payment verified: QAR 500,000 received from Ahmed Al-Thani (Account: 0.0.100001)',
         'Bank reference validated: TT12345678 matches contract milestone M1 (Escrow Wiring)',
@@ -140,8 +140,8 @@ function generatePaymentCertificateWorkflowTasks(): Task[] {
       severity: 'critical',
       deadlineAt: twoHoursFromNow,
       primaryAction: 'APPROVE_REJECT',
-      why: 'Validate that the Payment Certificate settings comply with QFC Digital Asset Regulations Article 9 (not a means of payment) and Article 12 (token generation steps). This is the final compliance check before issuing the digital token.',
-      policyClause: 'QFC Digital Asset Regulations 2024, Article 9: "A token that evidences a contractual right shall not be treated as a means of payment if it is not transferable except in accordance with the underlying contract." Article 12(1): "Token generation must follow the sequence: (a) certificate of validation, (b) generation request, (c) issue and deliver." Article 20: "Token Issuers must implement identity verification, transfer lock, emergency stop, and reversal controls."',
+      why: 'Validate that the Payment Certificate settings comply with QFC Digital Asset Regulations (non-transferable token) and Shariah requirements for Islamic Lease (Ijarah) contracts. This is the final compliance check before issuing the digital token.',
+      policyClause: 'QFC DAR 2024 Article 9 (not a means of payment), Article 12 (token generation sequence), Article 20 (Token Issuer controls) • AAOIFI SS-9: Ijarah payment evidence must link to underlying lease contract • ISO 31000 (Risk Management): Control-based token issuance to manage operational risk',
       aiReasoning: [
         'Regulations Article 9 compliant: Token cannot be transferred or sold',
         'Regulations Article 12 compliant: Validation Certificate issued → Recorded on Blockchain → Issuance request created',
