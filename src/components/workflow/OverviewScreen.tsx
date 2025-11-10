@@ -148,10 +148,10 @@ export default function OverviewScreen() {
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-4xl font-bold text-emerald-900">
-          Welcome to ZeroH
+          Islamic Finance GRC Platform
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Sustainable Islamic Finance governance, monitoring and risk management system
+          AI-powered Shariah compliance built on AAOIFI, IFSB, and ISO standards
         </p>
       </div>
 

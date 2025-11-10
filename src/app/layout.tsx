@@ -31,7 +31,7 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'AI native Governance, Risk & Compliance platform for Islamic Finance',
   description:
-    'AI-powered Shariah compliance automation built on AAOIFI, IFSB, and ISO standards. Automate Shariah reviews, manage risk, and enable compliant digital asset issuance.',
+    'AI-powered Shariah compliance platform built on AAOIFI, IFSB, and ISO standards. Assist Shariah officers with reviews, manage risk, and enable compliant digital asset issuance.',
   keywords: [
     'Islamic Finance',
     'GRC',

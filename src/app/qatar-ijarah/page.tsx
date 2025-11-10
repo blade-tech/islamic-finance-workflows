@@ -106,7 +106,7 @@ const scenes = [
     sceneId: 'grc-dashboard',
     name: 'GRC Dashboard',
     icon: LineChart,
-    description: '1 AI Pod: Compliance Checking (99.8% time savings) + 7 KPIs',
+    description: '1 AI Assistant: Compliance Checking (dramatic time savings) + 7 KPIs',
     url: '/qatar-ijarah/grc-dashboard',
     color: 'bg-teal-50 border-teal-200',
     iconColor: 'text-teal-600',
@@ -117,7 +117,7 @@ const scenes = [
     sceneId: 'ai-control-center',
     name: 'AI Control Center ⚡',
     icon: Brain,
-    description: '3 Agentic Pods working together - 95% time savings with HITL',
+    description: '3 AI Assistants working together with human oversight (HITL)',
     url: '/qatar-ijarah/ai-control-center',
     color: 'bg-purple-100 border-purple-300',
     iconColor: 'text-purple-700',
@@ -158,9 +158,9 @@ export default function QatarIjarahLanding() {
           </h1>
 
           <p className="text-xl text-white/90 mb-6 max-w-3xl">
-            Complete GRC automation for Ijārah off-plan construction financing.
+            AI-assisted GRC for Ijārah off-plan construction financing.
             <br />
-            <strong>15 controls</strong> • <strong>3 regulators</strong> (QCB + QFCRA + AAOIFI) • <strong>9 scenes</strong> • <strong>3 AI pods</strong> • <strong>100% automated</strong>
+            <strong>15 controls</strong> • <strong>3 regulators</strong> (QCB + QFCRA + AAOIFI) • <strong>9 scenes</strong> • <strong>3 AI assistants</strong>
           </p>
 
           <div className="flex gap-4">

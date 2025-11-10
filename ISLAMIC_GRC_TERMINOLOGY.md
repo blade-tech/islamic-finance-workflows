@@ -18,7 +18,7 @@
 
 **Tagline Options**:
 - "Ensure Shariah Compliance • Manage Risk • Meet Regulatory Requirements"
-- "Automated Shariah Compliance • Built on Standards • Digital-Asset Ready"
+- "AI-Assisted Shariah Compliance • Built on Standards • Digital-Asset Ready"
 - "AI-Powered Compliance for Islamic Finance Institutions"
 
 ### Footer/About
@@ -348,7 +348,7 @@ Step 5: Record Final Contract with Version & Approvals
 
 #### For Shariah Officers / Shariah Board Members
 **Card Title**: "Shariah Compliance Officer"
-**Value Prop**: "Automate Shariah reviews, track breach risks, and generate audit-ready reports—with 80% less manual work."
+**Value Prop**: "Assist Shariah officers with reviews, breach risk tracking, and audit reporting—reducing manual effort significantly."
 **Quick Actions**:
 - Review pending transactions (5)
 - View Shariah breach risk register
@@ -538,7 +538,7 @@ Step 5: Record Final Contract with Version & Approvals
 │  AI-Powered Shariah Compliance & Risk Management     │
 │                                                       │
 │  What you can do:                                    │
-│  ✓ Automate Shariah reviews (ex-ante & ex-post)     │
+│  ✓ Assist with Shariah reviews (ex-ante & ex-post)  │
 │  ✓ Track Shariah Breach Risk (SNCR) & purification  │
 │  ✓ Manage PER/IRR reserves for investor protection  │
 │  ✓ Issue blockchain-verified compliance certificates│
@@ -558,7 +558,7 @@ Step 5: Record Final Contract with Version & Approvals
 │  This helps us customize your dashboard and workflows│
 │                                                       │
 │  ○ Shariah Compliance Officer                        │
-│    → Automate Shariah reviews & breach tracking     │
+│    → Assist with Shariah reviews & breach tracking  │
 │                                                       │
 │  ○ Risk Management Officer                           │
 │    → Monitor SNCR, DCR, PER/IRR in real-time        │
@@ -587,7 +587,7 @@ Step 5: Record Final Contract with Version & Approvals
 │    Learn how contract gates prevent Shariah breaches│
 │                                                       │
 │  □ Set up Shariah Breach Risk (SNCR) monitoring     │
-│    Track incidents and automate purification        │
+│    Track incidents and assist with purification     │
 │                                                       │
 │  □ Define PER/IRR policy for investor protection    │
 │    Protect Investment Account Holders               │

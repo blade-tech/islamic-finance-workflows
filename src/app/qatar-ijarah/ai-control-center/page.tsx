@@ -352,12 +352,12 @@ export default function AIControlCenterPage() {
               <div className="grid grid-cols-3 gap-4 max-w-2xl mx-auto">
                 <div className="p-4 bg-white rounded-lg border-2 border-purple-200">
                   <Zap className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-900">95%</div>
+                  <div className="text-2xl font-bold text-purple-900">Dramatic</div>
                   <div className="text-xs text-gray-600">Time Saved</div>
                 </div>
                 <div className="p-4 bg-white rounded-lg border-2 border-purple-200">
                   <Shield className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                  <div className="text-2xl font-bold text-purple-900">100%</div>
+                  <div className="text-2xl font-bold text-purple-900">Full</div>
                   <div className="text-xs text-gray-600">Human Oversight</div>
                 </div>
                 <div className="p-4 bg-white rounded-lg border-2 border-purple-200">

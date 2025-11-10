@@ -1,8 +1,8 @@
 # AI native Governance, Risk & Compliance platform for Islamic Finance
 
-**Automate Shariah Compliance • Manage Risk • Enable Compliant Digital Assets**
+**Support Shariah Compliance • Manage Risk • Enable Compliant Digital Assets**
 
-The only platform that automates Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
+The only platform that assists with Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.18-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18.3.1-blue)](https://reactjs.org/)
@@ -33,7 +33,7 @@ The only platform that automates Shariah compliance, manages operational risk, a
 ### Core Capabilities
 
 - **Islamic GRC Fundamentals**: Shariah Board governance, SNCR tracking, PER/IRR reserves, purification workflows, contract-sequence gates
-- **AI-Powered Automation**: 80% less manual work - Claude AI orchestrates Shariah reviews, evidence collection, and control testing
+- **AI-Assisted Workflows**: Claude AI assists with Shariah reviews, evidence collection, and control testing—reducing manual effort significantly
 - **Blockchain-Verified Proofs**: Hedera Guardian integration for immutable Verifiable Credentials
 - **Compliant Digital Assets**: Issue Sukuk, tokens, and digital assets with MLETR and QFC DAR compliance built-in
 - **Standards-Based**: ISO 37301 (Compliance) + ISO 31000 (Risk) + COSO (Controls) + AAOIFI/IFSB (Islamic Finance)
@@ -41,7 +41,7 @@ The only platform that automates Shariah compliance, manages operational risk, a
 ### Value Proposition by Persona
 
 **For Shariah Compliance Officers:**
-> Automate Shariah reviews, track breach risks (SNCR), and generate audit-ready reports—with 80% less manual work.
+> Assist Shariah officers with reviews, SNCR tracking, and audit reporting—reducing manual effort significantly.
 
 **For Risk Officers:**
 > Monitor Shariah Breach Risk (SNCR), Profit Smoothing Risk (DCR), and fiduciary risks in real-time. One dashboard for all Islamic risk categories.
@@ -72,7 +72,7 @@ The only platform that automates Shariah compliance, manages operational risk, a
 - Board-level workflows for fatwa (Shariah rulings) and product approvals
 
 **2. Islamic Risk Categories** (IFSB-1, IFSB-10)
-- **Shariah Breach Risk (SNCR)** - Track Shariah non-compliance incidents, calculate non-compliant income, automate purification (charity donation)
+- **Shariah Breach Risk (SNCR)** - Track Shariah non-compliance incidents, calculate non-compliant income, assist with purification (charity donation)
 - **Profit Smoothing Risk (DCR)** - Manage Profit Equalization Reserve (PER) and Investment Risk Reserve (IRR) for Investment Account Holders
 - **Profit Rate Risk (RoR)** - Monitor profit distribution fairness
 - **Fiduciary Risk** - Investor trust and fiduciary duty controls
@@ -85,7 +85,7 @@ The only platform that automates Shariah compliance, manages operational risk, a
 
 **4. Purification & Charity Controls**
 - Track "tainted income" from Shariah breaches
-- Automate purification calculations
+- Assist with purification calculations
 - Shariah Board approval workflows for charity disbursement
 - Reconciliation: ensure purification amounts match donations
 

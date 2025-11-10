@@ -254,7 +254,7 @@ function generatePaymentCertificateWorkflowTasks(): Task[] {
       why: 'Review the weekly summary of Payment Certificates issued, including compliance metrics and reconciliation status.',
       aiReasoning: [
         '12 Payment Certificates issued this week (target: 10-15)',
-        '100% regulatory compliance rate maintained',
+        'Regulatory compliance maintained',
         'Average processing time: 4.2 hours (meets deadline requirements)',
         '2 pending issuance approvals (both on time)'
       ],

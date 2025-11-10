@@ -226,9 +226,9 @@ export function WorkflowContainer() {
             {/* Title and Demo Button */}
             <div className="flex items-start justify-between">
               <div>
-                <h1 className="text-3xl font-bold">ZeroH</h1>
+                <h1 className="text-3xl font-bold">Islamic Finance GRC Platform</h1>
                 <p className="text-sm text-muted-foreground mt-1">
-                  Sustainable Islamic Finance governance, monitoring and risk management system
+                  AI native Governance, Risk & Compliance platform for Islamic Finance
                 </p>
               </div>
               <Button

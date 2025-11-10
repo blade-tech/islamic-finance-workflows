@@ -53,7 +53,7 @@ export default function WelcomeScreen() {
     {
       icon: ShieldCheck,
       role: 'Shariah Compliance Officers',
-      value: 'Automate Shariah reviews, track breach risks, and generate audit-ready reports—with 80% less manual work.',
+      value: 'Assist Shariah officers with reviews, breach risk tracking, and audit reporting—reducing manual effort significantly.',
       iconBg: 'bg-green-100',
       iconColor: 'text-green-600'
     },
@@ -311,7 +311,7 @@ export default function WelcomeScreen() {
           {/* Footer */}
           <div className="text-center mt-6 sm:mt-8">
             <p className="text-xs sm:text-sm text-gray-500 mb-2">
-              The only platform that automates Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
+              The only platform that assists with Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
             </p>
             <p className="text-xs text-gray-400">
               Powered by Blade Labs

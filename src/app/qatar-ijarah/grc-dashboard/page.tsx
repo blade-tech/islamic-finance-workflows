@@ -314,7 +314,7 @@ export default function GRCDashboardPage() {
                     Al Khor Towers - Off-Plan Ijārah Project
                   </p>
                   <p className="text-sm text-purple-600 mt-1">
-                    All 15 controls passing • 100% evidence complete • Full regulatory compliance
+                    All 15 controls passing • Evidence complete • Regulatory compliance maintained
                   </p>
                 </div>
               </div>
@@ -377,7 +377,7 @@ export default function GRCDashboardPage() {
                     Continuous Controls Monitoring
                   </CardTitle>
                   <CardDescription className="text-orange-700">
-                    AI-powered control testing for all 15 controls (99% time savings)
+                    AI-assisted control testing for all 15 controls (dramatic time savings)
                   </CardDescription>
                 </div>
                 <Button
@@ -652,19 +652,19 @@ export default function GRCDashboardPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="text-center p-4 bg-white rounded-lg border border-green-200">
-                <p className="text-3xl font-bold text-green-600 mb-1">95%</p>
+                <p className="text-3xl font-bold text-green-600 mb-1">Significant</p>
                 <p className="text-sm text-gray-700">Time Savings</p>
                 <p className="text-xs text-gray-600 mt-1">vs. manual compliance</p>
               </div>
               <div className="text-center p-4 bg-white rounded-lg border border-green-200">
-                <p className="text-3xl font-bold text-green-600 mb-1">100%</p>
+                <p className="text-3xl font-bold text-green-600 mb-1">Complete</p>
                 <p className="text-sm text-gray-700">Evidence Traceability</p>
                 <p className="text-xs text-gray-600 mt-1">Audit-ready at all times</p>
               </div>
               <div className="text-center p-4 bg-white rounded-lg border border-green-200">
                 <p className="text-3xl font-bold text-green-600 mb-1">Zero</p>
                 <p className="text-sm text-gray-700">Compliance Breaches</p>
-                <p className="text-xs text-gray-600 mt-1">Automated hard gates</p>
+                <p className="text-xs text-gray-600 mt-1">AI-assisted hard gates</p>
               </div>
               <div className="text-center p-4 bg-white rounded-lg border border-green-200">
                 <p className="text-3xl font-bold text-green-600 mb-1">Real-time</p>

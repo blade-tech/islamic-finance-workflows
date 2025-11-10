@@ -472,10 +472,10 @@ export default function LatePaymentPage() {
                     <TrendingUp className="h-6 w-6 text-green-600" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-green-900 mb-2">Automated Compliance</h3>
+                    <h3 className="font-semibold text-green-900 mb-2">AI-Assisted Compliance</h3>
                     <p className="text-sm text-green-800 mb-3">
-                      The system automatically detects late payments, calculates penalties, and ensures 100%
-                      charity allocation. No manual intervention needed - full Shariah compliance guaranteed.
+                      The system detects late payments, calculates penalties, and ensures
+                      charity allocation per AAOIFI requirements. Human oversight ensures Shariah compliance.
                     </p>
                     <div className="flex items-center space-x-4 text-xs text-green-700">
                       <div className="flex items-center space-x-1">
