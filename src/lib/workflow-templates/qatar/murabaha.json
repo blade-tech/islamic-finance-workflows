@@ -1,0 +1,85 @@
+{
+  "productType": "murabaha",
+  "jurisdiction": "qatar",
+  "name": "Murabaha (Cost-Plus Financing) - Qatar",
+  "description": "Complete GRC workflow for Murabaha financing in Qatar, compliant with AAOIFI FAS-28, QCB Guidelines, and QFCRA IBANK",
+  "modules": [
+    "qat-ssb-001",
+    "qat-scf-001",
+    "qat-mrb-gate-001",
+    "qat-mrb-gate-002",
+    "qat-mrb-gate-003",
+    "qat-sncr-001",
+    "qat-rep-aaoifi-001",
+    "qat-rep-qcb-001"
+  ],
+  "assemblyRules": {
+    "hardGates": [
+      "qat-ssb-001",
+      "qat-mrb-gate-001",
+      "qat-mrb-gate-002"
+    ],
+    "dependencyChains": [
+      {
+        "before": "qat-ssb-001",
+        "after": ["qat-mrb-gate-001", "qat-mrb-gate-002", "qat-mrb-gate-003"]
+      },
+      {
+        "before": "qat-mrb-gate-002",
+        "after": "qat-mrb-gate-001"
+      },
+      {
+        "before": "qat-mrb-gate-001",
+        "after": "qat-scf-001"
+      },
+      {
+        "before": "qat-scf-001",
+        "after": "qat-sncr-001"
+      },
+      {
+        "before": "qat-sncr-001",
+        "after": ["qat-rep-aaoifi-001", "qat-rep-qcb-001"]
+      }
+    ]
+  },
+  "estimatedDurationDays": 28,
+  "criticalPath": [
+    "qat-ssb-001",
+    "qat-mrb-gate-002",
+    "qat-mrb-gate-001",
+    "qat-scf-001",
+    "qat-sncr-001",
+    "qat-rep-qcb-001"
+  ],
+  "keyRequirements": [
+    {
+      "requirement": "SSB Approval",
+      "source": "AAOIFI GS-1",
+      "mandatory": true
+    },
+    {
+      "requirement": "Asset Ownership Before Sale",
+      "source": "AAOIFI FAS-28 §4",
+      "mandatory": true
+    },
+    {
+      "requirement": "Full Cost Disclosure to Customer",
+      "source": "AAOIFI FAS-28 §3",
+      "mandatory": true
+    },
+    {
+      "requirement": "Promise vs Contract Distinction",
+      "source": "AAOIFI FAS-28 §5",
+      "mandatory": true
+    },
+    {
+      "requirement": "SNCR Monitoring",
+      "source": "IFSB-1 §6.1-6.2",
+      "mandatory": true
+    }
+  ],
+  "optionalModules": [
+    "qat-rep-qfcra-001"
+  ],
+  "notes": "Murabaha workflow emphasizes transparency (cost disclosure) and proper sequencing (ownership before sale). Both qat-mrb-gate-001 and qat-mrb-gate-002 are HARD GATES."
+}

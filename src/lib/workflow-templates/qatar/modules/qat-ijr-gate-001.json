@@ -1,0 +1,129 @@
+{
+  "id": "qat-ijr-gate-001",
+  "name": "Ijarah: Asset Ownership Verification",
+  "nameArabic": "الإجارة: التحقق من ملكية الأصل",
+  "category": "contract-gates",
+  "policySource": "AAOIFI SS-9 §3/1",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["ijarah"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 3,
+  "description": "Verify that institution legally owns the asset before entering into Ijarah contract. Asset ownership by lessor is fundamental Shariah requirement for Ijarah validity",
+  "steps": [
+    {
+      "id": "qat-ijr-gate-001-step-1",
+      "order": 1,
+      "title": "Obtain Legal Title Documentation",
+      "description": "Acquire proof of legal ownership: title deed, purchase invoice, asset registration",
+      "assignedRole": "Legal / Asset Management",
+      "durationDays": 2,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Title Deed or Ownership Certificate",
+          "description": "Legal document proving institution's ownership of asset",
+          "isRequired": true
+        },
+        {
+          "type": "Purchase Invoice",
+          "description": "Invoice showing institution purchased asset from supplier",
+          "isRequired": true
+        },
+        {
+          "type": "Asset Registration (if applicable)",
+          "description": "For vehicles, real estate, etc. - government registration in institution's name",
+          "isRequired": false
+        },
+        {
+          "type": "Payment Confirmation",
+          "description": "Bank transfer or payment receipt confirming institution paid for asset",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI SS-9 §3/1",
+          "constraint": "Institution must own the asset before leasing it - cannot lease asset it does not own",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-ijr-gate-001-step-2",
+      "order": 2,
+      "title": "Legal Verification of Ownership",
+      "description": "Legal counsel verifies that ownership documentation is valid and institution has clear title",
+      "assignedRole": "Legal Counsel",
+      "durationDays": 1,
+      "startAfter": ["qat-ijr-gate-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Legal Opinion",
+          "description": "Legal counsel's written opinion confirming valid ownership",
+          "isRequired": true
+        },
+        {
+          "type": "Title Search Report (if applicable)",
+          "description": "For real estate - title search confirming no liens or encumbrances",
+          "isRequired": false
+        },
+        {
+          "type": "Ownership Verification Checklist",
+          "description": "Checklist confirming all ownership requirements met",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI SS-9 §3/1",
+          "constraint": "Clear legal ownership required - no disputes, liens, or unclear title",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Legal Counsel",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-ijr-gate-001-step-3",
+      "order": 3,
+      "title": "SCO Ownership Confirmation",
+      "description": "Shariah Compliance Officer confirms ownership evidence meets Shariah requirements",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-ijr-gate-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "SCO Ownership Confirmation",
+          "description": "SCO's confirmation that institution owns asset per Shariah standards",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI SS-9 §3/1",
+          "constraint": "Ownership must be verified before Ijarah contract can be executed",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: Institution must own the asset before leasing. Without clear ownership, Ijarah contract is INVALID per AAOIFI SS-9 §3/1."
+}

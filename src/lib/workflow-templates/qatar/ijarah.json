@@ -1,0 +1,91 @@
+{
+  "productType": "ijarah",
+  "jurisdiction": "qatar",
+  "name": "Ijarah (Islamic Lease) - Qatar",
+  "description": "Complete GRC workflow for Ijarah financing in Qatar, compliant with AAOIFI SS-9, QCB Guidelines, and QFCRA IBANK 1.3.12",
+  "modules": [
+    "qat-ssb-001",
+    "qat-scf-001",
+    "qat-ijr-gate-001",
+    "qat-ijr-gate-002",
+    "qat-ijr-gate-003",
+    "qat-ijr-gate-004",
+    "qat-sncr-001",
+    "qat-rep-aaoifi-001",
+    "qat-rep-qcb-001"
+  ],
+  "assemblyRules": {
+    "hardGates": [
+      "qat-ssb-001",
+      "qat-ijr-gate-002"
+    ],
+    "dependencyChains": [
+      {
+        "before": "qat-ssb-001",
+        "after": ["qat-ijr-gate-001", "qat-ijr-gate-002", "qat-ijr-gate-003", "qat-ijr-gate-004"]
+      },
+      {
+        "before": "qat-ijr-gate-001",
+        "after": "qat-ijr-gate-002"
+      },
+      {
+        "before": "qat-ijr-gate-002",
+        "after": ["qat-ijr-gate-003", "qat-scf-001"]
+      },
+      {
+        "before": "qat-scf-001",
+        "after": "qat-sncr-001"
+      },
+      {
+        "before": "qat-sncr-001",
+        "after": ["qat-rep-aaoifi-001", "qat-rep-qcb-001"]
+      }
+    ]
+  },
+  "estimatedDurationDays": 35,
+  "criticalPath": [
+    "qat-ssb-001",
+    "qat-ijr-gate-001",
+    "qat-ijr-gate-002",
+    "qat-scf-001",
+    "qat-sncr-001",
+    "qat-rep-qcb-001"
+  ],
+  "keyRequirements": [
+    {
+      "requirement": "SSB Approval",
+      "source": "AAOIFI GS-1",
+      "mandatory": true
+    },
+    {
+      "requirement": "Asset Ownership Before Lease",
+      "source": "AAOIFI SS-9 §3/1",
+      "mandatory": true
+    },
+    {
+      "requirement": "Delivery Before Rent Collection",
+      "source": "AAOIFI SS-9 §4/4, QFCRA IBANK 1.3.12",
+      "mandatory": true
+    },
+    {
+      "requirement": "Takaful Coverage for Asset Risk",
+      "source": "AAOIFI SS-9 (Lessor Risk)",
+      "mandatory": true
+    },
+    {
+      "requirement": "Maintenance Responsibility Documentation",
+      "source": "AAOIFI SS-9",
+      "mandatory": true
+    },
+    {
+      "requirement": "SNCR Monitoring",
+      "source": "IFSB-1 §6.1-6.2",
+      "mandatory": true
+    }
+  ],
+  "optionalModules": [
+    "qat-green-001",
+    "qat-rep-qfcra-001"
+  ],
+  "notes": "Ijarah workflow emphasizes asset ownership and delivery-before-rent requirement. The qat-ijr-gate-002 module is a HARD GATE that cannot be bypassed."
+}

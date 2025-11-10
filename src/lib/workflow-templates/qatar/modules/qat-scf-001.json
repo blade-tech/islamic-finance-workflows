@@ -1,0 +1,148 @@
+{
+  "id": "qat-scf-001",
+  "name": "Shariah Compliance Function (Ex-Ante Review)",
+  "nameArabic": "وظيفة الامتثال الشرعي (المراجعة المسبقة)",
+  "category": "shariah-governance",
+  "policySource": "AAOIFI GS-9",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["ijarah", "murabaha", "mudaraba", "sukuk", "funds", "takaful", "musharaka"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": false,
+  "estimatedDurationDays": 3,
+  "description": "Ex-ante Shariah compliance review before transaction execution. SCO verifies that transaction structure and documentation comply with SSB resolutions and Shariah requirements",
+  "steps": [
+    {
+      "id": "qat-scf-001-step-1",
+      "order": 1,
+      "title": "Prepare Transaction Package for SCO Review",
+      "description": "Compile all transaction documentation for Shariah Compliance Officer's ex-ante review",
+      "assignedRole": "Transaction Team",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Transaction Summary",
+          "description": "Executive summary of transaction structure, parties, amounts, and timeline",
+          "isRequired": true
+        },
+        {
+          "type": "Contract Documents",
+          "description": "All contracts to be executed (customer-facing and operational)",
+          "isRequired": true
+        },
+        {
+          "type": "SSB Resolution Reference",
+          "description": "Reference to applicable SSB resolution approving this product type",
+          "isRequired": true
+        },
+        {
+          "type": "Compliance Checklist",
+          "description": "Self-assessment checklist showing compliance with SSB requirements",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-9 §3/1",
+          "constraint": "All transactions must undergo ex-ante Shariah compliance review before execution",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-scf-001-step-2",
+      "order": 2,
+      "title": "SCO Ex-Ante Compliance Review",
+      "description": "Shariah Compliance Officer conducts detailed review to verify transaction complies with Shariah requirements and SSB resolutions",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 2,
+      "startAfter": ["qat-scf-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "SCO Review Report",
+          "description": "Detailed report documenting SCO's compliance assessment",
+          "isRequired": true
+        },
+        {
+          "type": "Compliance Checklist (Completed)",
+          "description": "SCO's completed checklist verifying each Shariah requirement",
+          "isRequired": true
+        },
+        {
+          "type": "Risk Assessment",
+          "description": "Assessment of Shariah non-compliance risk (SNCR) for this transaction",
+          "isRequired": true
+        },
+        {
+          "type": "Conditional Approval or Objections",
+          "description": "Any conditions or objections raised by SCO that must be addressed",
+          "isRequired": false
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-9 §3/2",
+          "constraint": "SCO must review contracts, terms, and conditions to ensure Shariah compliance",
+          "cannotModify": true
+        },
+        {
+          "source": "AAOIFI GS-9 §4/1",
+          "constraint": "SCO must have sufficient authority and independence to object to non-compliant transactions",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-scf-001-step-3",
+      "order": 3,
+      "title": "SCO Approval or Remediation",
+      "description": "SCO provides formal approval for transaction to proceed, or requires remediation if issues identified",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-scf-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "SCO Approval Letter",
+          "description": "Formal written approval from SCO authorizing transaction to proceed",
+          "isRequired": true
+        },
+        {
+          "type": "Remediation Plan (if applicable)",
+          "description": "If issues identified, plan for addressing SCO's concerns before execution",
+          "isRequired": false
+        },
+        {
+          "type": "Approval Conditions Log",
+          "description": "Documentation of any conditions that must be met during execution",
+          "isRequired": false
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI GS-9 §3/3",
+          "constraint": "Transaction cannot proceed without SCO approval",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "note": "Ex-ante review is preventive - it catches Shariah compliance issues BEFORE transaction execution. This is distinct from ex-post review (qat-scr-001) which audits after execution."
+}

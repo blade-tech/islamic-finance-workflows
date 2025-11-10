@@ -1,0 +1,116 @@
+{
+  "productType": "mudaraba",
+  "jurisdiction": "qatar",
+  "name": "Mudaraba (Profit-Sharing) - Qatar",
+  "description": "Complete GRC workflow for Mudaraba financing in Qatar, compliant with AAOIFI FAS-3, IFSB-10, and QCB Investment Account Requirements",
+  "modules": [
+    "qat-ssb-001",
+    "qat-scf-001",
+    "qat-mdr-gate-001",
+    "qat-mdr-gate-002",
+    "qat-mdr-gate-003",
+    "qat-sncr-001",
+    "qat-per-irr-001",
+    "qat-dcr-001",
+    "qat-ror-001",
+    "qat-rep-aaoifi-001",
+    "qat-rep-qcb-001",
+    "qat-disc-001"
+  ],
+  "assemblyRules": {
+    "hardGates": [
+      "qat-ssb-001",
+      "qat-mdr-gate-001",
+      "qat-mdr-gate-002",
+      "qat-mdr-gate-003"
+    ],
+    "dependencyChains": [
+      {
+        "before": "qat-ssb-001",
+        "after": ["qat-mdr-gate-001"]
+      },
+      {
+        "before": "qat-mdr-gate-001",
+        "after": ["qat-mdr-gate-002", "qat-mdr-gate-003"]
+      },
+      {
+        "before": "qat-mdr-gate-002",
+        "after": ["qat-per-irr-001", "qat-scf-001"]
+      },
+      {
+        "before": "qat-per-irr-001",
+        "after": ["qat-dcr-001", "qat-ror-001"]
+      },
+      {
+        "before": "qat-scf-001",
+        "after": "qat-sncr-001"
+      },
+      {
+        "before": "qat-sncr-001",
+        "after": ["qat-rep-aaoifi-001", "qat-rep-qcb-001", "qat-disc-001"]
+      }
+    ]
+  },
+  "estimatedDurationDays": 42,
+  "criticalPath": [
+    "qat-ssb-001",
+    "qat-mdr-gate-001",
+    "qat-mdr-gate-002",
+    "qat-per-irr-001",
+    "qat-dcr-001",
+    "qat-sncr-001",
+    "qat-rep-qcb-001"
+  ],
+  "keyRequirements": [
+    {
+      "requirement": "SSB Approval",
+      "source": "AAOIFI GS-1",
+      "mandatory": true
+    },
+    {
+      "requirement": "Capital Verification",
+      "source": "AAOIFI FAS-3 §2",
+      "mandatory": true
+    },
+    {
+      "requirement": "Profit-Sharing Ratio (Percentage-Based)",
+      "source": "AAOIFI FAS-3 §3",
+      "mandatory": true
+    },
+    {
+      "requirement": "Loss Allocation to Rab al-Mal Only",
+      "source": "AAOIFI FAS-3 §4",
+      "mandatory": true
+    },
+    {
+      "requirement": "PER/IRR Policy Setup",
+      "source": "IFSB-1 §7.1-7.2",
+      "mandatory": true
+    },
+    {
+      "requirement": "Displaced Commercial Risk Monitoring",
+      "source": "IFSB-1 §7.1",
+      "mandatory": true
+    },
+    {
+      "requirement": "Rate-of-Return Risk Monitoring",
+      "source": "IFSB-10",
+      "mandatory": true
+    },
+    {
+      "requirement": "Investment Account Holder Disclosures",
+      "source": "IFSB-10, AAOIFI",
+      "mandatory": true
+    },
+    {
+      "requirement": "SNCR Monitoring",
+      "source": "IFSB-1 §6.1-6.2",
+      "mandatory": true
+    }
+  ],
+  "optionalModules": [
+    "qat-rep-qfcra-001",
+    "qat-vbi-001"
+  ],
+  "notes": "Mudaraba workflow is the most complex due to investment account requirements. Includes profit equalization reserves (PER), investment risk reserves (IRR), and displaced commercial risk (DCR) monitoring. All three contract gates (qat-mdr-gate-001/002/003) are HARD GATES."
+}

@@ -1,0 +1,149 @@
+{
+  "id": "qat-mrb-gate-002",
+  "name": "Murabaha: Asset Ownership Before Sale (Hard Gate)",
+  "nameArabic": "المرابحة: ملكية الأصل قبل البيع",
+  "category": "contract-gates",
+  "policySource": "AAOIFI FAS-28 §4",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["murabaha"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 2,
+  "description": "HARD GATE: Institution must own asset/commodity in its inventory before selling to customer. Selling what you don't own is prohibited (bay' al-ma'dum)",
+  "steps": [
+    {
+      "id": "qat-mrb-gate-002-step-1",
+      "order": 1,
+      "title": "Purchase Asset from Supplier",
+      "description": "Institution purchases asset/commodity from supplier using its own funds",
+      "assignedRole": "Procurement Team",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Purchase Order",
+          "description": "Institution's purchase order to supplier",
+          "isRequired": true
+        },
+        {
+          "type": "Supplier Invoice",
+          "description": "Supplier's invoice showing institution as buyer",
+          "isRequired": true
+        },
+        {
+          "type": "Payment Confirmation",
+          "description": "Proof of payment to supplier (bank transfer, check)",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §4",
+          "constraint": "Institution must purchase asset before selling to customer - cannot sell what it doesn't own",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-mrb-gate-002-step-2",
+      "order": 2,
+      "title": "Asset Entry into Inventory",
+      "description": "Record asset in institution's inventory system with valuation at cost",
+      "assignedRole": "Finance / Accounting",
+      "durationDays": 1,
+      "startAfter": ["qat-mrb-gate-002-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Inventory Entry",
+          "description": "Accounting entry recording asset in institution's inventory",
+          "isRequired": true
+        },
+        {
+          "type": "Asset Valuation",
+          "description": "Valuation at cost (acquisition price + incidental costs)",
+          "isRequired": true
+        },
+        {
+          "type": "Warehouse/Storage Receipt",
+          "description": "Physical evidence of asset in institution's possession (if applicable)",
+          "isRequired": false
+        },
+        {
+          "type": "Ownership Duration Evidence",
+          "description": "Evidence showing asset was owned for constructive possession period",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §4",
+          "constraint": "Asset must be in institution's inventory before Murabaha sale to customer",
+          "cannotModify": true
+        },
+        {
+          "source": "Shariah Principle",
+          "constraint": "Institution must bear ownership risk (even briefly) - cannot pass directly from supplier to customer",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Finance Manager",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mrb-gate-002-step-3",
+      "order": 3,
+      "title": "SCO Ownership Verification Before Sale",
+      "description": "SCO verifies that institution owned asset before executing Murabaha sale contract with customer",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-mrb-gate-002-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "SCO Verification Report",
+          "description": "SCO confirmation that asset was in institution's ownership before sale",
+          "isRequired": true
+        },
+        {
+          "type": "Timeline Analysis",
+          "description": "Analysis showing: (1) Purchase from supplier → (2) Inventory entry → (3) Sale to customer",
+          "isRequired": true
+        },
+        {
+          "type": "Constructive Possession Confirmation",
+          "description": "Confirmation that institution had constructive possession (control/risk)",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-28 §4",
+          "constraint": "CRITICAL: Customer Murabaha sale contract cannot be executed until asset is in institution's inventory",
+          "cannotModify": true
+        },
+        {
+          "source": "QFCRA IBANK",
+          "constraint": "Regulatory requirement: Documentation must show asset ownership sequence",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: Selling an asset before owning it (bay' al-ma'dum) is prohibited in Shariah. Institution must purchase asset → enter in inventory → THEN sell to customer via Murabaha. This distinguishes Murabaha from conventional financing."
+}

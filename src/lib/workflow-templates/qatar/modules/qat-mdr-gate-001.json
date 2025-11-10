@@ -1,0 +1,129 @@
+{
+  "id": "qat-mdr-gate-001",
+  "name": "Mudaraba: Capital Verification (Hard Gate)",
+  "nameArabic": "المضاربة: التحقق من رأس المال",
+  "category": "contract-gates",
+  "policySource": "AAOIFI FAS-3 §2",
+  "isRequired": true,
+  "isEditable": false,
+  "requiredFor": ["mudaraba"],
+  "optionalFor": [],
+  "jurisdiction": "qatar",
+  "isHardGate": true,
+  "estimatedDurationDays": 2,
+  "description": "HARD GATE: Verify that capital (ras al-mal) has been transferred from capital provider to Mudarib before business operations begin",
+  "steps": [
+    {
+      "id": "qat-mdr-gate-001-step-1",
+      "order": 1,
+      "title": "Capital Amount Documentation",
+      "description": "Document the exact capital amount being contributed by Rab al-Mal",
+      "assignedRole": "Finance Officer",
+      "durationDays": 1,
+      "startAfter": [],
+      "requiredEvidence": [
+        {
+          "type": "Capital Certificate",
+          "description": "Written certification of capital amount (must be clearly quantified)",
+          "isRequired": true
+        },
+        {
+          "type": "Mudaraba Agreement",
+          "description": "Signed agreement specifying exact capital amount",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §2",
+          "constraint": "Capital must be clearly quantified - vague or uncertain amounts not permitted",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": false,
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": true,
+      "allowRoleChange": true
+    },
+    {
+      "id": "qat-mdr-gate-001-step-2",
+      "order": 2,
+      "title": "Capital Transfer Verification",
+      "description": "Verify that capital has been transferred from Rab al-Mal to Mudarib's Mudaraba account",
+      "assignedRole": "Finance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-mdr-gate-001-step-1"],
+      "requiredEvidence": [
+        {
+          "type": "Bank Transfer Confirmation",
+          "description": "Bank statement or SWIFT confirmation showing capital transfer",
+          "isRequired": true
+        },
+        {
+          "type": "Mudaraba Account Statement",
+          "description": "Account statement showing capital received in designated Mudaraba account",
+          "isRequired": true
+        },
+        {
+          "type": "Capital Receipt Acknowledgment",
+          "description": "Mudarib's written acknowledgment of capital receipt",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §2",
+          "constraint": "Capital must be transferred BEFORE Mudaraba business operations begin",
+          "cannotModify": true
+        },
+        {
+          "source": "Shariah Principle",
+          "constraint": "Mudarib cannot conduct business using promised capital - actual transfer required",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Finance Manager",
+      "isHardGate": true,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    },
+    {
+      "id": "qat-mdr-gate-001-step-3",
+      "order": 3,
+      "title": "SCO Capital Verification",
+      "description": "Shariah Compliance Officer confirms capital transfer meets Shariah requirements",
+      "assignedRole": "Shariah Compliance Officer",
+      "durationDays": 1,
+      "startAfter": ["qat-mdr-gate-001-step-2"],
+      "requiredEvidence": [
+        {
+          "type": "SCO Verification Report",
+          "description": "SCO's confirmation that capital was transferred before operations",
+          "isRequired": true
+        },
+        {
+          "type": "Timeline Analysis",
+          "description": "Analysis showing capital transfer date precedes business operations start date",
+          "isRequired": true
+        }
+      ],
+      "policyConstraints": [
+        {
+          "source": "AAOIFI FAS-3 §2",
+          "constraint": "Mudaraba is invalid if business starts before capital is transferred",
+          "cannotModify": true
+        }
+      ],
+      "requiresApproval": true,
+      "approvalRole": "Shariah Compliance Officer",
+      "isHardGate": false,
+      "isOptional": false,
+      "allowDurationChange": false,
+      "allowRoleChange": false
+    }
+  ],
+  "criticalNote": "⚠️ HARD GATE: Capital must be transferred BEFORE Mudaraba operations begin. Operating on promised (but not transferred) capital invalidates the Mudaraba per AAOIFI FAS-3 §2."
+}
