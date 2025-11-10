@@ -4,7 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Islamic Finance Workflows is a Next.js + FastAPI application demonstrating AI-powered workflows for Islamic finance compliance and document processing. The application uses Claude AI with Model Context Protocol (MCP) integrations for knowledge graph management via Graphiti and Neo4j.
+**AI native Governance, Risk & Compliance platform for Islamic Finance** - Built on ISO 37301 (Compliance Management), ISO 31000 (Risk Management), COSO (Internal Controls), AAOIFI, and IFSB standards.
+
+This is a Next.js + FastAPI application that automates Shariah compliance, manages Islamic-specific operational risks, and enables compliant digital asset issuance. The platform uses Claude AI with Model Context Protocol (MCP) integrations for knowledge graph management via Graphiti and Neo4j.
+
+### Platform Positioning
+
+**What Makes This Different from Traditional GRC Platforms:**
+
+- **vs. Vanta/Delve** (Continuous Compliance Monitoring): Islamic Finance domain expertise + blockchain-verified Verifiable Credentials
+- **vs. ServiceNow GRC** (Enterprise GRC Suite): AI-powered workflow extraction from Shariah policies + agile Islamic finance focus
+- **vs. Hedera Guardian** (Policy Workflow to Digital Assets): GRC fundamentals (risk management, control testing, continuous monitoring) + AAOIFI/IFSB standards
+
+**Core Islamic GRC Capabilities:**
+- **Shariah Governance**: Shariah Board (SSB) workflows, independence controls, fatwa management
+- **Islamic Risk Categories**: SNCR (Shariah Breach Risk), DCR (Profit Smoothing Risk), RoR (Profit Rate Risk)
+- **Purification Workflows**: Track non-compliant income, automate charity donations
+- **Contract-Sequence Gates**: Product-level controls (Ijarah delivery before rent, IMB separate sale/gift, etc.)
+- **PER/IRR Management**: Profit Equalization Reserve and Investment Risk Reserve for Investment Account Holders
+- **Template Discipline**: IIFM/ISDA/BAFT contract standards with Shariah Board approval workflows
 
 ## Key Architecture Principles
 
