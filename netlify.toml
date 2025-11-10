@@ -6,7 +6,7 @@
 # DO NOT specify publish directory - Netlify handles it automatically
 
 [build]
-  command = "npm run build"
+  command = "./node_modules/.bin/next build"
   # Note: No publish directory needed - Netlify's Next.js plugin handles deployment
 
 [build.environment]
