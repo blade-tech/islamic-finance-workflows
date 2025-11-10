@@ -6,7 +6,7 @@
  * Executive view with high-level metrics and Islamic GRC indicators
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -20,16 +20,14 @@ import {
   Activity,
 } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
+import {
+  useTasks,
+  useCurrentWorkflows,
+  useCurrentConfig,
+} from '@/lib/stores/grc-demo-store'
 
-// Mock data
-const DASHBOARD_METRICS = {
-  activeWorkflows: 3,
-  totalTasks: 47,
-  completedTasks: 21,
-  overdueItems: 2,
-  hardGatesCleared: 8,
-  totalHardGates: 12,
-  shariahCompliance: 100,
+// Static data for demo purposes (regulatory reporting, risk categories, etc.)
+const STATIC_DEMO_DATA = {
   sncr: {
     incidents: 0,
     lastReview: '2025-11-09',
@@ -38,7 +36,6 @@ const DASHBOARD_METRICS = {
   ssb: {
     lastMeeting: '2025-10-15',
     nextMeeting: '2025-12-15',
-    pendingApprovals: 1,
   },
   regulatoryReporting: {
     qcb: { status: 'current', lastSubmission: '2025-10-31' },
@@ -46,33 +43,6 @@ const DASHBOARD_METRICS = {
     aaoifi: { status: 'current', lastSubmission: '2025-09-30' },
   },
 }
-
-const WORKFLOW_SUMMARY = [
-  {
-    name: 'Ijarah Off-Plan Construction',
-    product: 'Ijarah',
-    progress: 58,
-    status: 'on-track',
-    dueDate: '2025-12-13',
-    criticalIssues: 0,
-  },
-  {
-    name: 'Murabaha Trade Finance',
-    product: 'Murabaha',
-    progress: 42,
-    status: 'on-track',
-    dueDate: '2025-12-20',
-    criticalIssues: 0,
-  },
-  {
-    name: 'Mudaraba Investment Fund',
-    product: 'Mudaraba',
-    progress: 25,
-    status: 'at-risk',
-    dueDate: '2025-12-28',
-    criticalIssues: 1,
-  },
-]
 
 const ISLAMIC_RISK_CATEGORIES = [
   {
@@ -126,13 +96,87 @@ const RECENT_ACTIVITY = [
 ]
 
 export default function OverviewDashboardPage() {
-  const completionRate = Math.round(
-    (DASHBOARD_METRICS.completedTasks / DASHBOARD_METRICS.totalTasks) * 100
-  )
+  const tasks = useTasks()
+  const workflows = useCurrentWorkflows()
+  const config = useCurrentConfig()
 
-  const hardGateProgress = Math.round(
-    (DASHBOARD_METRICS.hardGatesCleared / DASHBOARD_METRICS.totalHardGates) * 100
-  )
+  // Calculate metrics from real data
+  const metrics = useMemo(() => {
+    const now = new Date()
+    const completedTasks = tasks.filter((t) => t.status === 'completed').length
+    const totalTasks = tasks.length
+    const overdueTasks = tasks.filter(
+      (t) => t.status !== 'completed' && new Date(t.dueDate) < now
+    ).length
+
+    // Count hard gates
+    const hardGateTasks = tasks.filter((t) => t.priority === 'critical')
+    const hardGatesCleared = hardGateTasks.filter((t) => t.status === 'completed')
+      .length
+    const totalHardGates = hardGateTasks.length
+
+    // Count pending approvals
+    const pendingApprovals = tasks.filter(
+      (t) => t.requiresApproval && t.approvalStatus === 'pending'
+    ).length
+
+    // Calculate Shariah compliance (100% if no SNCR incidents)
+    const shariahCompliance =
+      STATIC_DEMO_DATA.sncr.incidents === 0 ? 100 : 95
+
+    return {
+      activeWorkflows: workflows.length,
+      totalTasks,
+      completedTasks,
+      overdueItems: overdueTasks,
+      hardGatesCleared,
+      totalHardGates,
+      shariahCompliance,
+      pendingApprovals,
+    }
+  }, [tasks, workflows])
+
+  const completionRate =
+    metrics.totalTasks > 0
+      ? Math.round((metrics.completedTasks / metrics.totalTasks) * 100)
+      : 0
+
+  const hardGateProgress =
+    metrics.totalHardGates > 0
+      ? Math.round((metrics.hardGatesCleared / metrics.totalHardGates) * 100)
+      : 0
+
+  // Calculate workflow summaries from real data
+  const workflowSummaries = useMemo(() => {
+    return workflows.map((workflow) => {
+      const workflowTasks = tasks.filter((t) => t.workflowId === workflow.id)
+      const completedSteps = workflowTasks.filter(
+        (t) => t.status === 'completed'
+      ).length
+      const totalSteps = workflowTasks.length
+      const progress =
+        totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0
+
+      const criticalIssues = workflowTasks.filter(
+        (t) => t.status === 'blocked' || (t.priority === 'critical' && new Date(t.dueDate) < new Date())
+      ).length
+
+      // Find the latest due date for the workflow
+      const dueDates = workflowTasks.map((t) => new Date(t.dueDate))
+      const latestDueDate = dueDates.length > 0
+        ? new Date(Math.max(...dueDates.map((d) => d.getTime())))
+        : new Date()
+
+      return {
+        name: workflow.name,
+        product: config?.productType || 'Unknown',
+        progress,
+        status: criticalIssues > 0 ? ('at-risk' as const) : ('on-track' as const),
+        dueDate: latestDueDate.toISOString().split('T')[0],
+        criticalIssues,
+      }
+    })
+  }, [workflows, tasks, config])
 
   return (
     <div className="space-y-6">
@@ -145,7 +189,7 @@ export default function OverviewDashboardPage() {
               <Badge className="bg-purple-600">Active</Badge>
             </div>
             <div className="text-2xl font-bold text-purple-900">
-              {DASHBOARD_METRICS.activeWorkflows}
+              {metrics.activeWorkflows}
             </div>
             <div className="text-xs text-purple-700 mt-1">Active Workflows</div>
           </CardContent>
@@ -160,7 +204,7 @@ export default function OverviewDashboardPage() {
               </span>
             </div>
             <div className="text-2xl font-bold text-blue-900">
-              {DASHBOARD_METRICS.completedTasks}/{DASHBOARD_METRICS.totalTasks}
+              {metrics.completedTasks}/{metrics.totalTasks}
             </div>
             <div className="text-xs text-blue-700 mt-1">Tasks Completed</div>
           </CardContent>
@@ -175,24 +219,24 @@ export default function OverviewDashboardPage() {
               </Badge>
             </div>
             <div className="text-2xl font-bold text-green-900">
-              {DASHBOARD_METRICS.hardGatesCleared}/{DASHBOARD_METRICS.totalHardGates}
+              {metrics.hardGatesCleared}/{metrics.totalHardGates}
             </div>
             <div className="text-xs text-green-700 mt-1">Hard Gates Cleared</div>
           </CardContent>
         </Card>
 
-        <Card className={`border-2 ${DASHBOARD_METRICS.overdueItems > 0 ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
+        <Card className={`border-2 ${metrics.overdueItems > 0 ? 'border-red-200 bg-red-50' : 'border-gray-200 bg-gray-50'}`}>
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-2">
-              <AlertTriangle className={`h-5 w-5 ${DASHBOARD_METRICS.overdueItems > 0 ? 'text-red-600' : 'text-gray-400'}`} />
-              {DASHBOARD_METRICS.overdueItems > 0 && (
+              <AlertTriangle className={`h-5 w-5 ${metrics.overdueItems > 0 ? 'text-red-600' : 'text-gray-400'}`} />
+              {metrics.overdueItems > 0 && (
                 <Badge className="bg-red-600">Alert</Badge>
               )}
             </div>
-            <div className={`text-2xl font-bold ${DASHBOARD_METRICS.overdueItems > 0 ? 'text-red-900' : 'text-gray-600'}`}>
-              {DASHBOARD_METRICS.overdueItems}
+            <div className={`text-2xl font-bold ${metrics.overdueItems > 0 ? 'text-red-900' : 'text-gray-600'}`}>
+              {metrics.overdueItems}
             </div>
-            <div className={`text-xs mt-1 ${DASHBOARD_METRICS.overdueItems > 0 ? 'text-red-700' : 'text-gray-600'}`}>
+            <div className={`text-xs mt-1 ${metrics.overdueItems > 0 ? 'text-red-700' : 'text-gray-600'}`}>
               Overdue Items
             </div>
           </CardContent>
@@ -212,7 +256,7 @@ export default function OverviewDashboardPage() {
           <CardContent className="space-y-4">
             <div className="text-center p-4 bg-green-50 rounded-lg">
               <div className="text-4xl font-bold text-green-900 mb-2">
-                {DASHBOARD_METRICS.shariahCompliance}%
+                {metrics.shariahCompliance}%
               </div>
               <Badge className="bg-green-600">Fully Compliant</Badge>
             </div>
@@ -223,10 +267,10 @@ export default function OverviewDashboardPage() {
                 <span className="text-sm font-semibold text-gray-900">
                   SNCR Incidents
                 </span>
-                <Badge className="bg-green-600">{DASHBOARD_METRICS.sncr.incidents}</Badge>
+                <Badge className="bg-green-600">{STATIC_DEMO_DATA.sncr.incidents}</Badge>
               </div>
               <p className="text-xs text-gray-600">
-                Last review: {DASHBOARD_METRICS.sncr.lastReview}
+                Last review: {STATIC_DEMO_DATA.sncr.lastReview}
               </p>
             </div>
 
@@ -236,15 +280,15 @@ export default function OverviewDashboardPage() {
                 <span className="text-sm font-semibold text-purple-900">
                   Shariah Board
                 </span>
-                {DASHBOARD_METRICS.ssb.pendingApprovals > 0 && (
+                {metrics.pendingApprovals > 0 && (
                   <Badge variant="outline" className="text-orange-700 border-orange-300">
-                    {DASHBOARD_METRICS.ssb.pendingApprovals} pending
+                    {metrics.pendingApprovals} pending
                   </Badge>
                 )}
               </div>
               <div className="text-xs text-purple-800 space-y-1">
-                <p>Last meeting: {DASHBOARD_METRICS.ssb.lastMeeting}</p>
-                <p>Next meeting: {DASHBOARD_METRICS.ssb.nextMeeting}</p>
+                <p>Last meeting: {STATIC_DEMO_DATA.ssb.lastMeeting}</p>
+                <p>Next meeting: {STATIC_DEMO_DATA.ssb.nextMeeting}</p>
               </div>
             </div>
           </CardContent>
@@ -268,7 +312,7 @@ export default function OverviewDashboardPage() {
                 <Badge className="bg-green-600">Current</Badge>
               </div>
               <p className="text-xs text-gray-600">
-                Last submission: {DASHBOARD_METRICS.regulatoryReporting.qcb.lastSubmission}
+                Last submission: {STATIC_DEMO_DATA.regulatoryReporting.qcb.lastSubmission}
               </p>
             </div>
 
@@ -281,7 +325,7 @@ export default function OverviewDashboardPage() {
                 <Badge className="bg-green-600">Current</Badge>
               </div>
               <p className="text-xs text-gray-600">
-                Last submission: {DASHBOARD_METRICS.regulatoryReporting.qfcra.lastSubmission}
+                Last submission: {STATIC_DEMO_DATA.regulatoryReporting.qfcra.lastSubmission}
               </p>
             </div>
 
@@ -294,7 +338,7 @@ export default function OverviewDashboardPage() {
                 <Badge className="bg-green-600">Current</Badge>
               </div>
               <p className="text-xs text-gray-600">
-                Last submission: {DASHBOARD_METRICS.regulatoryReporting.aaoifi.lastSubmission}
+                Last submission: {STATIC_DEMO_DATA.regulatoryReporting.aaoifi.lastSubmission}
               </p>
             </div>
           </CardContent>
@@ -360,8 +404,16 @@ export default function OverviewDashboardPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {WORKFLOW_SUMMARY.map((workflow) => (
+          {workflowSummaries.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <p className="text-sm">No active workflows yet.</p>
+              <p className="text-xs mt-1">
+                Configure a product to generate workflows.
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {workflowSummaries.map((workflow) => (
               <div
                 key={workflow.name}
                 className="p-4 bg-gray-50 rounded-lg border"
@@ -402,7 +454,8 @@ export default function OverviewDashboardPage() {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 

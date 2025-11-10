@@ -25,152 +25,9 @@ import type { Task, TaskStatus } from '@/lib/types/grc-demo-types'
 type TimeFilter = 'today' | 'week' | 'month' | 'all'
 type StatusFilter = 'all' | TaskStatus
 
-// Mock tasks for demonstration
-const MOCK_TASKS: Task[] = [
-  {
-    id: 'task-1',
-    workflowId: 'wf-1',
-    stepId: 'qat-ssb-001-step-1',
-    title: 'Prepare Product Proposal for SSB Review',
-    description:
-      'Compile comprehensive product documentation including structure, contracts, fatwa basis, and Shariah compliance analysis',
-    priority: 'critical',
-    assignedRole: 'Shariah Compliance Officer',
-    createdAt: new Date().toISOString(),
-    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'in-progress',
-    requiredEvidence: [
-      {
-        type: 'Product Structure Document',
-        description: 'Detailed description of product mechanics and cash flows',
-        isRequired: true,
-      },
-      {
-        type: 'Draft Contracts',
-        description: 'All customer-facing and operational contracts',
-        isRequired: true,
-      },
-    ],
-    requiresApproval: false,
-    policyReference: 'AAOIFI GS-1 §6/1',
-    calendarExported: false,
-  },
-  {
-    id: 'task-2',
-    workflowId: 'wf-1',
-    stepId: 'qat-ijr-gate-001-step-1',
-    title: 'Obtain Legal Title Documentation',
-    description:
-      'Acquire proof of legal ownership: title deed, purchase invoice, asset registration',
-    priority: 'high',
-    assignedRole: 'Legal / Asset Management',
-    createdAt: new Date().toISOString(),
-    dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'not-started',
-    requiredEvidence: [
-      {
-        type: 'Title Deed or Ownership Certificate',
-        description: "Legal document proving institution's ownership",
-        isRequired: true,
-      },
-      {
-        type: 'Purchase Invoice',
-        description: 'Invoice showing institution purchased asset',
-        isRequired: true,
-      },
-    ],
-    requiresApproval: false,
-    policyReference: 'AAOIFI SS-9 §3/1',
-    calendarExported: false,
-  },
-  {
-    id: 'task-3',
-    workflowId: 'wf-1',
-    stepId: 'qat-ijr-gate-002-step-2',
-    title: 'Physical Asset Delivery and Handover',
-    description:
-      'Execute formal handover of asset to lessee with signed delivery receipt',
-    priority: 'critical',
-    assignedRole: 'Operations Manager',
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'waiting-approval',
-    requiredEvidence: [
-      {
-        type: 'Delivery Receipt (Signed)',
-        description: 'Physical or electronic delivery receipt signed by lessee',
-        isRequired: true,
-      },
-      {
-        type: 'Asset Handover Certificate',
-        description: 'Formal certificate documenting asset details and condition',
-        isRequired: true,
-      },
-    ],
-    requiresApproval: true,
-    approver: 'Shariah Compliance Officer',
-    policyReference: 'AAOIFI SS-9 §4/4 (HARD GATE)',
-    calendarExported: false,
-  },
-  {
-    id: 'task-4',
-    workflowId: 'wf-1',
-    stepId: 'qat-sncr-001-step-1',
-    title: 'Establish SNCR Register',
-    description:
-      'Create dedicated register to log all potential and actual Shariah non-compliance incidents',
-    priority: 'high',
-    assignedRole: 'Shariah Compliance Officer',
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'in-progress',
-    requiredEvidence: [
-      {
-        type: 'SNCR Register Template',
-        description: 'Spreadsheet or system module for logging incidents',
-        isRequired: true,
-      },
-      {
-        type: 'SNCR Classification Policy',
-        description: 'Policy defining what constitutes SNCR and severity levels',
-        isRequired: true,
-      },
-    ],
-    requiresApproval: false,
-    policyReference: 'IFSB-1 §6.1',
-    calendarExported: true,
-  },
-  {
-    id: 'task-5',
-    workflowId: 'wf-1',
-    stepId: 'qat-scf-001-step-2',
-    title: 'SCO Ex-Ante Compliance Review',
-    description:
-      'Shariah Compliance Officer conducts detailed review to verify transaction complies with Shariah requirements',
-    priority: 'critical',
-    assignedRole: 'Shariah Compliance Officer',
-    createdAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'not-started',
-    requiredEvidence: [
-      {
-        type: 'SCO Review Report',
-        description: "Detailed report documenting SCO's compliance assessment",
-        isRequired: true,
-      },
-    ],
-    requiresApproval: false,
-    policyReference: 'AAOIFI GS-9 §3/2',
-    calendarExported: false,
-  },
-]
-
 export default function MyTasksPage() {
   const tasks = useTasks()
   const { updateTaskStatus, completeTask } = useGRCDemoStore()
-
-  // Use mock tasks if no real tasks yet
-  const displayTasks = tasks.length > 0 ? tasks : MOCK_TASKS
 
   const [timeFilter, setTimeFilter] = useState<TimeFilter>('all')
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all')
@@ -178,13 +35,13 @@ export default function MyTasksPage() {
 
   // Get unique roles
   const roles = useMemo(() => {
-    const uniqueRoles = new Set(displayTasks.map((t) => t.assignedRole))
+    const uniqueRoles = new Set(tasks.map((t) => t.assignedRole))
     return ['all', ...Array.from(uniqueRoles)]
-  }, [displayTasks])
+  }, [tasks])
 
   // Filter tasks
   const filteredTasks = useMemo(() => {
-    return displayTasks.filter((task) => {
+    return tasks.filter((task) => {
       // Time filter
       if (timeFilter !== 'all') {
         const dueDate = new Date(task.dueDate)
@@ -206,7 +63,7 @@ export default function MyTasksPage() {
 
       return true
     })
-  }, [displayTasks, timeFilter, statusFilter, roleFilter])
+  }, [tasks, timeFilter, statusFilter, roleFilter])
 
   // Statistics
   const stats = useMemo(() => {
@@ -214,20 +71,20 @@ export default function MyTasksPage() {
     const todayEnd = new Date(today.setHours(23, 59, 59, 999))
 
     return {
-      total: displayTasks.length,
-      dueToday: displayTasks.filter(
+      total: tasks.length,
+      dueToday: tasks.filter(
         (t) =>
           new Date(t.dueDate) <= todayEnd &&
           t.status !== 'completed'
       ).length,
-      inProgress: displayTasks.filter((t) => t.status === 'in-progress').length,
-      waitingApproval: displayTasks.filter((t) => t.status === 'waiting-approval')
+      inProgress: tasks.filter((t) => t.status === 'in-progress').length,
+      waitingApproval: tasks.filter((t) => t.status === 'waiting-approval')
         .length,
-      overdue: displayTasks.filter(
+      overdue: tasks.filter(
         (t) => new Date(t.dueDate) < today && t.status !== 'completed'
       ).length,
     }
-  }, [displayTasks])
+  }, [tasks])
 
   const handleStatusChange = (taskId: string, newStatus: TaskStatus) => {
     updateTaskStatus(taskId, newStatus)

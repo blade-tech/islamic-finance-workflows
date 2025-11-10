@@ -6,7 +6,7 @@
  * Manager view - track workflow progress across all team members
  */
 
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
@@ -17,130 +17,13 @@ import {
   TrendingUp,
   Users,
   Calendar,
+  Activity,
 } from 'lucide-react'
-
-// Mock workflow data
-const WORKFLOW_DATA = {
-  workflowName: 'Ijarah (Islamic Lease) - Qatar',
-  productType: 'Ijarah',
-  jurisdiction: 'Qatar',
-  startedAt: '2025-11-08',
-  estimatedCompletion: '2025-12-13',
-  totalSteps: 12,
-  completedSteps: 5,
-  criticalPathSteps: 8,
-  criticalPathCompleted: 3,
-  progress: 42,
-  status: 'on-track' as const,
-}
-
-const STEP_STATUS = [
-  {
-    stepNumber: 1,
-    title: 'Shariah Supervisory Board Approval',
-    assignedTo: 'Shariah Compliance Officer',
-    status: 'completed' as const,
-    completedDate: '2025-11-10',
-    duration: 2,
-    isOnCriticalPath: true,
-  },
-  {
-    stepNumber: 2,
-    title: 'Asset Ownership Verification',
-    assignedTo: 'Legal / Asset Management',
-    status: 'completed' as const,
-    completedDate: '2025-11-12',
-    duration: 2,
-    isOnCriticalPath: true,
-  },
-  {
-    stepNumber: 3,
-    title: 'Delivery Before Rent (HARD GATE)',
-    assignedTo: 'Operations Manager',
-    status: 'in-progress' as const,
-    startedDate: '2025-11-13',
-    duration: 2,
-    isOnCriticalPath: true,
-  },
-  {
-    stepNumber: 4,
-    title: 'Takaful Coverage Setup',
-    assignedTo: 'Risk Officer',
-    status: 'not-started' as const,
-    duration: 1,
-    isOnCriticalPath: false,
-  },
-  {
-    stepNumber: 5,
-    title: 'Shariah Compliance Function (Ex-Ante)',
-    assignedTo: 'Shariah Compliance Officer',
-    status: 'not-started' as const,
-    duration: 3,
-    isOnCriticalPath: true,
-  },
-  {
-    stepNumber: 6,
-    title: 'SNCR Monitoring Setup',
-    assignedTo: 'Shariah Compliance Officer',
-    status: 'not-started' as const,
-    duration: 3,
-    isOnCriticalPath: true,
-  },
-  {
-    stepNumber: 7,
-    title: 'AAOIFI FAS Financial Reporting',
-    assignedTo: 'Finance Manager',
-    status: 'not-started' as const,
-    duration: 5,
-    isOnCriticalPath: false,
-  },
-  {
-    stepNumber: 8,
-    title: 'QCB Prudential Reporting',
-    assignedTo: 'Compliance Manager',
-    status: 'not-started' as const,
-    duration: 4,
-    isOnCriticalPath: true,
-  },
-]
-
-const TEAM_UTILIZATION = [
-  {
-    role: 'Shariah Compliance Officer',
-    assignedTasks: 4,
-    completedTasks: 1,
-    inProgressTasks: 1,
-    utilization: 75,
-  },
-  {
-    role: 'Legal / Asset Management',
-    assignedTasks: 2,
-    completedTasks: 1,
-    inProgressTasks: 0,
-    utilization: 50,
-  },
-  {
-    role: 'Operations Manager',
-    assignedTasks: 2,
-    completedTasks: 0,
-    inProgressTasks: 1,
-    utilization: 50,
-  },
-  {
-    role: 'Finance Manager',
-    assignedTasks: 3,
-    completedTasks: 0,
-    inProgressTasks: 0,
-    utilization: 0,
-  },
-  {
-    role: 'Risk Officer',
-    assignedTasks: 1,
-    completedTasks: 0,
-    inProgressTasks: 0,
-    utilization: 0,
-  },
-]
+import {
+  useTasks,
+  useCurrentWorkflows,
+  useCurrentConfig,
+} from '@/lib/stores/grc-demo-store'
 
 const statusConfig = {
   completed: {
@@ -155,6 +38,18 @@ const statusConfig = {
     icon: Clock,
     label: 'In Progress',
   },
+  'waiting-approval': {
+    color: 'text-yellow-700',
+    bg: 'bg-yellow-50 border-yellow-200',
+    icon: Clock,
+    label: 'Waiting Approval',
+  },
+  blocked: {
+    color: 'text-red-700',
+    bg: 'bg-red-50 border-red-200',
+    icon: AlertTriangle,
+    label: 'Blocked',
+  },
   'not-started': {
     color: 'text-gray-600',
     bg: 'bg-gray-50 border-gray-200',
@@ -164,9 +59,160 @@ const statusConfig = {
 }
 
 export default function ProcessTrackingPage() {
-  const completionPercentage = Math.round(
-    (WORKFLOW_DATA.completedSteps / WORKFLOW_DATA.totalSteps) * 100
-  )
+  const tasks = useTasks()
+  const workflows = useCurrentWorkflows()
+  const config = useCurrentConfig()
+
+  // Get the primary workflow (first one)
+  const primaryWorkflow = workflows[0]
+
+  // Calculate workflow data
+  const workflowData = useMemo(() => {
+    if (!primaryWorkflow) {
+      return null
+    }
+
+    const workflowTasks = tasks.filter((t) => t.workflowId === primaryWorkflow.id)
+    const completedSteps = workflowTasks.filter((t) => t.status === 'completed')
+      .length
+    const totalSteps = workflowTasks.length
+
+    // Count critical path tasks (critical priority)
+    const criticalPathTasks = workflowTasks.filter((t) => t.priority === 'critical')
+    const criticalPathCompleted = criticalPathTasks.filter(
+      (t) => t.status === 'completed'
+    ).length
+
+    // Calculate progress
+    const progress =
+      totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0
+
+    // Determine status (at-risk if any critical task is overdue)
+    const now = new Date()
+    const criticalOverdue = criticalPathTasks.some(
+      (t) => t.status !== 'completed' && new Date(t.dueDate) < now
+    )
+    const status = criticalOverdue ? ('at-risk' as const) : ('on-track' as const)
+
+    // Find latest due date for estimated completion
+    const dueDates = workflowTasks.map((t) => new Date(t.dueDate))
+    const estimatedCompletion =
+      dueDates.length > 0
+        ? new Date(Math.max(...dueDates.map((d) => d.getTime())))
+            .toISOString()
+            .split('T')[0]
+        : new Date().toISOString().split('T')[0]
+
+    // Find earliest created date for start date
+    const createdDates = workflowTasks.map((t) => new Date(t.createdAt))
+    const startedAt =
+      createdDates.length > 0
+        ? new Date(Math.min(...createdDates.map((d) => d.getTime())))
+            .toISOString()
+            .split('T')[0]
+        : new Date().toISOString().split('T')[0]
+
+    return {
+      workflowName: primaryWorkflow.name,
+      productType: config?.productType || 'Unknown',
+      jurisdiction: config?.jurisdiction || 'Unknown',
+      startedAt,
+      estimatedCompletion,
+      totalSteps,
+      completedSteps,
+      criticalPathSteps: criticalPathTasks.length,
+      criticalPathCompleted,
+      progress,
+      status,
+    }
+  }, [primaryWorkflow, tasks, config])
+
+  // Calculate step status from tasks
+  const stepStatuses = useMemo(() => {
+    if (!primaryWorkflow) return []
+
+    const workflowTasks = tasks.filter((t) => t.workflowId === primaryWorkflow.id)
+
+    return workflowTasks.map((task, index) => ({
+      stepNumber: index + 1,
+      title: task.title,
+      assignedTo: task.assignedRole,
+      status: task.status,
+      completedDate: task.completedAt
+        ? new Date(task.completedAt).toISOString().split('T')[0]
+        : undefined,
+      startedDate:
+        task.status === 'in-progress'
+          ? new Date(task.createdAt).toISOString().split('T')[0]
+          : undefined,
+      duration: Math.ceil(
+        (new Date(task.dueDate).getTime() - new Date(task.createdAt).getTime()) /
+          (1000 * 60 * 60 * 24)
+      ),
+      isOnCriticalPath: task.priority === 'critical',
+    }))
+  }, [primaryWorkflow, tasks])
+
+  // Calculate team utilization
+  const teamUtilization = useMemo(() => {
+    const roleStats = new Map<
+      string,
+      {
+        assignedTasks: number
+        completedTasks: number
+        inProgressTasks: number
+      }
+    >()
+
+    tasks.forEach((task) => {
+      const role = task.assignedRole
+      const stats = roleStats.get(role) || {
+        assignedTasks: 0,
+        completedTasks: 0,
+        inProgressTasks: 0,
+      }
+
+      stats.assignedTasks++
+      if (task.status === 'completed') stats.completedTasks++
+      if (task.status === 'in-progress') stats.inProgressTasks++
+
+      roleStats.set(role, stats)
+    })
+
+    return Array.from(roleStats.entries()).map(([role, stats]) => {
+      // Simple utilization calculation: (completed + in-progress) / total * 100
+      const utilization = Math.round(
+        ((stats.completedTasks + stats.inProgressTasks) / stats.assignedTasks) *
+          100
+      )
+
+      return {
+        role,
+        ...stats,
+        utilization,
+      }
+    })
+  }, [tasks])
+
+  const completionPercentage = workflowData?.progress || 0
+
+  if (!workflowData) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardContent className="p-12 text-center">
+            <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+            <h3 className="text-lg font-medium text-gray-900 mb-1">
+              No Active Workflow
+            </h3>
+            <p className="text-sm text-gray-600">
+              Configure a product to generate a workflow.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -176,18 +222,22 @@ export default function ProcessTrackingPage() {
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-xl mb-2">
-                {WORKFLOW_DATA.workflowName}
+                {workflowData.workflowName}
               </CardTitle>
               <div className="flex items-center gap-3 text-sm text-gray-600">
-                <span>{WORKFLOW_DATA.productType}</span>
+                <span>{workflowData.productType}</span>
                 <span>•</span>
-                <span>{WORKFLOW_DATA.jurisdiction}</span>
+                <span>{workflowData.jurisdiction}</span>
                 <span>•</span>
-                <span>Started {WORKFLOW_DATA.startedAt}</span>
+                <span>Started {workflowData.startedAt}</span>
               </div>
             </div>
-            <Badge className="bg-green-600">
-              {WORKFLOW_DATA.status === 'on-track' && 'On Track'}
+            <Badge
+              className={
+                workflowData.status === 'on-track' ? 'bg-green-600' : 'bg-orange-600'
+              }
+            >
+              {workflowData.status === 'on-track' ? 'On Track' : 'At Risk'}
             </Badge>
           </div>
         </CardHeader>
@@ -206,37 +256,40 @@ export default function ProcessTrackingPage() {
               <Progress value={completionPercentage} className="h-3" />
               <div className="flex items-center justify-between mt-2 text-xs text-gray-600">
                 <span>
-                  {WORKFLOW_DATA.completedSteps} of {WORKFLOW_DATA.totalSteps}{' '}
+                  {workflowData.completedSteps} of {workflowData.totalSteps}{' '}
                   steps completed
                 </span>
                 <span>
-                  Est. completion: {WORKFLOW_DATA.estimatedCompletion}
+                  Est. completion: {workflowData.estimatedCompletion}
                 </span>
               </div>
             </div>
 
             {/* Critical Path Progress */}
-            <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-orange-600" />
-                  <span className="text-sm font-medium text-orange-900">
-                    Critical Path
-                  </span>
+            {workflowData.criticalPathSteps > 0 && (
+              <div className="p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-orange-600" />
+                    <span className="text-sm font-medium text-orange-900">
+                      Critical Path
+                    </span>
+                  </div>
+                  <Badge variant="outline" className="text-orange-700 border-orange-300">
+                    {workflowData.criticalPathCompleted} /{' '}
+                    {workflowData.criticalPathSteps}
+                  </Badge>
                 </div>
-                <Badge variant="outline" className="text-orange-700 border-orange-300">
-                  {WORKFLOW_DATA.criticalPathCompleted} / {WORKFLOW_DATA.criticalPathSteps}
-                </Badge>
+                <Progress
+                  value={
+                    (workflowData.criticalPathCompleted /
+                      workflowData.criticalPathSteps) *
+                    100
+                  }
+                  className="h-2"
+                />
               </div>
-              <Progress
-                value={
-                  (WORKFLOW_DATA.criticalPathCompleted /
-                    WORKFLOW_DATA.criticalPathSteps) *
-                  100
-                }
-                className="h-2"
-              />
-            </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -251,7 +304,7 @@ export default function ProcessTrackingPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            {STEP_STATUS.map((step) => {
+            {stepStatuses.map((step) => {
               const status = statusConfig[step.status]
               const StatusIcon = status.icon
 
@@ -329,7 +382,7 @@ export default function ProcessTrackingPage() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {TEAM_UTILIZATION.map((member) => (
+            {teamUtilization.map((member) => (
               <div key={member.role} className="p-4 bg-gray-50 rounded-lg border">
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="font-semibold text-gray-900 text-sm">
