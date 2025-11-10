@@ -258,6 +258,7 @@ export interface Task {
 
   // Policy context
   policyReference: string // e.g., "AAOIFI SS-9 §4/4"
+  policyConstraints?: PolicyConstraint[] // Full constraint details
 
   // Calendar export
   calendarExported: boolean

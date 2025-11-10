@@ -70,6 +70,7 @@ export function generateTasksFromWorkflows(workflows: Workflow[]): Task[] {
         approvalStatus: step.requiresApproval ? 'pending' : undefined,
         approver: step.approvalRole,
         policyReference,
+        policyConstraints: step.policyConstraints.length > 0 ? step.policyConstraints : undefined,
         calendarExported: false,
       }
 
