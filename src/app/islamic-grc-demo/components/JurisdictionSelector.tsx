@@ -88,19 +88,20 @@ export function JurisdictionSelector({
             >
               <CardHeader className="p-4">
                 <div className="flex items-center justify-between">
-                  <div className="text-4xl">{jurisdiction.flag}</div>
+                  <div className="flex items-center gap-3">
+                    <div className="text-4xl">{jurisdiction.flag}</div>
+                    <CardTitle
+                      className={`text-lg ${isActive ? 'text-green-900' : 'text-gray-600'}`}
+                    >
+                      {jurisdiction.name}
+                    </CardTitle>
+                  </div>
                   {isSelected && (
                     <CheckCircle2 className="h-6 w-6 text-green-600" />
                   )}
                 </div>
               </CardHeader>
               <CardContent className="p-4 pt-0">
-                <CardTitle
-                  className={`text-base mb-2 ${isActive ? 'text-green-900' : 'text-gray-600'}`}
-                >
-                  {jurisdiction.name}
-                </CardTitle>
-
                 {isActive ? (
                   <Badge className="bg-green-600 hover:bg-green-700">
                     Active

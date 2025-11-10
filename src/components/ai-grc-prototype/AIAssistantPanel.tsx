@@ -12,7 +12,7 @@
  * - Pre-scripted conversations for demo
  */
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -36,11 +36,15 @@ interface AIAssistantPanelProps {
   availableConversations: Conversation[]
 }
 
-export function AIAssistantPanel({
+export interface AIAssistantPanelRef {
+  loadConversation: (conversation: Conversation) => void
+}
+
+export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanelProps>(function AIAssistantPanel({
   taskId,
   taskName,
   availableConversations
-}: AIAssistantPanelProps) {
+}, ref) {
   const [messages, setMessages] = useState<AIMessage[]>([
     {
       id: 'welcome',
@@ -80,6 +84,11 @@ export function AIAssistantPanel({
       }
     })
   }
+
+  // Expose loadConversation method via ref for parent component
+  useImperativeHandle(ref, () => ({
+    loadConversation: handleLoadConversation
+  }))
 
   const handleApprove = (messageId: string, toolId: string) => {
     setMessages(prev =>
@@ -298,7 +307,7 @@ export function AIAssistantPanel({
       </Card>
     </div>
   )
-}
+})
 
 /**
  * TOOL APPROVAL CARD COMPONENT
