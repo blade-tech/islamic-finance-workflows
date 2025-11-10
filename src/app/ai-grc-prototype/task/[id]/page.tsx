@@ -36,6 +36,7 @@ import {
   ExternalLink,
   FileCheck,
   FileText,
+  GitBranch,
   Lock,
   Shield,
   Sparkles,
@@ -49,6 +50,10 @@ import {
   calculateCapitalSad,
   scheduleMeeting,
   uploadEvidence,
+  searchKnowledgeBase,
+  draftReport,
+  verifyCompliance,
+  extractTerms,
   type Conversation
 } from '@/lib/mock-data/ai-conversations'
 
@@ -98,8 +103,24 @@ export default function TaskPage() {
 
   // Select conversations based on control
   const availableConversations = control.isHardGate
-    ? [calculateCapitalHappy, calculateCapitalSad, scheduleMeeting, uploadEvidence]
-    : [scheduleMeeting, uploadEvidence]
+    ? [
+        calculateCapitalHappy,
+        calculateCapitalSad,
+        scheduleMeeting,
+        uploadEvidence,
+        searchKnowledgeBase,
+        draftReport,
+        verifyCompliance,
+        extractTerms
+      ]
+    : [
+        scheduleMeeting,
+        uploadEvidence,
+        searchKnowledgeBase,
+        draftReport,
+        verifyCompliance,
+        extractTerms
+      ]
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50">
@@ -317,6 +338,50 @@ export default function TaskPage() {
               </AccordionTrigger>
               <AccordionContent className="px-6 pb-6">
                 <div className="space-y-6">
+                  {/* Traceability Chain */}
+                  <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                    <div className="flex items-center gap-2 mb-4">
+                      <GitBranch className="h-5 w-5 text-green-600" />
+                      <h4 className="font-semibold text-green-900">Why This Task Exists</h4>
+                    </div>
+                    <p className="text-sm text-green-800 mb-4">
+                      This task implements a regulatory obligation through the GRC control framework:
+                    </p>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                          1
+                        </div>
+                        <div className="flex-1 p-3 bg-white rounded-lg border border-green-300">
+                          <p className="text-xs font-semibold text-blue-900">Regulatory Obligation</p>
+                          <p className="text-sm text-gray-900">{control.requiredBy[0]}</p>
+                        </div>
+                      </div>
+                      <div className="ml-5 w-0.5 h-4 bg-green-400" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-sm">
+                          2
+                        </div>
+                        <div className="flex-1 p-3 bg-white rounded-lg border border-green-300">
+                          <p className="text-xs font-semibold text-purple-900">Control Implementation</p>
+                          <p className="text-sm text-gray-900">{control.name}</p>
+                          <p className="text-xs text-gray-600 mt-1">{control.aaoifiSection} • {control.frequency}</p>
+                        </div>
+                      </div>
+                      <div className="ml-5 w-0.5 h-4 bg-green-400" />
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+                          3
+                        </div>
+                        <div className="flex-1 p-3 bg-white rounded-lg border-2 border-green-400">
+                          <p className="text-xs font-semibold text-indigo-900">This Task</p>
+                          <p className="text-sm text-gray-900 font-medium">{mockTask.title}</p>
+                          <p className="text-xs text-gray-600 mt-1">{control.evidenceRequired.length} evidence items required</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Regulatory Requirements */}
                   <div className="p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
                     <div className="flex items-center gap-2 mb-3">
@@ -358,14 +423,32 @@ export default function TaskPage() {
                   )}
 
                   {/* Links */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-3">
                     <Button
                       variant="outline"
                       size="sm"
-                      onClick={() => window.open('#', '_blank')}
+                      onClick={() => router.push(`/ai-grc-prototype/control/${controlId}`)}
                       className="text-xs"
                     >
-                      View in Control Library
+                      View Control Details
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push('/ai-grc-prototype/obligations')}
+                      className="text-xs"
+                    >
+                      View Obligations Register
+                      <ExternalLink className="h-3 w-3 ml-1" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => router.push('/ssb-prototype')}
+                      className="text-xs"
+                    >
+                      View Traceability Map
                       <ExternalLink className="h-3 w-3 ml-1" />
                     </Button>
                   </div>

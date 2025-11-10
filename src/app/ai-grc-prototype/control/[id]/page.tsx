@@ -18,6 +18,14 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import {
   ArrowLeft,
   ArrowRight,
   Bot,
@@ -26,6 +34,7 @@ import {
   FileCheck,
   FileText,
   GitBranch,
+  HelpCircle,
   Lock,
   Shield,
   Sparkles
@@ -91,7 +100,7 @@ export default function ControlDetailPage() {
                 <h1 className="text-3xl font-bold text-gray-900">{control.name}</h1>
               </div>
               <p className="text-gray-600 text-sm mb-3">{control.description}</p>
-              <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-4 text-sm mb-4">
                 <div className="flex items-center gap-2">
                   <Shield className="h-4 w-4 text-purple-600" />
                   <span className="text-gray-700">{control.aaoifiSection}</span>
@@ -106,6 +115,115 @@ export default function ControlDetailPage() {
                   </Badge>
                 )}
               </div>
+
+              {/* Why This Control Dialog */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="border-blue-400 text-blue-700 hover:bg-blue-50">
+                    <HelpCircle className="h-4 w-4 mr-2" />
+                    Why this control?
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl flex items-center gap-2">
+                      <Shield className="h-6 w-6 text-purple-600" />
+                      Why This Control?
+                    </DialogTitle>
+                    <DialogDescription>
+                      Understanding the regulatory foundation and Shariah purpose of this control
+                    </DialogDescription>
+                  </DialogHeader>
+
+                  <div className="space-y-6 mt-4">
+                    {/* Regulatory Obligations */}
+                    <div className="p-4 bg-purple-50 rounded-lg border-2 border-purple-200">
+                      <h4 className="font-semibold text-purple-900 mb-3 flex items-center gap-2">
+                        <Sparkles className="h-5 w-5" />
+                        Regulatory Obligations Satisfied
+                      </h4>
+                      <p className="text-sm text-purple-800 mb-3">
+                        This control ensures compliance with the following regulatory requirements:
+                      </p>
+                      <div className="space-y-2">
+                        {control.requiredBy.map((source, index) => (
+                          <div key={index} className="flex items-start gap-3 p-3 bg-white rounded-lg border border-purple-200">
+                            <Shield className="h-4 w-4 text-purple-600 flex-shrink-0 mt-0.5" />
+                            <span className="text-sm text-gray-900">{source}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Shariah Purpose */}
+                    <div className="p-4 bg-green-50 rounded-lg border-2 border-green-200">
+                      <h4 className="font-semibold text-green-900 mb-3 flex items-center gap-2">
+                        <Shield className="h-5 w-5" />
+                        Shariah Purpose
+                      </h4>
+                      <p className="text-sm text-green-800">
+                        {control.aaoifiSection} mandates this control to ensure Mudarabah contracts adhere to Islamic principles of {control.name.toLowerCase()}, protecting the rights of all parties and maintaining Shariah compliance throughout the contract lifecycle.
+                      </p>
+                    </div>
+
+                    {/* Traceability */}
+                    <div className="p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                      <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                        <GitBranch className="h-5 w-5" />
+                        Traceability Chain
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs">
+                            1
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-blue-900">Regulatory Obligation</p>
+                            <p className="text-blue-700 text-xs">{control.requiredBy[0]}</p>
+                          </div>
+                        </div>
+                        <div className="ml-4 w-0.5 h-6 bg-blue-300" />
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xs">
+                            2
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-purple-900">Control</p>
+                            <p className="text-purple-700 text-xs">{control.name}</p>
+                          </div>
+                        </div>
+                        <div className="ml-4 w-0.5 h-6 bg-blue-300" />
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-xs">
+                            3
+                          </div>
+                          <div className="flex-1">
+                            <p className="font-medium text-indigo-900">Workflow & Tasks</p>
+                            <p className="text-indigo-700 text-xs">{control.frequency} testing with {control.evidenceRequired.length} evidence items</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Learn More */}
+                    <div className="flex gap-3">
+                      <Button
+                        variant="outline"
+                        className="flex-1"
+                        onClick={() => router.push('/ai-grc-prototype/obligations')}
+                      >
+                        View Full Obligations Register
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => router.push('/ssb-prototype')}
+                      >
+                        View Traceability Map
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>

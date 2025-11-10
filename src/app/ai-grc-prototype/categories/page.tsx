@@ -41,6 +41,7 @@ import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
+  BookOpen,
   Bot,
   CheckCircle2,
   ChevronDown,
@@ -64,7 +65,7 @@ import {
 
 export default function AIGRCCategoriesPage() {
   const router = useRouter()
-  const [activeTab, setActiveTab] = useState<'overview' | 'controls' | 'updates'>('controls')
+  const [activeTab, setActiveTab] = useState<'overview' | 'controls' | 'obligations' | 'updates'>('controls')
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [expandedCategories, setExpandedCategories] = useState<string[]>(['cat-capital', 'cat-profit'])
@@ -193,6 +194,13 @@ export default function AIGRCCategoriesPage() {
               }`}
             >
               Controls
+            </button>
+            <button
+              onClick={() => router.push('/ai-grc-prototype/obligations')}
+              className="pb-4 px-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"
+            >
+              <BookOpen className="h-4 w-4" />
+              Obligations Register
             </button>
             <button
               onClick={() => setActiveTab('updates')}
