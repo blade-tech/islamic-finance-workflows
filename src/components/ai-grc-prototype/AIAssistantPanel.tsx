@@ -49,12 +49,14 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
     {
       id: 'welcome',
       role: 'assistant',
-      content: `👋 Hi! I'm your AI assistant for **${taskName}**.\n\nI can help you:\n- Calculate compliance metrics\n- Draft documents\n- Schedule meetings\n- Upload and verify evidence\n\n**Try one of the pre-scripted conversations below to see me in action!**`,
+      content: `👋 Hi! I'm your AI assistant for **${taskName}**.\n\nI can help you:\n- Calculate compliance metrics\n- Draft documents\n- Schedule meetings\n- Upload and verify evidence\n- Search knowledge base\n- Extract contract terms\n- Verify compliance status\n\n**Click an action above to see me in action with Human-in-the-Loop approval!**`,
       timestamp: 'Just now'
     }
   ])
   const [inputValue, setInputValue] = useState('')
   const [isTyping, setIsTyping] = useState(false)
+  const [pendingMessages, setPendingMessages] = useState<AIMessage[]>([])
+  const [isPaused, setIsPaused] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -65,24 +67,40 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
     scrollToBottom()
   }, [messages])
 
-  const handleLoadConversation = (conversation: Conversation) => {
-    // Reset to welcome message
-    setMessages([messages[0]])
+  const playMessages = (messagesToPlay: AIMessage[], startDelay = 500) => {
+    if (messagesToPlay.length === 0) return
 
-    // Simulate conversation playback with delays
-    let delay = 500
-    conversation.messages.forEach((msg, index) => {
+    let delay = startDelay
+    messagesToPlay.forEach((msg, index) => {
       setTimeout(() => {
         setMessages(prev => [...prev, msg])
+
+        // If this message requires approval, pause playback
+        if (msg.toolUse?.status === 'pending_approval') {
+          setIsPaused(true)
+          // Store remaining messages for later
+          const remaining = messagesToPlay.slice(index + 1)
+          setPendingMessages(remaining)
+        }
       }, delay)
 
-      // Add extra delay for assistant messages with pending approval
+      // Only schedule next messages if not paused
       if (msg.toolUse?.status === 'pending_approval') {
-        delay += 2000
-      } else {
-        delay += 1500
+        return // Stop scheduling further messages
       }
+
+      delay += 1500
     })
+  }
+
+  const handleLoadConversation = (conversation: Conversation) => {
+    // Reset state
+    setMessages([messages[0]])
+    setPendingMessages([])
+    setIsPaused(false)
+
+    // Start playing messages
+    playMessages(conversation.messages)
   }
 
   // Expose loadConversation method via ref for parent component
@@ -91,6 +109,7 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
   }))
 
   const handleApprove = (messageId: string, toolId: string) => {
+    // Update status to executing
     setMessages(prev =>
       prev.map(msg => {
         if (msg.id === messageId && msg.toolUse?.id === toolId) {
@@ -106,7 +125,7 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
       })
     )
 
-    // Simulate execution and completion
+    // After 2s, mark as completed and resume playback
     setTimeout(() => {
       setMessages(prev =>
         prev.map(msg => {
@@ -122,10 +141,18 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
           return msg
         })
       )
+
+      // Resume playback with remaining messages
+      setIsPaused(false)
+      if (pendingMessages.length > 0) {
+        playMessages(pendingMessages, 1500)
+        setPendingMessages([])
+      }
     }, 2000)
   }
 
   const handleReject = (messageId: string, toolId: string) => {
+    // Update status to rejected
     setMessages(prev =>
       prev.map(msg => {
         if (msg.id === messageId && msg.toolUse?.id === toolId) {
@@ -140,6 +167,10 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
         return msg
       })
     )
+
+    // Clear pending messages and unpause
+    setPendingMessages([])
+    setIsPaused(false)
 
     // Add rejection message
     setTimeout(() => {
@@ -168,36 +199,6 @@ export const AIAssistantPanel = forwardRef<AIAssistantPanelRef, AIAssistantPanel
 
   return (
     <div className="space-y-6">
-      {/* Pre-scripted Conversations */}
-      <Card className="border-2 border-purple-300 bg-gradient-to-r from-purple-50 to-indigo-50">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-600" />
-            <CardTitle className="text-purple-900">Try Pre-Scripted Conversations</CardTitle>
-          </div>
-          <CardDescription className="text-purple-700">
-            Click to see AI assistant capabilities with HITL approval
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {availableConversations.map(conv => (
-              <Button
-                key={conv.id}
-                onClick={() => handleLoadConversation(conv)}
-                variant="outline"
-                className="h-auto p-4 justify-start text-left hover:border-purple-400 hover:bg-purple-50"
-              >
-                <div>
-                  <p className="font-semibold text-gray-900 mb-1">{conv.name}</p>
-                  <p className="text-xs text-gray-600">{conv.description}</p>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Chat Panel */}
       <Card className="border-2 border-blue-300">
         <CardHeader className="bg-gradient-to-r from-blue-50 to-cyan-50">

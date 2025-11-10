@@ -442,6 +442,268 @@ export const uploadEvidence: Conversation = {
 }
 
 /**
+ * CONVERSATION 5: Search Knowledge Base
+ * Task: Search regulatory requirements
+ */
+export const searchKnowledgeBase: Conversation = {
+  id: 'search-knowledge',
+  name: 'Search Knowledge Base',
+  description: 'Search regulations and best practices via MCP',
+  messages: [
+    {
+      id: 'msg-1',
+      role: 'user',
+      content: 'What are the QFCRA requirements for capital adequacy reporting?',
+      timestamp: '9:15 AM'
+    },
+    {
+      id: 'msg-2',
+      role: 'assistant',
+      content: 'I\'ll search the regulatory knowledge base for QFCRA capital adequacy requirements.',
+      timestamp: '9:15 AM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'search_knowledge_base',
+        parameters: {
+          query: 'QFCRA capital adequacy reporting requirements',
+          sources: ['QFCRA IBANK Rules', 'IFSB Standards', 'AAOIFI GS-8'],
+          maxResults: 5
+        },
+        reasoning: 'Search across multiple regulatory sources to provide comprehensive answer',
+        status: 'pending_approval'
+      }
+    },
+    {
+      id: 'msg-3',
+      role: 'assistant',
+      content: '✅ **Found 3 relevant regulations:**\n\n**QFCRA IBANK Rule 5.3.1:**\n"Islamic banks must maintain minimum CAR of 12.5% at all times, with reporting required monthly to QFCRA"\n\n**IFSB-15 Section 4.2:**\n"Capital adequacy calculations must exclude non-PLS investments from risk-weighted assets"\n\n**AAOIFI GS-8 Para 3/2:**\n"Profit equalization reserves may be included in Tier 2 capital up to 40% of total capital"\n\n**Key Requirements:**\n- Minimum CAR: 12.5%\n- Reporting frequency: Monthly\n- Calculation method: Basel III adapted for Islamic finance',
+      timestamp: '9:15 AM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'search_knowledge_base',
+        parameters: {
+          query: 'QFCRA capital adequacy reporting requirements',
+          sources: ['QFCRA IBANK Rules', 'IFSB Standards', 'AAOIFI GS-8'],
+          maxResults: 5
+        },
+        reasoning: 'Search across multiple regulatory sources to provide comprehensive answer',
+        status: 'completed',
+        result: {
+          sourcesFound: 3,
+          documents: ['QFCRA IBANK 5.3.1', 'IFSB-15 Sec 4.2', 'AAOIFI GS-8']
+        }
+      }
+    }
+  ]
+}
+
+/**
+ * CONVERSATION 6: Draft Compliance Report
+ */
+export const draftReport: Conversation = {
+  id: 'draft-report',
+  name: 'Draft Compliance Report',
+  description: 'Generate compliance reports with AI assistance',
+  messages: [
+    {
+      id: 'msg-1',
+      role: 'user',
+      content: 'Can you draft the quarterly Shariah compliance report for Q4 2025?',
+      timestamp: '11:00 AM'
+    },
+    {
+      id: 'msg-2',
+      role: 'assistant',
+      content: 'I\'ll gather the required data and draft the Shariah compliance report.',
+      timestamp: '11:00 AM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'draft_compliance_report',
+        parameters: {
+          reportType: 'shariah-quarterly',
+          period: 'Q4 2025',
+          includeSections: [
+            'Executive Summary',
+            'Capital Maintenance Status',
+            'Profit Distribution Compliance',
+            'Asset Shariah Compliance',
+            'Outstanding Issues',
+            'SSB Resolutions'
+          ]
+        },
+        reasoning: 'Compile comprehensive quarterly Shariah compliance report for SSB review',
+        status: 'pending_approval'
+      }
+    },
+    {
+      id: 'msg-3',
+      role: 'assistant',
+      content: '✅ **Shariah Compliance Report Q4 2025 Generated**\n\n📄 **Report_Shariah_Q4_2025.pdf** (12 pages)\n\n**Key Highlights:**\n✅ All Mudarabah contracts maintained capital integrity\n✅ Profit distributions complied with AAOIFI SS-13\n✅ 100% of investments passed Shariah screening\n✅ No non-permissible income detected\n\n**Outstanding Items:**\n⚠️ 2 contracts awaiting SSB renewal approval\n📋 1 new Sukuk structure pending fatwa\n\n**Ready for:** SSB review on Nov 19, 2025',
+      timestamp: '11:01 AM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'draft_compliance_report',
+        parameters: {
+          reportType: 'shariah-quarterly',
+          period: 'Q4 2025',
+          includeSections: [
+            'Executive Summary',
+            'Capital Maintenance Status',
+            'Profit Distribution Compliance',
+            'Asset Shariah Compliance',
+            'Outstanding Issues',
+            'SSB Resolutions'
+          ]
+        },
+        reasoning: 'Compile comprehensive quarterly Shariah compliance report for SSB review',
+        status: 'completed',
+        result: {
+          documentId: 'report-q4-2025',
+          filename: 'Report_Shariah_Q4_2025.pdf',
+          pages: 12
+        }
+      }
+    }
+  ]
+}
+
+/**
+ * CONVERSATION 7: Verify Compliance
+ */
+export const verifyCompliance: Conversation = {
+  id: 'verify-compliance',
+  name: 'Verify Compliance',
+  description: 'Check control compliance status via MCP',
+  messages: [
+    {
+      id: 'msg-1',
+      role: 'user',
+      content: 'Check if all required controls for Mudarabah product launch are complete',
+      timestamp: '1:30 PM'
+    },
+    {
+      id: 'msg-2',
+      role: 'assistant',
+      content: 'I\'ll verify the compliance status for all Mudarabah controls.',
+      timestamp: '1:30 PM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'verify_compliance_status',
+        parameters: {
+          productType: 'mudarabah',
+          jurisdiction: 'qatar',
+          checkpoints: [
+            'Contract Structure Review',
+            'Capital Maintenance Controls',
+            'Profit Distribution Controls',
+            'Shariah Board Approval',
+            'Regulatory Filings'
+          ]
+        },
+        reasoning: 'Comprehensive pre-launch compliance verification across all control categories',
+        status: 'pending_approval'
+      }
+    },
+    {
+      id: 'msg-3',
+      role: 'assistant',
+      content: '📊 **Compliance Verification Complete**\n\n**Overall Status: 92% Complete** ⚠️\n\n✅ Contract Structure Review (100%)\n- AAOIFI SS-13 compliance: ✅\n- QFCRA approval: ✅\n\n✅ Capital Maintenance Controls (100%)\n- Monthly monitoring: ✅\n- Quarterly hard gates: ✅\n\n✅ Profit Distribution Controls (100%)\n- Distribution logic: ✅\n- SSB approval process: ✅\n\n✅ Shariah Board Approval (100%)\n- Product fatwa: ✅ (dated Oct 2025)\n\n⚠️ Regulatory Filings (50%)\n- QFCRA Form IBANK-01: ✅ Submitted\n- QCB Notification: ⏳ **PENDING**\n\n**Blocker:** QCB notification required before product launch.',
+      timestamp: '1:30 PM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'verify_compliance_status',
+        parameters: {
+          productType: 'mudarabah',
+          jurisdiction: 'qatar',
+          checkpoints: [
+            'Contract Structure Review',
+            'Capital Maintenance Controls',
+            'Profit Distribution Controls',
+            'Shariah Board Approval',
+            'Regulatory Filings'
+          ]
+        },
+        reasoning: 'Comprehensive pre-launch compliance verification across all control categories',
+        status: 'completed',
+        result: {
+          overallCompletionRate: 0.92,
+          criticalGaps: ['QCB Notification pending']
+        }
+      }
+    }
+  ]
+}
+
+/**
+ * CONVERSATION 8: Extract Key Terms
+ */
+export const extractTerms: Conversation = {
+  id: 'extract-terms',
+  name: 'Extract Key Terms',
+  description: 'Extract key contract terms using AI',
+  messages: [
+    {
+      id: 'msg-1',
+      role: 'user',
+      content: 'Extract the profit-sharing ratio from the Mudarabah contract I just uploaded',
+      timestamp: '3:10 PM'
+    },
+    {
+      id: 'msg-2',
+      role: 'assistant',
+      content: 'I\'ll analyze the contract and extract the profit-sharing terms.',
+      timestamp: '3:10 PM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'extract_contract_terms',
+        parameters: {
+          documentId: 'contract-2025-mud-017',
+          extractionTargets: [
+            'profit_sharing_ratio',
+            'capital_amount',
+            'mudarib_name',
+            'rab_al_mal_name',
+            'contract_term',
+            'termination_conditions'
+          ]
+        },
+        reasoning: 'Extract structured data from unstructured contract document',
+        status: 'pending_approval'
+      }
+    },
+    {
+      id: 'msg-3',
+      role: 'assistant',
+      content: '✅ **Contract Terms Extracted**\n\n**Profit-Sharing Ratio:**\n- Rab al-Mal: 60%\n- Mudarib: 40%\n\n**Other Key Terms:**\n- Capital: QAR 5,000,000\n- Rab al-Mal: ABC Investment LLC\n- Mudarib: XYZ Islamic Finance Co.\n- Contract Term: 3 years (renewable)\n- Start Date: January 1, 2026\n\n**Termination Conditions:**\n- Early termination requires 90 days notice\n- Capital impairment triggers review\n- SSB can recommend termination for Shariah non-compliance',
+      timestamp: '3:10 PM',
+      toolUse: {
+        id: 'tool-1',
+        toolName: 'extract_contract_terms',
+        parameters: {
+          documentId: 'contract-2025-mud-017',
+          extractionTargets: [
+            'profit_sharing_ratio',
+            'capital_amount',
+            'mudarib_name',
+            'rab_al_mal_name',
+            'contract_term',
+            'termination_conditions'
+          ]
+        },
+        reasoning: 'Extract structured data from unstructured contract document',
+        status: 'completed',
+        result: {
+          rabAlMalRatio: '60%',
+          mudaribRatio: '40%',
+          capitalAmount: 'QAR 5,000,000',
+          contractTerm: '3 years'
+        }
+      }
+    }
+  ]
+}
+
+/**
  * HELPER FUNCTIONS
  */
 
@@ -450,7 +712,11 @@ export function getConversationById(conversationId: string): Conversation | unde
     calculateCapitalHappy,
     calculateCapitalSad,
     scheduleMeeting,
-    uploadEvidence
+    uploadEvidence,
+    searchKnowledgeBase,
+    draftReport,
+    verifyCompliance,
+    extractTerms
   ]
   return conversations.find(c => c.id === conversationId)
 }
@@ -460,6 +726,10 @@ export function getAllConversations(): Conversation[] {
     calculateCapitalHappy,
     calculateCapitalSad,
     scheduleMeeting,
-    uploadEvidence
+    uploadEvidence,
+    searchKnowledgeBase,
+    draftReport,
+    verifyCompliance,
+    extractTerms
   ]
 }

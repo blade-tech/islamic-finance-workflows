@@ -270,61 +270,26 @@ export default function TaskPage() {
             </div>
           </CardHeader>
           <CardContent className="p-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Left: How It Works */}
-              <Card className="border-2 border-blue-300 bg-blue-50">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-blue-600" />
-                    <CardTitle className="text-blue-900 text-base">How It Works</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2 text-sm text-blue-900">
-                    <li className="flex items-start gap-2">
-                      <span className="font-bold text-blue-600">1.</span>
-                      <span>Click a conversation to load pre-scripted demo</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-bold text-blue-600">2.</span>
-                      <span>Review tool parameters when AI requests approval</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-bold text-blue-600">3.</span>
-                      <span>Click Approve to execute the tool</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="font-bold text-blue-600">4.</span>
-                      <span>See results with full transparency</span>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-
-              {/* Right: Try These Actions */}
-              <div className="space-y-3">
-                <h3 className="text-sm font-semibold text-gray-700">Try These Actions</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {availableConversations.map(conv => (
-                    <Card
-                      key={conv.id}
-                      className="border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 cursor-pointer transition-all"
-                      onClick={() => aiAssistantRef.current?.loadConversation(conv)}
-                    >
-                      <CardContent className="p-3 text-center">
-                        <div className="flex flex-col items-center gap-2">
-                          <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                            <Bot className="h-5 w-5 text-purple-600" />
-                          </div>
-                          <p className="text-xs font-semibold text-gray-900 leading-tight">
-                            {conv.name}
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
+            {/* AI Action Cards Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+              {availableConversations.map(conv => (
+                <Card
+                  key={conv.id}
+                  className="border-2 border-gray-200 hover:border-purple-400 hover:bg-purple-50 cursor-pointer transition-all"
+                  onClick={() => aiAssistantRef.current?.loadConversation(conv)}
+                >
+                  <CardContent className="p-4 text-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                        <Bot className="h-6 w-6 text-purple-600" />
+                      </div>
+                      <p className="text-xs font-semibold text-gray-900 leading-tight">
+                        {conv.name}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
 
             {/* AI Assistant Panel */}
