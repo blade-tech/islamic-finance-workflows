@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Sparkles,
   Home,
+  Shield,
 } from 'lucide-react'
 
 export default function DashboardLayout({
@@ -38,6 +39,12 @@ export default function DashboardLayout({
       label: 'Process Tracking',
       icon: TrendingUp,
       description: 'Monitor workflow progress',
+    },
+    {
+      href: '/islamic-grc-demo/dashboard/controls',
+      label: 'Control Library',
+      icon: Shield,
+      description: 'Browse GRC controls',
     },
     {
       href: '/islamic-grc-demo/dashboard/overview',
