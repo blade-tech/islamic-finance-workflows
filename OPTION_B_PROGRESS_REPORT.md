@@ -2,7 +2,7 @@
 
 **Project**: Islamic GRC Demo - 3-Week Production-Ready Enhancement
 **Start Date**: 2025-11-10
-**Status**: Phase 1 - In Progress (20% Complete)
+**Status**: Phase 1 - Complete | Phase 2 - In Progress (30% Complete)
 
 ---
 
@@ -10,9 +10,9 @@
 
 We're implementing **Option B**: Full 3-week plan to create a production-ready Islamic GRC demo with Qatar regulatory depth. This combines the Qatar GRC infrastructure research (60 obligations, dual-regulator framework) with the existing demo implementation (pod architecture, interactive UI).
 
-**Progress**: 2 of 10 major tasks complete (20%)
+**Progress**: 3 of 10 major tasks complete (30%)
 **Timeline**: On track for 15-18 day completion
-**Current Focus**: Phase 1 - Making the demo work end-to-end
+**Current Focus**: Phase 2 - Control library visibility and policy constraints
 
 ---
 
@@ -109,64 +109,104 @@ We're implementing **Option B**: Full 3-week plan to create a production-ready I
 
 ---
 
+### ✅ Phase 1.3: Dashboard Connection (COMPLETE)
+
+**Objective**: Connect all dashboard pages to live task data from Zustand store
+
+**Implementation**:
+- Modified `src/app/islamic-grc-demo/dashboard/my-tasks/page.tsx` (removed mock fallback)
+- Modified `src/app/islamic-grc-demo/dashboard/overview/page.tsx` (compute metrics from real data)
+- Modified `src/app/islamic-grc-demo/dashboard/process-tracking/page.tsx` (workflow progress from real tasks)
+
+**Changes Made**:
+
+**My Tasks Page**:
+- Removed MOCK_TASKS fallback logic
+- All statistics now calculated from real tasks
+- Filters work on real task data
+- Task completion handlers connected to store actions
+
+**Overview Dashboard**:
+- Key metrics tile: Calculated from real workflows and tasks
+  - Active workflows count (from store)
+  - Total/completed tasks (from store)
+  - Hard gates cleared (count critical priority tasks)
+  - Overdue items (date-based filtering)
+- Workflow summaries: Computed progress for each workflow
+- Shariah compliance metrics: Static demo data + real pending approvals count
+- Regulatory reporting: Static demo data (maintained for demo purposes)
+- Islamic risk categories: Static demo data (maintained for demo purposes)
+
+**Process Tracking Page**:
+- Workflow overview: Calculated from first workflow in store
+  - Overall progress (completed/total steps)
+  - Critical path progress (critical priority tasks)
+  - Estimated completion (latest due date)
+  - At-risk detection (overdue critical tasks)
+- Step status timeline: Generated from real tasks
+  - Step number, title, assigned role from tasks
+  - Status, completion/start dates from task metadata
+  - Duration calculated from due dates
+  - Critical path indicator from priority
+- Team utilization: Computed by role
+  - Assigned/completed/in-progress counts per role
+  - Utilization percentage: (completed + in-progress) / total
+
+**Code Quality**:
+- Added empty states for no workflows/tasks
+- Type-safe with all TaskStatus values in statusConfig
+- Proper useMemo for computed values
+- Clean separation of static demo data vs. real data
+
+**Impact**:
+- ✅ **Phase 1 COMPLETE**: Full end-to-end flow now works
+- ✅ **Dashboard shows real-time data** from deployed workflows
+- ✅ **No more mock data** in critical views
+- ✅ **Users can track progress** on actual tasks
+
+---
+
 ## Current Status: Demo Flow
 
 ### What Works Now:
 1. ✅ **Step 1 (Configuration)**: User selects Qatar + Ijarah → Works
-2. ✅ **Step 2 (Workflow Review)**: Shows real workflow with 4+ steps → **FIXED!**
-3. ⏳ **Step 3 (Dashboard)**: Will work after Phase 1.3 (next)
+2. ✅ **Step 2 (Workflow Review)**: Shows real workflow with 4+ steps → Works
+3. ✅ **Step 3 (Dashboard)**: Shows real tasks, metrics, and workflow progress → **WORKS!**
 
-### What's Fixed:
-- ❌ **Before**: "Workflow generation in progress..." (stuck)
-- ✅ **After**: Real workflow with SSB approval, asset ownership gates, SNCR monitoring, etc.
+### What's Fixed Since Start:
+- ❌ **Before Phase 1.1**: "Workflow generation in progress..." (stuck at step 2)
+- ✅ **After Phase 1.1**: Real workflow generation works
+- ❌ **Before Phase 1.2**: Tasks not generated from workflows
+- ✅ **After Phase 1.2**: Tasks properly created with metadata
+- ❌ **Before Phase 1.3**: Dashboard showed mock data
+- ✅ **After Phase 1.3**: Dashboard shows real-time task data
 
-### User Experience:
+### User Experience (Full Flow):
 ```
-Configuration → [Generate Workflows] → Workflow Review
-Qatar + Ijarah                         ✅ Shows real workflow
-                                       ✅ 4-9 steps depending on product
-                                       ✅ Total duration (35 days)
-                                       ✅ Hard gates highlighted
-                                       ✅ Policy constraints visible
-                                       ✅ [Deploy Workflows] button enabled
+Step 1: Configuration
+└─ Select Qatar + Ijarah → ✅ Works
+
+Step 2: Workflow Review
+└─ Shows real workflow → ✅ Works
+   ├─ 4-9 steps depending on product
+   ├─ Total duration (35 days)
+   ├─ Hard gates highlighted
+   └─ Policy constraints visible
+
+Step 3: Dashboard (3 tabs)
+├─ My Tasks → ✅ Shows real tasks with filters
+├─ Overview → ✅ Shows real metrics and workflow progress
+└─ Process Tracking → ✅ Shows step-by-step progress
 ```
 
 ---
 
-## Next Steps: Phase 1.3 (Current Work)
+## Remaining Work (70%)
 
-### Objective: Connect Dashboard to Live Task Data
-
-**Tasks**:
-1. Remove mock data from dashboard pages
-2. Connect to `useTasks()` hook from store
-3. Show real task counts and statistics
-4. Enable task status updates (mark complete, etc.)
-5. Test full flow: Configuration → Workflows → Dashboard → Complete Task
-
-**Files to modify**:
-- `src/app/islamic-grc-demo/dashboard/my-tasks/page.tsx`
-- `src/app/islamic-grc-demo/dashboard/overview/page.tsx`
-- `src/app/islamic-grc-demo/dashboard/team-tasks/page.tsx`
-
-**Estimated time**: 1-2 days
-
-**What users will get**:
-- ✅ See all tasks from deployed workflows
-- ✅ Task counts by status (pending, in-progress, completed, blocked)
-- ✅ Task counts by priority (critical, high, normal)
-- ✅ Mark tasks as complete
-- ✅ Filter tasks by role, status, priority
-- ✅ See overdue tasks
-
----
-
-## Remaining Work (80%)
-
-### Phase 1 (Week 1) - **40% Complete, 60% Remaining**
+### Phase 1 (Week 1) - **100% Complete** ✅
 - ✅ 1.1: Workflow assembler (DONE)
 - ✅ 1.2: Task generator (DONE)
-- ⏳ 1.3: Dashboard connection (NEXT - 1-2 days)
+- ✅ 1.3: Dashboard connection (DONE)
 
 ### Phase 2 (Week 2) - **0% Complete, 100% Remaining**
 - ⏳ 2.1: Control library visibility (2 days)
@@ -315,11 +355,14 @@ const { assembleWorkflows } = await import('@/lib/workflow-assembler')
 
 ## Conclusion
 
-**Phase 1 Progress**: 40% complete (2/3 tasks done)
-**Overall Progress**: 20% complete (2/10 tasks done)
+**Phase 1 Progress**: 100% complete (3/3 tasks done) ✅
+**Overall Progress**: 30% complete (3/10 tasks done)
 **Timeline**: On track for 15-18 day completion
-**Blockers**: None - proceeding to Phase 1.3
+**Blockers**: None - proceeding to Phase 2.1
 
-**Key Achievement**: Demo is now **unblocked** - users can progress from Configuration → Workflow Review. Next: enable Dashboard → Task execution.
+**Key Achievement**: **Phase 1 COMPLETE** - Full end-to-end demo flow now works! Users can configure → generate workflows → view dashboard → track tasks. All core infrastructure in place.
 
-**Commit**: `3ca18ba` - "feat(grc-demo): implement workflow assembler and task generator (Phase 1.1-1.2)"
+**Commits**:
+- `3ca18ba` - "feat(grc-demo): implement workflow assembler and task generator (Phase 1.1-1.2)"
+- `625508b` - "fix(deploy): set publish directory to .next for Netlify Next.js plugin"
+- `af48f4a` - "feat(dashboard): connect all dashboard pages to live task data (Phase 1.3)"
