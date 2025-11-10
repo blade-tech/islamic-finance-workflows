@@ -1,13 +1,12 @@
 # ============================================================================
-# NETLIFY CONFIGURATION - ZERO-CONFIG NEXT.JS DEPLOYMENT
+# NETLIFY CONFIGURATION - NEXT.JS DEPLOYMENT
 # ============================================================================
 # Islamic Finance Workflows - Next.js 14 App Router Demo
-# Netlify auto-detects Next.js and uses Essential Next.js plugin
-# DO NOT specify publish directory - Netlify handles it automatically
+# Uses Netlify Next.js plugin for deployment
 
 [build]
   command = "./node_modules/.bin/next build"
-  # Note: No publish directory needed - Netlify's Next.js plugin handles deployment
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "20"
