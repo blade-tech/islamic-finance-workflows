@@ -97,12 +97,11 @@ export const useGRCDemoStore = create<GRCDemoStore>()(
         set({ isLoading: true, error: null })
 
         try {
-          // TODO: Call workflow assembler to generate workflows
-          // For now, this will be implemented when we create the assembler
-          // const workflows = await assembleWorkflows(currentConfig)
+          // Import assembler dynamically to avoid circular dependencies
+          const { assembleWorkflows } = await import('@/lib/workflow-assembler')
 
-          // Placeholder: Empty workflows array
-          const workflows: Workflow[] = []
+          // Generate workflows from templates
+          const workflows = await assembleWorkflows(currentConfig)
 
           set({
             currentWorkflows: workflows,
@@ -165,12 +164,15 @@ export const useGRCDemoStore = create<GRCDemoStore>()(
         set({ isLoading: true, error: null })
 
         try {
-          // TODO: Deploy workflows and generate tasks
-          // For now, this will be implemented when we create task generation logic
-          // const tasks = await generateTasksFromWorkflows(workflows)
+          // Import task generator dynamically
+          const { generateTasksFromWorkflows, updateTaskDependencies } =
+            await import('@/lib/task-generator')
 
-          // Placeholder: Empty tasks array
-          const tasks: Task[] = []
+          // Generate tasks from workflows
+          let tasks = generateTasksFromWorkflows(workflows)
+
+          // Update dependencies to use task IDs
+          tasks = updateTaskDependencies(tasks)
 
           set({
             tasks,
