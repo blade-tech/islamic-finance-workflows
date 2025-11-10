@@ -191,6 +191,13 @@ export default function QatarIjarahLanding() {
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
             </Button>
+            <Button size="lg" variant="outline" className="border-green-400 bg-green-500/30 text-white hover:bg-green-500/40" asChild>
+              <Link href="/qatar-ijarah/multi-stakeholder-verification">
+                <Shield className="w-5 h-5 mr-2" />
+                🔗 Multi-Stakeholder Verification
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Link>
+            </Button>
           </div>
         </div>
 
