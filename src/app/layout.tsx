@@ -29,17 +29,21 @@ import { Navigation } from '@/components/layout/Navigation'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'ZeroH - Sustainable Islamic Finance Governance',
+  title: 'AI native Governance, Risk & Compliance platform for Islamic Finance',
   description:
-    'Sustainable Islamic Finance governance, monitoring and risk management system',
+    'AI-powered Shariah compliance automation built on AAOIFI, IFSB, and ISO standards. Automate Shariah reviews, manage risk, and enable compliant digital asset issuance.',
   keywords: [
     'Islamic Finance',
-    'Sustainable Finance',
-    'Governance',
+    'GRC',
+    'Governance Risk Compliance',
+    'Shariah Compliance',
+    'AAOIFI',
+    'IFSB',
     'Risk Management',
-    'Monitoring',
     'Sukuk',
-    'ESG',
+    'Digital Assets',
+    'Verifiable Credentials',
+    'Tokenization',
   ],
 }
 

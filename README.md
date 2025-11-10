@@ -1,6 +1,8 @@
-# ZeroH - Islamic Finance Governance Platform
+# AI native Governance, Risk & Compliance platform for Islamic Finance
 
-**Sustainable Islamic Finance governance, monitoring and risk management system**
+**Automate Shariah Compliance • Manage Risk • Enable Compliant Digital Assets**
+
+The only platform that automates Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
 
 [![Next.js](https://img.shields.io/badge/Next.js-14.2.18-black)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-18.3.1-blue)](https://reactjs.org/)
@@ -12,44 +14,94 @@
 
 ## 📖 Overview
 
-ZeroH is a **comprehensive platform for structuring, monitoring, and managing Shariah-compliant Islamic finance transactions** with blockchain-based verification and digital asset management.
+**AI native Governance, Risk & Compliance platform** built on **ISO 37301** (Compliance Management), **ISO 31000** (Risk Management), **COSO** (Internal Controls), **AAOIFI**, and **IFSB** standards. Integrated with **Hedera Guardian** for blockchain-verified compliance certificates and compliant digital asset issuance.
 
-### What Makes ZeroH Different
+### What Makes This Different from Traditional GRC Platforms
 
-- **5-Pillar Compliance Framework**: Comprehensive governance across Shariah, Regulatory, Risk, Financial, and Audit dimensions
-- **AI-Powered Automation**: Claude AI orchestrates document processing, compliance checking, and policy generation
-- **Blockchain Verification**: Hedera Guardian integration for immutable compliance certificates
-- **Digital Asset Management**: Cross-deal tracking of Guardian certificates and ATS tokens
-- **Deal Lifecycle Management**: From structure to execution to ongoing monitoring
+**vs. Vanta/Delve** (Continuous Compliance Monitoring):
+- ✅ **Islamic Finance domain expertise** - Built-in Shariah governance, SNCR tracking, purification workflows
+- ✅ **Digital asset issuance** - Blockchain-verified Verifiable Credentials and compliant tokenization
 
-### 11-Step Comprehensive Workflow
+**vs. ServiceNow GRC** (Enterprise GRC Suite):
+- ✅ **AI-powered workflow extraction** - Upload Shariah policies, auto-generate compliance processes
+- ✅ **Agile Islamic finance focus** - Not generic, heavyweight enterprise software
 
-1. **Connect Sources** - Backend services and AI knowledge base initialization
-2. **Select Shariah Structure** - Choose from 7 structures (Wakala, Murabaha, Ijarah, etc.) OR upload methodology documents for AI digitization
-3. **Select Jurisdiction** - Choose from 5 regulatory frameworks (Qatar QFC, UAE DIFC, Saudi CMA, etc.)
-4. **Select Accounting** - Choose standards (AAOIFI, IFRS, IFRS+Islamic)
-5. **Select Impact Metrics** - Choose ESG frameworks (QFC Sustainable, UN SDGs, Green Sukuk, etc.)
-6. **Review Configuration** - Validate component compatibility
-7. **Configure Details** - Fill deal parameters and upload documents
-8. **Review Policy Structure** - View Guardian policy and BPMN workflow
-9. **Test Workflow** - Run sandbox simulation
-10. **Live Execution** - Deploy to Hedera Guardian blockchain
-11. **Monitor & Collaborate** - Track compliance, manage documents, and collaborate with stakeholders
+**vs. Hedera Guardian** (Policy Workflow to Digital Assets):
+- ✅ **GRC fundamentals** - Risk management, control testing, continuous compliance monitoring
+- ✅ **Islamic finance specifics** - AAOIFI/IFSB standards, Shariah Board workflows, SNCR management
+
+### Core Capabilities
+
+- **Islamic GRC Fundamentals**: Shariah Board governance, SNCR tracking, PER/IRR reserves, purification workflows, contract-sequence gates
+- **AI-Powered Automation**: 80% less manual work - Claude AI orchestrates Shariah reviews, evidence collection, and control testing
+- **Blockchain-Verified Proofs**: Hedera Guardian integration for immutable Verifiable Credentials
+- **Compliant Digital Assets**: Issue Sukuk, tokens, and digital assets with MLETR and QFC DAR compliance built-in
+- **Standards-Based**: ISO 37301 (Compliance) + ISO 31000 (Risk) + COSO (Controls) + AAOIFI/IFSB (Islamic Finance)
+
+### Value Proposition by Persona
+
+**For Shariah Compliance Officers:**
+> Automate Shariah reviews, track breach risks (SNCR), and generate audit-ready reports—with 80% less manual work.
+
+**For Risk Officers:**
+> Monitor Shariah Breach Risk (SNCR), Profit Smoothing Risk (DCR), and fiduciary risks in real-time. One dashboard for all Islamic risk categories.
+
+**For Digital Asset Teams:**
+> Launch compliant Sukuk, tokens, and digital assets in weeks—not quarters. Compliance is built-in, not bolted-on.
+
+**For CFOs / Executives:**
+> One view of Shariah compliance health, regulatory risk exposure, and digital asset performance. Audit-ready 24/7.
+
+### 5-Stage Process: Policy to Tokenization
+
+1. **Policy Intent** - Define Shariah requirements (AAOIFI/IFSB jurisdiction, accounting framework, regulatory requirements)
+2. **Digitization** - AI extracts processes from documents (Guardian methodology engine creates workflows from policy documents)
+3. **Process Execution** - GRC fundamentals + Islamic overlays (Shariah Board oversight, SNCR tracking, contract-sequence gates, purification controls)
+4. **Verifiable Proofs** - Blockchain-verified compliance certificates (Generate VCs for Shariah compliance, issue VP, mint NFT certificate on Hedera)
+5. **Tokenization** *(Optional)* - Compliant digital asset issuance (Create tradeable tokens with MLETR and QFC Digital Asset Regulations compliance built-in)
 
 ---
 
 ## ✨ Key Features
 
+### Islamic GRC Unique Layers (What Conventional GRC Platforms Don't Have)
+
+**1. Shariah Governance Overlay** (AAOIFI GS-1/5/8, IFSB-10)
+- **Shariah Supervisory Board (SSB)** with independence requirements and conflict-of-interest controls
+- **Four Shariah Functions**: Compliance (day-to-day), Review (ex-post), Internal Audit, External Audit
+- Board-level workflows for fatwa (Shariah rulings) and product approvals
+
+**2. Islamic Risk Categories** (IFSB-1, IFSB-10)
+- **Shariah Breach Risk (SNCR)** - Track Shariah non-compliance incidents, calculate non-compliant income, automate purification (charity donation)
+- **Profit Smoothing Risk (DCR)** - Manage Profit Equalization Reserve (PER) and Investment Risk Reserve (IRR) for Investment Account Holders
+- **Profit Rate Risk (RoR)** - Monitor profit distribution fairness
+- **Fiduciary Risk** - Investor trust and fiduciary duty controls
+
+**3. Product-Level Contract Gates** (AAOIFI SS-9, QFCRA IBANK)
+- **Ijarah (Islamic Lease)**: Verify delivery before rent collection, Takaful (insurance) coverage, lessor maintenance obligations
+- **IMB (Lease-to-Own)**: Separate sale/gift contract for title transfer
+- **Murabaha (Cost-Plus)**: Cost disclosure requirements
+- Late-fee penalty treatment: Donate to charity (not booked as income)
+
+**4. Purification & Charity Controls**
+- Track "tainted income" from Shariah breaches
+- Automate purification calculations
+- Shariah Board approval workflows for charity disbursement
+- Reconciliation: ensure purification amounts match donations
+
+**5. Template Discipline** (IIFM/ISDA/BAFT Standards)
+- Use approved contract templates (IIFM Ijarah, ISDA-IIFM Tahawwut)
+- Control deviations tightly with Shariah Board approval
+- Link to underlying Shariah rulings (fatwa)
+
 ### 5-Pillar Compliance Framework
 The platform tracks compliance across five comprehensive governance areas:
 
-1. **🕌 Shariah Governance & Compliance** (Purple) - Islamic law adherence, Shariah board oversight, religious compliance
-2. **⚖️ Regulatory & Legal Compliance** (Orange) - Jurisdiction-specific regulations, legal requirements, licensing
-3. **🛡️ Risk Management** (Red) - Operational, market, credit, and Shariah-specific risk controls
-4. **📊 Financial & Product Reporting** (Blue) - Accounting standards, financial disclosures, product documentation
-5. **✓ Audit & Assurance** (Green) - Internal/external audits, quality assurance, compliance verification
-
-Each deal is monitored across all five pillars with real-time compliance tracking, evidence management, and automated control validation.
+1. **🕌 Shariah Governance & Compliance** - Shariah Board oversight, SNCR tracking, purification workflows
+2. **⚖️ Regulatory & Legal Compliance** - AAOIFI, IFSB, jurisdiction-specific regulations (QFC, DIFC, CMA)
+3. **🛡️ Risk Management** - SNCR, DCR, RoR, fiduciary risk, PER/IRR reserve management
+4. **📊 Financial & Product Reporting** - AAOIFI FAS, IFRS, product-level contract gates
+5. **✓ Audit & Assurance** - Shariah audit, external Shariah audit, compliance verification
 
 ### Phase 1: Core Workflow (Completed)
 - ✅ **10-step modular workflow** with component-based configuration
@@ -663,6 +715,48 @@ kill <process_id>
 
 ---
 
+## 📚 Islamic GRC Standards Compliance
+
+This platform is built on authoritative Islamic finance and GRC standards:
+
+### International Standards
+- **ISO 37301:2021** - Compliance Management Systems (CMS)
+- **ISO 31000:2018** - Risk Management
+- **COSO Internal Control 2013** - 5 components (Control Environment, Risk Assessment, Control Activities, Information & Communication, Monitoring)
+- **COSO ERM 2017** - Enterprise Risk Management
+
+### Islamic Finance Standards
+- **AAOIFI** (Accounting and Auditing Organization for Islamic Financial Institutions)
+  - GS-1: Shariah Supervisory Board (appointment, composition, reporting)
+  - GS-3: Internal Shariah Review
+  - GS-5: Independence of SSB
+  - GS-8: Central Shariah Board
+  - GS-9: Shariah Compliance Function
+  - GS-11: Internal Shariah Audit
+  - SS-9: Ijarah (Islamic Leasing)
+  - FAS-28: Murabaha and Other Deferred Payment Sales
+
+- **IFSB** (Islamic Financial Services Board)
+  - IFSB-1: Risk Management (SNCR, DCR, PER, IRR definitions)
+  - IFSB-10: Shariah Governance Systems
+  - IFSB-30: Revised Corporate Governance (2023)
+  - IFSB-31: Effective Supervision of Shariah Governance (2025)
+
+### National Regulators
+- **Qatar**: QFCRA (Qatar Financial Centre Regulatory Authority) - IBANK Rules, QFC Digital Asset Regulations 2024
+- **UAE**: DFSA (Dubai International Financial Centre), ADGM
+- **Saudi Arabia**: SAMA Shariah Governance Framework (2020), CMA
+- **Malaysia**: BNM Shariah Governance Policy (2019), Securities Commission
+- **Bahrain**: CBB Shariah Governance Module
+
+### Documentation & Contract Standards
+- **IIFM** (International Islamic Financial Market) - Ijarah templates, Sukuk standards
+- **ISDA-IIFM Tahawwut Master Agreement** - Islamic hedging
+- **BAFT** - Murabaha Participation Agreements
+- **MLETR** - Model Law on Electronic Transferable Records (for tokenization)
+
+---
+
 ## 📞 Support
 
 For issues and questions:
@@ -674,7 +768,9 @@ For issues and questions:
 
 ---
 
+**Platform**: AI native Governance, Risk & Compliance platform for Islamic Finance
+**Built On**: ISO 37301 • ISO 31000 • COSO • AAOIFI • IFSB
 **Current Phase**: Phase 7 In Progress - Payment Evidence Token (PET) Integration
-**Last Updated**: November 9, 2025
-**Version**: 1.7.0
-**Demo Status**: Fully functional with 9 Qatar Ijārah scenes + 3 AI pods + PET integration (in progress)
+**Last Updated**: November 10, 2025
+**Version**: 2.0.0
+**Demo Status**: Fully functional with 9 Qatar Ijārah scenes + 3 AI pods + Islamic GRC terminology + PET integration (in progress)

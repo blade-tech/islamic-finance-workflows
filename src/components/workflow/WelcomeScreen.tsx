@@ -1,21 +1,23 @@
 'use client'
 
 /**
- * WELCOME SCREEN - 5-STAGE PROCESS EXPLANATION
- * =============================================
- * Educational landing page explaining ZeroH's 5-stage process.
+ * WELCOME SCREEN - ISLAMIC FINANCE GRC PLATFORM
+ * ==============================================
+ * Educational landing page explaining the platform's 5-stage process
+ * and persona-based value propositions.
  *
  * PURPOSE:
- * - Introduce users to the platform's capabilities
- * - Explain the complete process visually
+ * - Introduce users to Islamic GRC capabilities
+ * - Show persona-based value props (Shariah Officers, Risk Officers, etc.)
+ * - Explain the complete compliance-to-tokenization process
  * - Build confidence before starting
  *
  * 5 STAGES:
- * 1. Policy Intent - Define Islamic finance requirements
+ * 1. Policy Intent - Define Shariah requirements
  * 2. Digitization - AI extracts processes from documents
- * 3. Process Execution - AI + human collaboration
+ * 3. Process Execution - GRC fundamentals with Islamic overlays
  * 4. Verifiable Proofs - Guardian issues VP/VC and mints NFT
- * 5. Tokenization - Optional: Create tradeable tokens
+ * 5. Tokenization - Optional: Compliant digital asset issuance
  */
 
 import React from 'react'
@@ -33,7 +35,10 @@ import {
   MessageSquare,
   CheckSquare,
   Bell,
-  Sparkles
+  Sparkles,
+  TrendingUp,
+  Award,
+  Zap
 } from 'lucide-react'
 
 export default function WelcomeScreen() {
@@ -43,12 +48,44 @@ export default function WelcomeScreen() {
     router.push('/')
   }
 
+  // Persona-based value propositions
+  const personas = [
+    {
+      icon: ShieldCheck,
+      role: 'Shariah Compliance Officers',
+      value: 'Automate Shariah reviews, track breach risks, and generate audit-ready reports—with 80% less manual work.',
+      iconBg: 'bg-green-100',
+      iconColor: 'text-green-600'
+    },
+    {
+      icon: TrendingUp,
+      role: 'Risk Officers',
+      value: 'Monitor SNCR, DCR, and fiduciary risks in real-time. One dashboard for all Islamic risk categories.',
+      iconBg: 'bg-orange-100',
+      iconColor: 'text-orange-600'
+    },
+    {
+      icon: Coins,
+      role: 'Digital Asset Teams',
+      value: 'Launch compliant Sukuk, tokens, and digital assets in weeks—not quarters. Compliance is built-in.',
+      iconBg: 'bg-amber-100',
+      iconColor: 'text-amber-600'
+    },
+    {
+      icon: Award,
+      role: 'CFO / Executives',
+      value: 'One view of Shariah compliance health, regulatory risk exposure, and digital asset performance.',
+      iconBg: 'bg-blue-100',
+      iconColor: 'text-blue-600'
+    }
+  ]
+
   const stages = [
     {
       icon: FileText,
       title: 'Policy Intent',
-      description: 'Define your Islamic finance requirements',
-      details: 'Select Shariah structure, jurisdiction, accounting framework, and impact metrics',
+      description: 'Define Shariah requirements',
+      details: 'Select Shariah structure, jurisdiction (AAOIFI/IFSB), accounting framework, and regulatory requirements',
       gradient: 'from-purple-500 to-purple-600',
       iconBg: 'bg-purple-100',
       iconColor: 'text-purple-600'
@@ -65,8 +102,8 @@ export default function WelcomeScreen() {
     {
       icon: Workflow,
       title: 'Process Execution',
-      description: 'AI + human collaboration with checkpoints',
-      details: 'Execute processes with multi-stakeholder collaboration, task tracking, and granular status monitoring',
+      description: 'GRC fundamentals + Islamic overlays',
+      details: 'Execute with Shariah Board oversight, SNCR tracking, contract-sequence gates, and purification controls',
       gradient: 'from-indigo-500 to-indigo-600',
       iconBg: 'bg-indigo-100',
       iconColor: 'text-indigo-600'
@@ -74,8 +111,8 @@ export default function WelcomeScreen() {
     {
       icon: ShieldCheck,
       title: 'Verifiable Proofs',
-      description: 'Guardian issues VP/VC and mints NFT certificate',
-      details: 'Generate Verifiable Credentials for each component, create Verifiable Presentation, mint compliance certificate',
+      description: 'Blockchain-verified compliance certificates',
+      details: 'Generate Verifiable Credentials for Shariah compliance, issue Verifiable Presentation, mint NFT certificate on Hedera',
       gradient: 'from-green-500 to-green-600',
       iconBg: 'bg-green-100',
       iconColor: 'text-green-600'
@@ -83,8 +120,8 @@ export default function WelcomeScreen() {
     {
       icon: Coins,
       title: 'Tokenization',
-      description: 'Optional: Create tradeable tokens',
-      details: 'Asset Tokenization Studio enables fractional ownership and secondary market trading',
+      description: 'Optional: Compliant digital asset issuance',
+      details: 'Create tradeable tokens with MLETR and QFC Digital Asset Regulations compliance built-in',
       gradient: 'from-amber-500 to-amber-600',
       iconBg: 'bg-amber-100',
       iconColor: 'text-amber-600',
@@ -101,42 +138,47 @@ export default function WelcomeScreen() {
             <div className="flex items-center justify-center gap-2 mb-4">
               <Sparkles className="h-8 w-8 text-purple-600" />
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
-                ZeroH
+                Islamic Finance GRC Platform
               </h1>
             </div>
-            <p className="text-base sm:text-lg text-gray-600 whitespace-nowrap overflow-hidden text-ellipsis px-4">
-              Sustainable Islamic Finance governance, monitoring and risk management system
+            <p className="text-base sm:text-lg text-gray-600 px-4">
+              AI-Powered Shariah Compliance • Built on Standards • Digital-Asset Ready
+            </p>
+            <p className="text-sm text-gray-500 mt-2 px-4">
+              Built on ISO 37301 • ISO 31000 • COSO • AAOIFI • IFSB • Integrated with Hedera Guardian
             </p>
           </div>
 
-          {/* Collaboration Layer Banner */}
-          <Card className="mb-6 sm:mb-8 border-2 border-purple-200 bg-gradient-to-r from-purple-50 to-indigo-50">
-            <CardContent className="p-4 sm:p-6">
-              <div className="flex items-center gap-2 mb-3">
-                <Users className="h-5 w-5 text-purple-600" />
-                <h3 className="font-semibold text-gray-900">Collaboration Layer</h3>
-                <span className="text-xs text-gray-500 ml-auto">Spans All Stages</span>
-              </div>
-              <div className="flex flex-wrap gap-4 sm:gap-6">
-                <div className="flex items-center gap-2">
-                  <MessageSquare className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm text-gray-700">@mentions</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckSquare className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm text-gray-700">Task Assignments</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Bell className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm text-gray-700">Real-time Notifications</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Workflow className="h-4 w-4 text-purple-600" />
-                  <span className="text-sm text-gray-700">Granular Status Tracking</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          {/* Value Propositions by Persona */}
+          <div className="mb-8 sm:mb-10">
+            <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
+              Built For Your Role
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {personas.map((persona, index) => {
+                const Icon = persona.icon
+                return (
+                  <Card key={index} className="border-2 hover:shadow-lg transition-shadow">
+                    <CardContent className="p-4 sm:p-5">
+                      <div className="flex items-start gap-4">
+                        <div className={`w-12 h-12 rounded-full ${persona.iconBg} flex items-center justify-center flex-shrink-0`}>
+                          <Icon className={`h-6 w-6 ${persona.iconColor}`} />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-2">
+                            {persona.role}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {persona.value}
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          </div>
 
           {/* 5-Stage Workflow - Desktop */}
           <div className="hidden lg:block mb-8">
@@ -244,9 +286,13 @@ export default function WelcomeScreen() {
                 <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                   Ready to get started?
                 </h3>
-                <p className="text-gray-600">
-                  Begin your first sustainable Islamic finance governance workflow in minutes
+                <p className="text-gray-600 mb-4">
+                  Experience the full Islamic GRC platform with our interactive demos
                 </p>
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+                  <Zap className="h-4 w-4 text-purple-600" />
+                  <span>Setup in minutes • No credit card required • AAOIFI/IFSB compliant</span>
+                </div>
               </div>
 
               <div className="flex flex-col items-center gap-4">
@@ -264,7 +310,10 @@ export default function WelcomeScreen() {
 
           {/* Footer */}
           <div className="text-center mt-6 sm:mt-8">
-            <p className="text-xs sm:text-sm text-gray-500">
+            <p className="text-xs sm:text-sm text-gray-500 mb-2">
+              The only platform that automates Shariah compliance, manages operational risk, and enables compliant digital asset issuance—in one system.
+            </p>
+            <p className="text-xs text-gray-400">
               Powered by Blade Labs
             </p>
           </div>
