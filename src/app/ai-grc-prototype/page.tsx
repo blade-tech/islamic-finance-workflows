@@ -31,6 +31,7 @@ import {
 } from 'lucide-react'
 import { JurisdictionSelector } from '@/app/islamic-grc-demo/components/JurisdictionSelector'
 import { ProductSelector } from '@/app/islamic-grc-demo/components/ProductSelector'
+import { DocumentUpload } from '@/components/ui/document-upload'
 import type { Jurisdiction, ProductType, AccountingStandard } from '@/lib/types/grc-demo-types'
 
 // Sustainability types
@@ -47,6 +48,7 @@ export default function AIGRCPrototypePage() {
   const [sustainabilityType, setSustainabilityType] = useState<SustainabilityType>('none')
   const [sustainabilityFrameworks, setSustainabilityFrameworks] = useState<SustainabilityFramework[]>([])
   const [impactCategories, setImpactCategories] = useState<string[]>([])
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
 
   const isComplete = jurisdiction && product && accounting
 
@@ -456,6 +458,34 @@ export default function AIGRCPrototypePage() {
                   </div>
                 </div>
               )}
+            </CardContent>
+          </Card>
+
+          {/* 5. Document Upload (Optional) */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">
+                    5
+                  </div>
+                  <div>
+                    <CardTitle className="text-lg">Document Upload (Demo)</CardTitle>
+                    <CardDescription className="text-xs">
+                      Upload compliance documents - visual demo only
+                    </CardDescription>
+                  </div>
+                </div>
+                <Badge variant="outline">Optional</Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <DocumentUpload
+                onFilesSelected={setUploadedFiles}
+                onQuickDemo={() => {
+                  // Quick demo already sets files via onFilesSelected
+                }}
+              />
             </CardContent>
           </Card>
         </div>
